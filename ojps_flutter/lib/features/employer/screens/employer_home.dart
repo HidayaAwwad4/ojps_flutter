@@ -3,8 +3,8 @@ import '../models/job_model.dart';
 import '../widgets/job_card.dart';
 import '../widgets/bottom_nav_bar.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class EmployerHome extends StatelessWidget {
+  const EmployerHome({super.key});
 
   @override
   Widget build(BuildContext context) {
