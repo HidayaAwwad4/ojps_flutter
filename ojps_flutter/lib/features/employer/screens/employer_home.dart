@@ -2,42 +2,19 @@ import 'package:flutter/material.dart';
 import '../models/job_model.dart';
 import '../widgets/job_card.dart';
 import '../widgets/bottom_nav_bar.dart';
+import './create_job_screen.dart';
+import './job_posting_screen.dart';
 
-class EmployerHome extends StatelessWidget {
+class EmployerHome extends StatefulWidget {
   const EmployerHome({super.key});
 
   @override
+  State<EmployerHome> createState() => _EmployerHomeState();
+}
+
+class _EmployerHomeState extends State<EmployerHome> {
+  @override
   Widget build(BuildContext context) {
-    List<Job> jobs = [
-      Job(
-          title: 'Full-Stack Developer',
-          description: 'Responsible for developing both front-end and back-end systems, ensuring seamless performance and efficiency',
-          salary: '\$800 - \$1000 Salary/Month',
-          employment: 'part time',
-          imageUrl: 'lib/assets/adham.jpg'
-      ),
-      Job(
-          title: 'Mobile App Developer',
-          description: 'Design and develop mobile apps for Android and iOS platforms.',
-          salary: '\$700 - \$900 Salary/Month',
-          employment: 'full time',
-          imageUrl: 'lib/assets/adham.jpg'
-      ),
-      Job(
-          title: 'Backend Developer',
-          description: 'Work on server-side applications and APIs for smooth operations.',
-          salary: '\$900 - \$1200 Salary/Month',
-          employment: 'remote',
-          imageUrl: 'lib/assets/adham.jpg'
-      ),
-      Job(
-          title: 'UI/UX Designer',
-          description: 'Create user-friendly and visually appealing designs for apps and websites.',
-          salary: '\$600 - \$850 Salary/Month',
-          employment: 'contract',
-          imageUrl: 'lib/assets/adham.jpg'
-      ),
-    ];
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       appBar: AppBar(
@@ -72,8 +49,8 @@ class EmployerHome extends StatelessWidget {
                     color: Colors.grey[200],
                   ),
                   child: IconButton(
-                    icon: const Icon(
-                        Icons.notifications, color: Colors.black, size: 20),
+                    icon: const Icon(Icons.notifications,
+                        color: Colors.black, size: 20),
                     onPressed: () {},
                   ),
                 ),
@@ -87,7 +64,6 @@ class EmployerHome extends StatelessWidget {
           ),
         ],
       ),
-
       body: Column(
         children: [
           Padding(
@@ -96,7 +72,13 @@ class EmployerHome extends StatelessWidget {
               margin: const EdgeInsets.only(top: 16),
               width: double.infinity,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CreateJobScreen()),
+                  );
+                },
                 style: OutlinedButton.styleFrom(
                   backgroundColor: const Color(0xFF0273B1),
                   foregroundColor: Colors.white,
@@ -115,7 +97,6 @@ class EmployerHome extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -125,20 +106,45 @@ class EmployerHome extends StatelessWidget {
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Open Positions',
+                    children: [
+                      const Text(
+                        'Open Positions',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const JobPostingScreen()),
+                          );
+                        },
+                        child: const Text(
+                          'See All',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      Text('See All', style: TextStyle(fontSize: 16)),
+                            fontSize: 16,
+                            color: Color(0xFF0273B1),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: jobs.length,
-                      itemBuilder: (context, index) {
-                        return JobCard(job: jobs[index]);
-                      },
+                    child: ListView(
+                      children: jobs
+                          .where((job) => job.isOpen)
+                          .map((job) => JobCard(
+                        job: job,
+                        onStatusChange: (updatedJob) {
+                          setState(() {
+                            updatedJob.isOpen = false;
+                          });
+                        },
+                      ))
+                          .toList(),
                     ),
                   ),
                 ],
@@ -147,7 +153,6 @@ class EmployerHome extends StatelessWidget {
           ),
         ],
       ),
-
       bottomNavigationBar: const BottomNavBar(),
     );
   }

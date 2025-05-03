@@ -3,21 +3,23 @@ import '../models/job_model.dart';
 
 class JobCard extends StatelessWidget {
   final Job job;
+  final Function(Job) onStatusChange;
 
-  const JobCard({super.key, required this.job});
+  const JobCard({super.key, required this.job, required this.onStatusChange});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color(0xFFF0F0F0),
+        color: const Color(0xFFF0F0F0),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -58,12 +60,55 @@ class JobCard extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
-                child: const Icon(Icons.close, size: 20, color: Colors.black),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(job.isOpen ? 'Close Job?' : 'Open Job?'),
+                      content: Text(
+                        job.isOpen
+                            ? 'Are you sure you want to close this job? It will no longer be visible to job seekers.'
+                            : 'Are you sure you want to open this job? It will now be visible to job seekers.',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            onStatusChange(job);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Confirm'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      job.isOpen ? Icons.cancel_outlined : Icons.check_circle_outline,
+                      color: job.isOpen ? Colors.red : Colors.green,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      job.isOpen ? 'Closed' : 'Open',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: job.isOpen ? Colors.red : Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
+
             ],
           ),
-
           const SizedBox(height: 12),
           Text(
             job.description,
@@ -73,17 +118,21 @@ class JobCard extends StatelessWidget {
           Text(
             job.salary,
             style: const TextStyle(
-                fontSize: 14, color: Colors.black87, fontWeight: FontWeight.bold),
+              fontSize: 14,
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
-
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Show applicants
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF007ACC),
+                    backgroundColor: const Color(0xFF007ACC),
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Applicants'),
@@ -92,10 +141,12 @@ class JobCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Delete job
+                  },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xFF007ACC)),
-                    foregroundColor:Color(0xFF007ACC),
+                    foregroundColor: const Color(0xFF007ACC),
                   ),
                   child: const Text('Delete'),
                 ),

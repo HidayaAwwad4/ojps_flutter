@@ -51,18 +51,18 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           children: [
             const CircleAvatar(
               radius: 16,
-              backgroundImage: AssetImage('assets/profile.png'),
+              backgroundImage: AssetImage('lib/assets/adham.jpg'),
             ),
             const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  'Company Name',
+                  'adham',
                   style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  'Company Location',
+                  'Rafidia, Nablus',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
