@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/features/job_seeker/screens/apply_now.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -9,11 +10,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Job Seeker App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ApplyNow(),
-    );
+   
+  return MaterialApp(
+      //home: ,
   }
 }
-
