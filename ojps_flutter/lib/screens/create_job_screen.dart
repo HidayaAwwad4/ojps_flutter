@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 import '../widgets/document_upload_button.dart';
-import 'employer_home.dart';
-import 'main_screen.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -46,19 +44,14 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const MainScreen()),
-                  (route) => false,
-            );
+            Navigator.pop(context);
           },
         ),
-
         title: Row(
           children: [
             const CircleAvatar(
               radius: 16,
-              backgroundImage: AssetImage('lib/assets/adham.jpg'),
+              backgroundImage: AssetImage('assets/adham.jpg'),
             ),
             const SizedBox(width: 8),
             Column(
@@ -138,8 +131,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
-            // DropdownSelector for Experience
             DropdownSelector(
               label: 'Experience',
               options: [
@@ -156,7 +147,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
             DropdownSelector(
               label: 'Employment',
               options: [
@@ -176,7 +166,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
             DropdownSelector(
               label: 'Category',
               options: [

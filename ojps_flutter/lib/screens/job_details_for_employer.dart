@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/job_model.dart';
-import 'edit_job_screen.dart';
+//import 'edit_job_screen.dart';
 import '../widgets/detail_tile.dart';
 import '../widgets/header_bar.dart';
 
@@ -79,12 +79,12 @@ class JobDetailsScreen extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
+                        /*Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditJobScreen(job: job),
                           ),
-                        );
+                        );*/
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF007ACC),

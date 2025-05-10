@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import '../models/job_model.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';

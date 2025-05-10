@@ -19,8 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = const [
     EmployerHome(),
     JobPostingScreen(tabIndex: 0),
-    CreateJobScreen(),
-    // Placeholder widgets for Notification and Profile
+    Scaffold(body: Center(child: Text(''))),
     Scaffold(body: Center(child: Text('Notifications'))),
     Scaffold(body: Center(child: Text('Profile'))),
   ];
@@ -29,6 +28,20 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
+  }
+
+  void _openCreateJobScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateJobScreen(),
+        fullscreenDialog: true,
+      ),
+    );
+
+    setState(() {
+      _currentIndex = 0;
+    });
   }
 
   @override
@@ -43,6 +56,10 @@ class _MainScreenState extends State<MainScreen> {
           setState(() {
             _currentIndex = index;
           });
+
+          if (index == 2) {
+            _openCreateJobScreen();
+          }
         },
         items: [
           BottomNavigationBarItem(
