@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants/colors.dart';
-
 class JobSummaryWidget extends StatelessWidget {
   final int openJobsCount;
   final int closedJobsCount;
@@ -28,13 +26,13 @@ class JobSummaryWidget extends StatelessWidget {
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: lightBlueBackgroundColor,
+          color: const Color(0xFFDDEAF3),
           borderRadius: BorderRadius.circular(20),
         ),
         alignment: Alignment.center,
         child: Text(
           text,
-          style: const TextStyle(color: primaryTextColor),
+          style: const TextStyle(color: Colors.black),
         ),
       ),
     );

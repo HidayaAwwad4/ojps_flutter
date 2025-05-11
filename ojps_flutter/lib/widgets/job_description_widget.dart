@@ -17,7 +17,7 @@ class JobDescriptionWidget extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            "Work on server-side applications and APIs for smooth operations.on server-side applications and APIs for smooth operationson server-side applications and APIs for smooth operationson server-side applications and APIs for smooth operations",
+            "Work on server-side applications and APIs for smooth operations.",
             style: TextStyle(fontSize: 13, color: secondaryTextColor),
           ),
         ],
