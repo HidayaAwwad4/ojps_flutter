@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/constants/colors.dart';
 import '../models/job_model.dart';
 import '../screens/job_posting_screen.dart';
 import 'job_card_horizontal.dart';
@@ -37,7 +38,7 @@ class JobSectionWidget extends StatelessWidget {
               },
               child: const Text(
                 'See All',
-                style: TextStyle(fontSize: 14, color: Color(0xFF0273B1), fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 14, color: primaryColor, fontWeight: FontWeight.w500),
               ),
             ),
           ],

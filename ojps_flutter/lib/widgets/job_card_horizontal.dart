@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../models/job_model.dart';
 import '../screens/job_details_for_employer.dart';
 
@@ -22,7 +23,7 @@ class JobCardHorizontal extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: const Color(0xFFF0F0F0),
+          color: cardBackgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -49,7 +50,7 @@ class JobCardHorizontal extends StatelessWidget {
                     children: [
                       Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(job.employment, style: const TextStyle(fontSize: 13, color: Colors.black87)),
+                      Text(job.employment, style: const TextStyle(fontSize: 13, color: secondaryTextColor)),
                     ],
                   ),
                 ),
@@ -81,13 +82,13 @@ class JobCardHorizontal extends StatelessWidget {
                     children: [
                       Icon(
                         job.isOpen ? Icons.cancel_outlined : Icons.check_circle_outline,
-                        color: job.isOpen ? Colors.red : Colors.green,
+                        color: job.isOpen ?closedColor : openColor,
                         size: 20,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         job.isOpen ? 'Closed' : 'Open',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: job.isOpen ? Colors.red : Colors.green),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: job.isOpen ? closedColor : openColor),
                       ),
                     ],
                   ),
@@ -95,7 +96,7 @@ class JobCardHorizontal extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(job.description, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+            Text(job.description, style: const TextStyle(fontSize: 14, color: secondaryTextColor)),
             const SizedBox(height: 10),
             Text(job.salary, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
@@ -105,8 +106,8 @@ class JobCardHorizontal extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: const Color(0xFF0273B1)),
+                        foregroundColor: whiteColor,
+                        backgroundColor: primaryColor),
                     child: const Text('Applicants'),
                   ),
                 ),
@@ -116,7 +117,7 @@ class JobCardHorizontal extends StatelessWidget {
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFF0273B1)),
-                      foregroundColor: const Color(0xFF0273B1),
+                      foregroundColor: primaryColor,
                     ),
                     child: const Text('Delete'),
                   ),

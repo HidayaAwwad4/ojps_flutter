@@ -4,8 +4,9 @@ class Applicant {
   final String email;
   final DateTime appliedAt;
   String status; // "pending", "accepted", "rejected"
-  String? imageUrl; // Optional field for the applicant's image
-  String? resume; // Optional field for the applicant's resume
+  String? imageUrl;
+  String? resumeFilePath;
+  String? coverLetter;
 
   Applicant({
     required this.id,
@@ -13,8 +14,9 @@ class Applicant {
     required this.email,
     required this.appliedAt,
     this.status = "pending",
-    this.imageUrl, // Initialize the imageUrl
-    this.resume, // Initialize the resume
+    this.imageUrl,
+    this.resumeFilePath,
+    this.coverLetter,
   });
 }
 
@@ -26,15 +28,17 @@ final List<Applicant> applicants = [
     appliedAt: DateTime(2025, 5, 9),
     status: 'pending',
     imageUrl: 'assets/sara.jpg',
-    resume: 'I am a software developer with 5 years of experience...',
+    resumeFilePath: 'assets/resume_sara.pdf',
+    coverLetter: 'Dear team, I am excited to apply for the position...',
   ),
   Applicant(
     id: '2',
     name: 'Omar Khaled',
     email: 'omar.khaled@example.com',
     appliedAt: DateTime(2025, 5, 8),
-    status: 'pending',
-    resume: 'Looking forward to contributing to your team...',
+    status: 'rejected',
+    resumeFilePath: 'assets/resume_omar.jpg',
+    coverLetter: 'I believe my skills are a great fit for your company...',
   ),
   Applicant(
     id: '3',
@@ -43,6 +47,7 @@ final List<Applicant> applicants = [
     appliedAt: DateTime(2025, 5, 7),
     status: 'accepted',
     imageUrl: 'assets/sara.jpg',
-    resume: 'Extensive experience in project management...',
+    resumeFilePath: 'assets/resume_sara.pdf',
+    coverLetter: 'With 10 years in management, I can lead your projects...',
   ),
 ];

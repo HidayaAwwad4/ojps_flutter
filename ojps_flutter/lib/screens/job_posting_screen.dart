@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../widgets/job_card_vertical.dart';
 import '../models/job_model.dart';
 
@@ -34,18 +35,18 @@ class _JobPostingScreenState extends State<JobPostingScreen>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:whiteColor,
         elevation: 0,
         centerTitle: true,
         title: const Text(
           'Job Postings',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color:primaryTextColor),
         ),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: const Color(0xFF0273B1),
-          labelColor: const Color(0xFF0273B1),
-          unselectedLabelColor: Colors.grey,
+          indicatorColor: primaryColor,
+          labelColor: primaryColor,
+          unselectedLabelColor: greyColor,
           tabs: const [
             Tab(text: 'Open Positions'),
             Tab(text: 'Closed Positions'),

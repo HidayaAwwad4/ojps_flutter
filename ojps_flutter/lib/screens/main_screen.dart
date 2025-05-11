@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../constants/colors.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
@@ -50,8 +51,8 @@ class _MainScreenState extends State<MainScreen> {
       body: _screens[_currentIndex],
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _currentIndex,
-        activeColor: const Color(0xFF0273B1),
-        inactiveColor: Colors.black,
+        activeColor: primaryColor,
+        inactiveColor: primaryTextColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
