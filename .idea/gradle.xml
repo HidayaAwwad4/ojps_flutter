@@ -20,8 +20,6 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_pdfview-1.4.0+1/android" />
-            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/open_file_android-1.0.6/android" />
             <option value="$PROJECT_DIR$/ojps_flutter/android" />
             <option value="$PROJECT_DIR$/ojps_flutter/android/app" />
             <option value="$USER_HOME$/Documents/flutter/packages/flutter_tools/gradle" />

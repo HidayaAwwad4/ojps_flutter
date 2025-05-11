@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/models/applicant_model.dart';
-import '../constants/colors.dart';
 import '../models/job_model.dart';
-import '../screens/applicant_details.dart';
-import '../screens/job_applicants_employer.dart';
 import '../screens/job_details_for_employer.dart';
 
 class JobCardVertical extends StatelessWidget {
@@ -29,7 +25,7 @@ class JobCardVertical extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: cardBackgroundColor,
+          color: const Color(0xFFF0F0F0),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -56,7 +52,7 @@ class JobCardVertical extends StatelessWidget {
                     children: [
                       Text(job.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 4),
-                      Text(job.employment, style: const TextStyle(fontSize: 13, color: secondaryTextColor)),
+                      Text(job.employment, style: const TextStyle(fontSize: 13, color: Colors.black87)),
                     ],
                   ),
                 ),
@@ -88,7 +84,7 @@ class JobCardVertical extends StatelessWidget {
                     children: [
                       Icon(
                         job.isOpen ? Icons.cancel_outlined : Icons.check_circle_outline,
-                        color: job.isOpen ? closedColor : openColor,
+                        color: job.isOpen ? Colors.red : Colors.green,
                         size: 20,
                       ),
                       const SizedBox(width: 4),
@@ -97,7 +93,7 @@ class JobCardVertical extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: job.isOpen ?closedColor : openColor,
+                          color: job.isOpen ? Colors.red : Colors.green,
                         ),
                       ),
                     ],
@@ -106,7 +102,7 @@ class JobCardVertical extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(job.description, style: const TextStyle(fontSize: 14, color: secondaryTextColor)),
+            Text(job.description, style: const TextStyle(fontSize: 14, color: Colors.black87)),
             const SizedBox(height: 10),
             Text(job.salary, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
@@ -114,28 +110,21 @@ class JobCardVertical extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                      builder: (_) => JobApplicantsScreen(applicants: applicants),
-                      ),
-                      );
-                      },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: whiteColor,
-                          backgroundColor: primaryColor,
-                        ),
-                        child: const Text('Applicants'),
-                      ),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: const Color(0xFF0273B1),
+                    ),
+                    child: const Text('Applicants'),
                   ),
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: primaryColor),
-                      foregroundColor: primaryColor,
+                      side: const BorderSide(color: Color(0xFF0273B1)),
+                      foregroundColor: const Color(0xFF0273B1),
                     ),
                     child: const Text('Delete'),
                   ),
