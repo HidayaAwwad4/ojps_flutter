@@ -9,6 +9,7 @@ class Job {
   String experience;
   String language;
   String schedule;
+  String category;
 
   Job({
     required this.title,
@@ -21,6 +22,7 @@ class Job {
     required this.experience,
     required this.language,
     required this.schedule,
+    required this.category,
   });
 }
 List<Job> jobs = [
@@ -29,26 +31,28 @@ List<Job> jobs = [
     description:
     'Responsible for developing both front-end and back-end systems, ensuring seamless performance and efficiency.',
     salary: '\$800 - \$1000 Salary/Month',
-    employment: 'Part time',
+    employment: 'Remote',
     imageUrl: 'assets/adham.jpg',
     isOpen: true,
     companyLocation: 'Amman, Jordan',
-    experience: '2+ years',
+    experience: '1-3 years',
     language: 'English, Arabic',
     schedule: 'Flexible',
+    category: 'Technology',
   ),
   Job(
     title: 'Mobile App Developer',
     description:
     'Design and develop mobile apps for Android and iOS platforms.',
     salary: '\$700 - \$900 Salary/Month',
-    employment: 'Full time',
+    employment: 'Remote',
     imageUrl: 'assets/adham.jpg',
     isOpen: false,
     companyLocation: 'Remote',
-    experience: '1+ year',
+    experience: 'Not required',
     language: 'English',
     schedule: 'Morning shift',
+    category: 'Technology',
   ),
   Job(
     title: 'Backend Developer',
@@ -62,6 +66,7 @@ List<Job> jobs = [
     experience: '3+ years',
     language: 'English',
     schedule: 'Evening shift',
+    category: 'Technology',
   ),
   Job(
     title: 'UI/UX Designer',
@@ -72,8 +77,9 @@ List<Job> jobs = [
     imageUrl: 'assets/adham.jpg',
     isOpen: false,
     companyLocation: 'Cairo, Egypt',
-    experience: '1-2 years',
+    experience: 'Not required',
     language: 'Arabic',
     schedule: 'Remote, Flexible',
+    category: 'Technology',
   ),
 ];

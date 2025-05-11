@@ -4,6 +4,7 @@ import '../models/job_model.dart';
 //import 'edit_job_screen.dart';
 import '../widgets/detail_tile.dart';
 import '../widgets/header_bar.dart';
+import 'edit_job_screen.dart';
 
 class JobDetailsScreen extends StatelessWidget {
   final Job job;
@@ -59,6 +60,7 @@ class JobDetailsScreen extends StatelessWidget {
                     DetailTile(title: 'Languages', value: job.language),
                     DetailTile(title: 'Employment', value: job.employment),
                     DetailTile(title: 'Schedule', value: job.schedule),
+                    DetailTile(title: 'Category', value: job.category),
                     DetailTile(title: 'Salary', value: job.salary),
 
                     const SizedBox(height: 24),
@@ -80,12 +82,12 @@ class JobDetailsScreen extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditJobScreen(job: job),
                           ),
-                        );*/
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,
