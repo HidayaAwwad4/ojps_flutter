@@ -23,6 +23,8 @@ class MyApp extends StatelessWidget {
 */
 
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
+import 'package:ojps_flutter/screens/job_list_screen.dart';
 import 'package:ojps_flutter/screens/main_screen.dart';
 
 
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MainScreen(),
+      //home: JobListScreen(),
+      //home: JobDetailsJopSeekerScreen(),
     );
   }
 }

@@ -56,29 +56,49 @@ class JobDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    DetailTile(title: 'Experience', value: job.experience),
-                    DetailTile(title: 'Languages', value: job.language),
-                    DetailTile(title: 'Employment', value: job.employment),
-                    DetailTile(title: 'Schedule', value: job.schedule),
-                    DetailTile(title: 'Category', value: job.category),
-                    DetailTile(title: 'Salary', value: job.salary),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: cardBackgroundColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          DetailTile(title: 'Experience', value: job.experience),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Languages', value: job.language),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Employment', value: job.employment),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Schedule', value: job.schedule),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Category', value: job.category),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Salary', value: job.salary),
+                        ],
+                      ),
+                    ),
 
-                    const SizedBox(height: 24),
+
+                    const SizedBox(height: 16),
 
                     ElevatedButton.icon(
                       onPressed: () {
                         // Handle documents logic
                       },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor:primaryTextColor,
+                        foregroundColor: primaryTextColor,
                         backgroundColor: cardBackgroundColor,
                         minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      icon: const Icon(Icons.file_download),
+                      icon: const Icon(Icons.description),
                       label: const Text('Documents'),
                     ),
 
-                    const SizedBox(height: 12),
+
+                    const SizedBox(height: 20),
 
                     ElevatedButton(
                       onPressed: () {

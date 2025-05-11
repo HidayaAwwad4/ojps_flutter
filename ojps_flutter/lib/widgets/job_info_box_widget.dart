@@ -11,7 +11,7 @@ class JobInfoBoxWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
-        color: cardBackgroundColor,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -23,8 +23,6 @@ class JobInfoBoxWidget extends StatelessWidget {
           _infoRow("Employment", "Full - time"),
           _divider(),
           _infoRow("Schedule", "Wednesday to Saturday"),
-          _divider(),
-          _infoRow("Category", "web development"),
           _divider(),
           _infoRow("Salary", "\$800 - \$1000 monthly"),
         ],
