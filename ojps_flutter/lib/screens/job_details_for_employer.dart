@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../models/job_model.dart';
 import 'edit_job_screen.dart';
 import '../widgets/detail_tile.dart';
@@ -12,7 +13,7 @@ class JobDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: whiteColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -27,7 +28,7 @@ class JobDetailsScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 36,
                       backgroundImage: AssetImage(job.imageUrl),
-                      backgroundColor: Colors.black,
+                      backgroundColor: primaryTextColor,
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -36,7 +37,7 @@ class JobDetailsScreen extends StatelessWidget {
                     ),
                     Text(
                       job.companyLocation,
-                      style: const TextStyle(color: Colors.grey),
+                      style: const TextStyle(color:greyColor),
                     ),
                     const SizedBox(height: 16),
 
@@ -54,28 +55,49 @@ class JobDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    DetailTile(title: 'Experience', value: job.experience),
-                    DetailTile(title: 'Languages', value: job.language),
-                    DetailTile(title: 'Employment', value: job.employment),
-                    DetailTile(title: 'Schedule', value: job.schedule),
-                    DetailTile(title: 'Salary', value: job.salary),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: cardBackgroundColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          DetailTile(title: 'Experience', value: job.experience),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Languages', value: job.language),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Employment', value: job.employment),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Schedule', value: job.schedule),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Category', value: job.category),
+                          const Divider(height: 1),
+                          DetailTile(title: 'Salary', value: job.salary),
+                        ],
+                      ),
+                    ),
 
-                    const SizedBox(height: 24),
+
+                    const SizedBox(height: 16),
 
                     ElevatedButton.icon(
                       onPressed: () {
                         // Handle documents logic
                       },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.black,
-                        backgroundColor: const Color(0xFFE8E8E8),
+                        foregroundColor: primaryTextColor,
+                        backgroundColor: cardBackgroundColor,
                         minimumSize: const Size(double.infinity, 48),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      icon: const Icon(Icons.file_download),
+                      icon: const Icon(Icons.description),
                       label: const Text('Documents'),
                     ),
 
-                    const SizedBox(height: 12),
+
+                    const SizedBox(height: 20),
 
                     ElevatedButton(
                       onPressed: () {
@@ -87,8 +109,8 @@ class JobDetailsScreen extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF007ACC),
-                        foregroundColor: Colors.white,
+                        backgroundColor: primaryColor,
+                        foregroundColor: whiteColor,
                         minimumSize: const Size(double.infinity, 48),
                       ),
                       child: const Text('Edit'),

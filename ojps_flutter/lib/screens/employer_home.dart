@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../models/job_model.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';
@@ -40,14 +41,14 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome Back!', style: TextStyle(fontSize: 18, color: Colors.black)),
-            Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: Colors.black87)),
+            Text('Welcome Back!', style: TextStyle(fontSize: 18, color: primaryTextColor)),
+            Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: secondaryTextColor)),
           ],
         ),
         actions: const [

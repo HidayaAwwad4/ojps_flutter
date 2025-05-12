@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 import '../widgets/document_upload_button.dart';
-import 'employer_home.dart';
-import 'main_screen.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -39,26 +38,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F0F0),
+      backgroundColor:cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: whiteColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: primaryTextColor),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const MainScreen()),
-                  (route) => false,
-            );
+            Navigator.pop(context);
           },
         ),
-
         title: Row(
           children: [
             const CircleAvatar(
               radius: 16,
-              backgroundImage: AssetImage('lib/assets/adham.jpg'),
+              backgroundImage: AssetImage('assets/adham.jpg'),
             ),
             const SizedBox(width: 8),
             Column(
@@ -66,11 +60,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               children: const [
                 Text(
                   'Adham',
-                  style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+                  style: TextStyle(color:primaryTextColor, fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 Text(
                   'Rafidia, Nablus',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  style: TextStyle(color: greyColor, fontSize: 12),
                 ),
               ],
             ),
@@ -82,8 +76,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             child: ElevatedButton(
               onPressed: isFormValid ? () {} : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? const Color(0xFF0273B1) : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? Colors.white : const Color(0xFFADADAD),
+                backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
+                foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -138,8 +132,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
-            // DropdownSelector for Experience
             DropdownSelector(
               label: 'Experience',
               options: [
@@ -156,7 +148,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
             DropdownSelector(
               label: 'Employment',
               options: [
@@ -176,7 +167,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 updateFormValidity();
               },
             ),
-
             DropdownSelector(
               label: 'Category',
               options: [
