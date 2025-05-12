@@ -1,52 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
-import 'package:ojps_flutter/widgets/custom_bottom_nav.dart';
+import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 
-class JobListScreen extends StatefulWidget {
-  const JobListScreen({super.key});
+class JobListScreen extends StatelessWidget {
+  final String categoryLabel;
 
-  @override
-  _JobListScreenState createState() => _JobListScreenState();
-}
-
-class _JobListScreenState extends State<JobListScreen> {
-  int _currentIndex = 0;
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  const JobListScreen({super.key, required this.categoryLabel});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
                 children: [
-                  Text(
-                    'Web Developer',
-                    style: TextStyle(
-                     fontSize: MediaQuery.of(context).size.width * 0.06,
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(
+                      Icons.arrow_back,
                       color: primaryTextColor,
+                      size: 28,
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Elevate your career with exclusive web\ndevelopment opportunities!',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.04,
-                      color: secondaryTextColor,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      categoryLabel,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.06,
+                        fontWeight: FontWeight.bold,
+                        color: primaryTextColor,
+                      ),
                     ),
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Elevate your career with exclusive web\ndevelopment opportunities!',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    color: secondaryTextColor,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -54,11 +58,19 @@ class _JobListScreenState extends State<JobListScreen> {
               child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return const JobCard(
+                  return JobCard(
                     title: 'Full-Stack Developer',
                     location: 'Nablus-Rafidia',
                     type: 'Full-Time',
                     logoPath: 'assets/adham.jpg',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JobDetailsJobSeekerScreen(),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -66,12 +78,6 @@ class _JobListScreenState extends State<JobListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-      ),
     );
   }
 }
-
-
