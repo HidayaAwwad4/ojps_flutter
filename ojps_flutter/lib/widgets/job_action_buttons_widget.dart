@@ -17,7 +17,7 @@ class JobActionButtonsWidget extends StatelessWidget {
               icon: const Icon(Icons.description, color: primaryTextColor),
               label: const Text("Documents"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: backgroundColor,
+                backgroundColor: cardBackgroundColor,
                 foregroundColor: primaryTextColor,
                 minimumSize: const Size(double.infinity, 48),
                 elevation: 0,
