@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/constants/colors.dart';
 import '../widgets/uploaded_cv_widget.dart';
 import '../widgets/cover_letter_field.dart';
 import '../widgets/submit_button.dart';
-import '../widgets/custom_bottom_nav.dart';
-import 'package:ojps_flutter/constants/colors.dart';
+
 class ApplyNow extends StatelessWidget {
   const ApplyNow({super.key});
 
@@ -11,18 +11,48 @@ class ApplyNow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
+      appBar: AppBar(
+        backgroundColor: whiteColor,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Apply Now",
+          style: TextStyle(
+            color: secondaryTextColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: secondaryTextColor),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Great work so far!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: secondaryTextColor,
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 600),
+                child: const Text(
+                  "Great work so far!",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
+                  ),
+                ),
+                builder: (context, value, child) => Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, (1 - value) * 20),
+                    child: child,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -36,7 +66,7 @@ class ApplyNow extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const UploadedCvWidget(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               const Text(
                 "A short cover letter helps show your interest and skills.",
                 style: TextStyle(
@@ -47,27 +77,12 @@ class ApplyNow extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const CoverLetterField(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               const SubmitButton(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushNamed(context, '/home');
-          } else if (index == 1) {
-            Navigator.pushNamed(context, '/saved');
-          } else if (index == 2) {
-            Navigator.pushNamed(context, '/notifications');
-          } else if (index == 3) {
-            Navigator.pushNamed(context, '/profile');
-          }
-        },
-      ),
     );
   }
 }
-
