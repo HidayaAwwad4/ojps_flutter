@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/screens/apply_now_screen.dart';
 
 class JobActionButtonsWidget extends StatelessWidget {
   const JobActionButtonsWidget({super.key});
@@ -30,7 +31,14 @@ class JobActionButtonsWidget extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ApplyNow(),
+                ),
+              );
+            },
             child: const Text("Apply Now"),
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
