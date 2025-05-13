@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,
@@ -47,8 +46,6 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomeScreen(),
       },
-
-     // home: ,
 
     );
   }
