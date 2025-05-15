@@ -8,3 +8,4 @@ const Color openColor = Colors.green;
 const Color primaryTextColor = Colors.black;
 const Color secondaryTextColor = Colors.black87;
 const Color whiteColor = Colors.white;
+const Color profileColor = Color(0xFFE8EEF1);

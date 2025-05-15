@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/constants/colors.dart';
-import '/constants/dimensions.dart';
 
 class ProfileImageWidget extends StatefulWidget {
   final String? imagePath;
@@ -27,9 +26,8 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
   }
 
   void _uploadImage() async {
-    // Simulate image picker here
     setState(() {
-      imagePath = 'assets/sample_profile.png'; // Example path
+      imagePath = 'assets/sample_profile.png';
     });
   }
 
@@ -39,11 +37,11 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundColor: backgroundColor,
+          backgroundColor: profileColor,
           backgroundImage:
           imagePath != null ? AssetImage(imagePath!) : null,
           child: imagePath == null
-              ? Icon(Icons.person, size: 50, color: primaryTextColor)
+              ? Icon(Icons.person, size: 50, color: primaryColor)
               : null,
         ),
         Positioned(
