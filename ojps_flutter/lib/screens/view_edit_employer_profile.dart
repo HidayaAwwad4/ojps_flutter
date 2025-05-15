@@ -86,18 +86,6 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
           ],
         ),
       ),
-      /* bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: secondaryTextColor,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: "Jobs"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_box), label: "Post"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notification"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ), */
     );
   }
 }
