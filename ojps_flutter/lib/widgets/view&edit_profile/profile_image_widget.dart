@@ -3,8 +3,9 @@ import '/constants/colors.dart';
 
 class ProfileImageWidget extends StatefulWidget {
   final String? imagePath;
+  final bool isEditable;
 
-  const ProfileImageWidget({super.key, this.imagePath});
+  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = true,});
 
   @override
   State<ProfileImageWidget> createState() => _ProfileImageWidgetState();
@@ -44,6 +45,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
               ? Icon(Icons.person, size: 50, color: primaryColor)
               : null,
         ),
+        if (widget.isEditable)
         Positioned(
           bottom: 0,
           right: 0,
