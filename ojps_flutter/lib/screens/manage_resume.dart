@@ -1,30 +1,51 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '/widgets/Resume/resume_section_title.dart';
 import '/constants/dimensions.dart';
 
-class ResumeScreen extends StatefulWidget {
-  const ResumeScreen({super.key});
+class ManageResumeScreen extends StatefulWidget {
+  const ManageResumeScreen({super.key});
 
   @override
-  State<ResumeScreen> createState() => _ResumeScreenState();
+  State<ManageResumeScreen> createState() => _ResumeScreenState();
 }
 
-class _ResumeScreenState extends State<ResumeScreen> {
+class _ResumeScreenState extends State<ManageResumeScreen> {
+  final TextEditingController personalDataController = TextEditingController();
+  final TextEditingController summaryController = TextEditingController();
   final TextEditingController experienceController = TextEditingController();
   final TextEditingController educationController = TextEditingController();
-  final TextEditingController skillsController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadResumeData();
+  }
+
+  void _loadResumeData() async {
+    // Replace this with your database call
+    await Future.delayed(const Duration(milliseconds: 500));
+    setState(() {
+      personalDataController.text="Lorem.ipsum112@example.com";
+      summaryController.text="Detail-oriented software engineer with 4+ years of experience in full-stack development."
+          " Skilled in React, Node.js, and database design."
+          " Passionate about building scalable web apps and seeking to contribute to innovative tech teams.";
+      experienceController.text = '2 years as Flutter Developer at XYZ';
+      educationController.text = 'Bachelor in Computer Science';
+    });
+  }
 
   @override
   void dispose() {
+    personalDataController.dispose();
+    summaryController.dispose();
     experienceController.dispose();
     educationController.dispose();
-    skillsController.dispose();
     super.dispose();
   }
 
   void _saveResume() {
-    // Save logic here (e.g. send to backend)
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Resume saved successfully.")),
     );
@@ -33,25 +54,33 @@ class _ResumeScreenState extends State<ResumeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Manage Resume")),
+      appBar: AppBar(
+          title: const Text("Manage Resume"),
+        centerTitle: true,
+        leading: const BackButton(),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ResumeSectionTitleWidget(title: "Work Experience"),
-            ProfileFieldWidget(label: "Describe your experience", controller: experienceController),
-            const ResumeSectionTitleWidget(title: "Education"),
-            ProfileFieldWidget(label: "List your education", controller: educationController),
-            const ResumeSectionTitleWidget(title: "Skills"),
-            ProfileFieldWidget(label: "List your skills", controller: skillsController),
+            ProfileFieldWidget(label: "Personal data", controller: personalDataController),
+            ProfileFieldWidget(label: "Summary", controller: summaryController),
+            ProfileFieldWidget(label: "Experience", controller: experienceController),
+            ProfileFieldWidget(label: "Education", controller: educationController),
             SizedBox(height: defaultPadding),
             Center(
-              child: ElevatedButton(
+              child:ElevatedButton(
                 onPressed: _saveResume,
-                child: const Text("Save Resume"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor
+                ),
+                child: const Text(
+                  "Save & View Resume",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
