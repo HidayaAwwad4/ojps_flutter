@@ -79,9 +79,9 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
                   backgroundColor: primaryColor
               ),
               child: const Text(
-                  "Save Changes",
-              style: TextStyle(color: Colors.white),
-            ),
+                "Save Changes",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

@@ -47,11 +47,11 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
         leading: const BackButton(),
       ),
       body: SingleChildScrollView(
-      padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             ProfileImageWidget(),
+            ProfileImageWidget(),
             const SizedBox(height: 10),
             Text(
               nameController.text.isEmpty ? "Your Name" : nameController.text,
@@ -90,6 +90,6 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
         ),
       ),
     );
-    }
   }
+}
 
