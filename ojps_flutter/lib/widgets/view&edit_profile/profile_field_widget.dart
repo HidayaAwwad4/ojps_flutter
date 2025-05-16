@@ -6,13 +6,17 @@ class ProfileFieldWidget extends StatefulWidget {
   final String label;
   final TextEditingController controller;
   final bool enabled;
+  final IconData? icon;
+  final int maxLines;
 
   const ProfileFieldWidget({
-    super.key,
+    Key? key,
     required this.label,
     required this.controller,
     this.enabled = true,
-  });
+    this.icon,
+    this.maxLines = 1,
+  }) : super(key: key);
 
   @override
   State<ProfileFieldWidget> createState() => _ProfileFieldWidgetState();
@@ -43,14 +47,15 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
       child: TextField(
         focusNode: _focusNode,
         controller: widget.controller,
+        maxLines: widget.maxLines,
         enabled: widget.enabled,
         cursorColor: primaryColor,
         decoration: InputDecoration(
-          label: widget.label == "Location"
+          label: widget.icon != null
               ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.location_on, size: 18, color: _focusNode.hasFocus ? primaryColor : Colors.grey),
+              Icon(widget.icon, size: 18, color: _focusNode.hasFocus ? primaryColor : Colors.grey),
               const SizedBox(width: 4),
               Text(widget.label, style: TextStyle(color: _focusNode.hasFocus ? primaryColor : Colors.grey)),
             ],
