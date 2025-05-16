@@ -1,3 +1,7 @@
+
+
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants/colors.dart';
@@ -13,6 +17,37 @@ class ManageResumeScreen extends StatefulWidget {
 }
 
 class _ManageResumeScreenState extends State<ManageResumeScreen> {
+  File? selectedFile;
+  String? fileName;
+
+  void _showUploadDialog() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx'],
+    );
+
+    if (result != null && result.files.single.path != null) {
+      File file = File(result.files.single.path!);
+      int fileSize = await file.length(); // in bytes
+
+      // 5MB = 5 * 1024 * 1024 bytes = 5242880
+      if (fileSize <= 5242880) {
+        setState(() {
+          selectedFile = file;
+          fileName = result.files.single.name;
+        });
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("File '${fileName!}' uploaded successfully")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("File size must be under 5MB")),
+        );
+      }
+    }
+  }
+
   // Personal Data Controllers
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -26,6 +61,8 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   List<Map<String, TextEditingController>> workExperienceList = [];
 
   // Education
+  List<Map<String, dynamic>> educationList = [];
+
   final List<String> degrees = [
     "In progress",
     "Diploma",
@@ -41,11 +78,51 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   final TextEditingController gpaController = TextEditingController();
   final TextEditingController honorsController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadResumeData();
-    _addWorkExperienceEntry(); // Initialize one entry
+
+  void _openUploadDialogBox() {
+    showDialog(
+      context: context,
+      builder: (_) =>
+          AlertDialog(
+            title: const Text("Upload Resume"),
+            content: const Text("Choose a PDF or Word document (Max 5MB)"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: _showUploadDialog,
+                child: const Text("Choose File"),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _addWorkExperienceEntry() {
+    workExperienceList.add({
+      'jobTitle': TextEditingController(),
+      'company': TextEditingController(),
+      'startDate': TextEditingController(),
+      'endDate': TextEditingController(),
+      'bulletPoint': TextEditingController(),
+    });
+    setState(() {});
+  }
+
+
+  void _addEducationEntry() {
+    setState(() {
+      educationList.add({
+        'degree': null,
+        'institution': TextEditingController(),
+        'startDate': TextEditingController(),
+        'endDate': TextEditingController(),
+        'gpa': TextEditingController(),
+        'honors': TextEditingController(),
+      });
+    });
   }
 
   void _loadResumeData() async {
@@ -63,17 +140,6 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
       gpaController.text = "3.9";
       honorsController.text = "With Distinction";
     });
-  }
-
-  void _addWorkExperienceEntry() {
-    workExperienceList.add({
-      'jobTitle': TextEditingController(),
-      'company': TextEditingController(),
-      'startDate': TextEditingController(),
-      'endDate': TextEditingController(),
-      'bulletPoint': TextEditingController(),
-    });
-    setState(() {});
   }
 
   Future<void> _selectDate(
@@ -95,6 +161,18 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
     );
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadResumeData();
+    _addWorkExperienceEntry();
+    _addEducationEntry(); // Initialize with one education entry
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,7 +180,15 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
         title: const Text("Manage Resume"),
         centerTitle: true,
         leading: const BackButton(),
+        actions: [
+          IconButton(
+            onPressed: _openUploadDialogBox,
+            icon: const Icon(Icons.upload_file),
+            tooltip: 'Upload Resume',
+          ),
+        ],
       ),
+
       body: SingleChildScrollView(
         padding: EdgeInsets.all(defaultPadding),
         child: Column(
@@ -111,6 +197,12 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
             ResumeFieldDropdownWidget(
               title: "Personal Data",
               children: [
+                if (fileName != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text("Uploaded File: $fileName",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
                 ProfileFieldWidget(label: "Full Name", controller: fullNameController),
                 ProfileFieldWidget(label: "Email", controller: emailController),
                 ProfileFieldWidget(label: "Phone Number", controller: phoneController),
@@ -169,36 +261,65 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
             ResumeFieldDropdownWidget(
               title: "Education",
               children: [
-                DropdownButtonFormField<String>(
-                  value: selectedDegree,
-                  items: degrees
-                      .map((degree) =>
-                      DropdownMenuItem(value: degree, child: Text(degree)))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedDegree = value;
-                    });
-                  },
-                  decoration: const InputDecoration(labelText: "Degree"),
-                ),
-                ProfileFieldWidget(label: "Institution", controller: institutionController),
-                GestureDetector(
-                  onTap: () => _selectDate(context, eduStartDateController),
-                  child: AbsorbPointer(
-                    child: ProfileFieldWidget(label: "Start Date", controller: eduStartDateController),
+                for (int i = 0; i < educationList.length; i++) ...[
+                  DropdownButtonFormField<String>(
+                    value: educationList[i]['degree'],
+                    items: degrees
+                        .map((degree) => DropdownMenuItem(
+                      value: degree,
+                      child: Text(degree),
+                    ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        educationList[i]['degree'] = value;
+                      });
+                    },
+                    decoration: const InputDecoration(labelText: "Degree"),
+                  ),
+                  ProfileFieldWidget(
+                    label: "Institution",
+                    controller: educationList[i]['institution'],
+                  ),
+                  GestureDetector(
+                    onTap: () => _selectDate(context, educationList[i]['startDate']),
+                    child: AbsorbPointer(
+                      child: ProfileFieldWidget(
+                        label: "Start Date",
+                        controller: educationList[i]['startDate'],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => _selectDate(context, educationList[i]['endDate']),
+                    child: AbsorbPointer(
+                      child: ProfileFieldWidget(
+                        label: "End Date",
+                        controller: educationList[i]['endDate'],
+                      ),
+                    ),
+                  ),
+                  ProfileFieldWidget(
+                    label: "GPA",
+                    controller: educationList[i]['gpa'],
+                  ),
+                  ProfileFieldWidget(
+                    label: "Honors",
+                    controller: educationList[i]['honors'],
+                  ),
+                  const Divider(),
+                ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: _addEducationEntry,
+                    icon: const Icon(Icons.add),
+                    label: const Text("Add Education"),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => _selectDate(context, eduEndDateController),
-                  child: AbsorbPointer(
-                    child: ProfileFieldWidget(label: "End Date", controller: eduEndDateController),
-                  ),
-                ),
-                ProfileFieldWidget(label: "GPA", controller: gpaController),
-                ProfileFieldWidget(label: "Honors", controller: honorsController),
               ],
             ),
+
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
@@ -216,3 +337,4 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
     );
   }
 }
+
