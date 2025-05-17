@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/screens/manage_resume.dart';
 
 
 void main() {
@@ -11,8 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Job Seeker App',
       debugShowCheckedModeBanner: false,
-      //home: ,
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const ManageResumeScreen(), // Change to employer screen if needed
     );
   }
 }
