@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/screens/manage_resume.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/screens/splash_screen.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
@@ -46,7 +47,6 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomeScreen(),
       },
-
     );
   }
 }

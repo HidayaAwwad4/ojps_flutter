@@ -11,5 +11,7 @@ const Color pendingColor = Colors.orange;
 const Color primaryTextColor = Colors.black;
 const Color secondaryTextColor = Colors.black87;
 const Color whiteColor = Colors.white;
+const Color profileColor = Color(0xFFE8EEF1);
+const Color lightGrey = Color(0xFFA0A4A5);
 const Color successColor = Color(0xFF28A745);
 const Color greyColor = Colors.grey;
