@@ -4,6 +4,9 @@ import 'package:ojps_flutter/screens/splash_screen.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
 import 'package:ojps_flutter/screens/job_status_screen.dart';
 import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
+import 'package:ojps_flutter/screens/user_type.dart';
+import 'screens/Login_page.dart';
+import 'package:ojps_flutter/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      home: ChooseType() ,
+      /*theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: AppBarTheme(
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
         '/job_status': (context) => const JobStatusScreen(),
         '/saved_jobs': (context) => const SavedJobsScreen(),
       },
+      },*/
     );
   }
 }
