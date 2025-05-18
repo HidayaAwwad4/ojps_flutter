@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'user_type.dart';
+import 'Forgetpassword.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ✅ صورة مموجة مع شفافية ولوجو
+
             Stack(
               children: [
                 ClipPath(
@@ -36,16 +37,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                // ✅ طبقة شفافية بيضاء خفيفة
-                ClipPath(
-                  clipper: WaveClipper(),
-                  child: Container(
-                    height: screenHeight * 0.4,
-                    width: double.infinity,
-                    color: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-                // ✅ اللوجو
+
+
+
                 Positioned(
                   top: 20,
                   left: 0,
@@ -53,14 +47,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Center(
                     child: Image.asset(
                       'assets/app_logo.png',
-                      height: 80,
+                      height: 70,
                     ),
                   ),
                 ),
               ],
             ),
 
-            // 🔒 نموذج تسجيل الدخول
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
               child: Form(
@@ -68,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 5),
+                    SizedBox(height: 1),
                     Text(
                       'Log In',
                       style: TextStyle(
@@ -79,15 +72,14 @@ class _LoginPageState extends State<LoginPage> {
                         color: primaryColor,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 3),
                     Text(
                       'Welcome back! Please login to your account.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 2),
 
-                    // 📧 البريد الإلكتروني
                     _buildTextFormField(
                       label: 'Email',
                       icon: Icons.email,
@@ -102,26 +94,49 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
 
-                    // 🔐 كلمة المرور
-                    _buildTextFormField(
-                      label: 'Password',
-                      icon: Icons.lock,
-                      controller: passwordController,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTextFormField(
+                          label: 'Password',
+                          icon: Icons.lock,
+                          controller: passwordController,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
+                              );
+                            },
+                            child: Text(
+                              'Forget Password?',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
-                    SizedBox(height: 25),
+
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryColor,
@@ -144,10 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-
                     SizedBox(height: 20),
                     Text("Or sign in with", style: TextStyle(color: Colors.black54)),
-                    SizedBox(height: 30),
+                    SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -159,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
 
-                    SizedBox(height: 14),
+                    SizedBox(height: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -234,7 +248,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-// ✅ كلاس تموج الشكل العلوي
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -252,7 +265,6 @@ class WaveClipper extends CustomClipper<Path> {
     path.close();
     return path;
   }
-
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
