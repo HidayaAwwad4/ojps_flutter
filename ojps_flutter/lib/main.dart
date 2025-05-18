@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'screens/Login_page.dart';
+import 'package:ojps_flutter/screens/apply_now_screen.dart';
+import 'package:ojps_flutter/screens/home_screen.dart';
+import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
+import 'package:ojps_flutter/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+     // home: ,
+
     );
   }
 }
