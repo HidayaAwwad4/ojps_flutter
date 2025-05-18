@@ -5,7 +5,7 @@ class ProfileImageWidget extends StatefulWidget {
   final String? imagePath;
   final bool isEditable;
 
-  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = true,});
+  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = false,});
 
   @override
   State<ProfileImageWidget> createState() => _ProfileImageWidgetState();
