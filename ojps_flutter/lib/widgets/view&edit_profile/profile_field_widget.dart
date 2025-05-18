@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
+import '/models/resume_model.dart';
 
 class ProfileFieldWidget extends StatefulWidget {
   final String label;
