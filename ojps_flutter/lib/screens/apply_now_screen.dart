@@ -12,19 +12,19 @@ class ApplyNow extends StatelessWidget {
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
-        elevation: 0,
+        backgroundColor: primaryColor,
+        elevation: 4,
         centerTitle: true,
         title: const Text(
           "Apply Now",
           style: TextStyle(
-            color: secondaryTextColor,
+            color: whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: secondaryTextColor),
+          icon: const Icon(Icons.arrow_back, color: whiteColor),
           onPressed: () {
             Navigator.pop(context);
           },
