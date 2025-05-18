@@ -47,7 +47,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome Back!', style: TextStyle(fontSize: 18, color: primaryTextColor)),
+            Text('Hello, Hidaya', style: TextStyle(fontSize: 18, color: primaryTextColor)),
             Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: secondaryTextColor)),
           ],
         ),
