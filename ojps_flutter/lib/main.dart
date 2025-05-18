@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/screens/splash_screen.dart';
-import 'package:ojps_flutter/screens/home_screen.dart';
-import 'package:ojps_flutter/screens/user_type.dart';
-import 'screens/Login_page.dart';
-import 'package:ojps_flutter/screens/main_screen.dart';
+import 'package:ojps_flutter/screens/view_resume.dart';
+
 
 
 void main() {
@@ -18,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      home: ChooseType() ,
+      home: ViewResumeScreen() ,
       /*theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,
