@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/screens/manage_resume.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/screens/splash_screen.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
+import 'package:ojps_flutter/screens/user_type.dart';
 import 'screens/Login_page.dart';
-import 'package:ojps_flutter/screens/apply_now_screen.dart';
-import 'package:ojps_flutter/screens/home_screen.dart';
-import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/main_screen.dart';
 
 
@@ -21,7 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      theme: ThemeData(
+      home: ChooseType() ,
+      /*theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: AppBarTheme(
@@ -46,7 +44,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/home': (context) => const HomeScreen(),
-      },
+      },*/
+
     );
   }
 }

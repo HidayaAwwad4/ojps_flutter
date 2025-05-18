@@ -43,11 +43,11 @@ List<Job> jobs = [
   Job(
     title: 'Mobile App Developer',
     description:
-    'Design and develop mobile apps for Android and iOS platforms.',
+    'Design and develop mobile apps for Android and iOS platforms, ensuring seamless performance and efficiency.',
     salary: '\$700 - \$900 Salary/Month',
     employment: 'Remote',
     imageUrl: 'assets/adham.jpg',
-    isOpen: false,
+    isOpen: true,
     companyLocation: 'Remote',
     experience: 'Not required',
     language: 'English',
@@ -61,7 +61,7 @@ List<Job> jobs = [
     salary: '\$900 - \$1200 Salary/Month',
     employment: 'Remote',
     imageUrl: 'assets/adham.jpg',
-    isOpen: true,
+    isOpen: false,
     companyLocation: 'Dubai, UAE',
     experience: '3+ years',
     language: 'English',
