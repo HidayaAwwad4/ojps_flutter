@@ -3,9 +3,29 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/categories_widget.dart';
 import '../widgets/recommended_jobs_widget.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import '../widgets/custom_bottom_nav.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+
+  void _onTap(int index) {
+    if (index == 1) {
+      Navigator.pushNamed(context, '/saved_jobs');
+    } else if (index == 3) {
+      Navigator.pushNamed(context, '/job_status');
+    } else {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +39,6 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -52,7 +71,16 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 const SearchBarWidget(),
                 const SizedBox(height: 20),
+                Text(
+                  "Categories",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: primaryTextColor,
+                  ),
+                ),
+                const SizedBox(height: 10),
                 const CategoriesWidget(),
+
                 const SizedBox(height: 20),
                 Text(
                   "Recommended Jobs",
@@ -62,24 +90,20 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const RecommendedJobsWidget(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: const RecommendedJobsWidget(),
+                ),
               ],
             ),
           ),
         ),
       ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: secondaryTextColor,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Save'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notification'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
+      bottomNavigationBar: CustomBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: _onTap,
       ),
     );
   }
 }
+
