@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+import '/widgets/view&edit_profile/profile_image_widget.dart';
+import '/widgets/view&edit_profile/profile_field_widget.dart';
+import '/constants/colors.dart';
+import '/constants/dimensions.dart';
+
+class ViewEditSeekerProfile extends StatefulWidget {
+  const ViewEditSeekerProfile({super.key});
+
+  @override
+  State<ViewEditSeekerProfile> createState() => _ViewEditSeekerProfileState();
+}
+
+class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
+  final TextEditingController nameController = TextEditingController(text: "Wafa Al-Adham");
+  final TextEditingController emailController = TextEditingController(text: "Al-Adham2020@example.com");
+  final TextEditingController phoneController = TextEditingController(text: "+970592222222");
+  final TextEditingController bioController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    nameController.addListener(() => setState(() {}));
+    emailController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    bioController.dispose();
+    super.dispose();
+  }
+  void _navigateToResumePage() {
+    Navigator.pushNamed(context, '/resume');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: const Text("Profile"),
+        centerTitle: true,
+        leading: const BackButton(),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ProfileImageWidget(),
+            const SizedBox(height: 10),
+            Text(
+              nameController.text.isEmpty ? "Your Name" : nameController.text,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
+              style: const TextStyle(color: secondaryTextColor),
+            ),
+            const SizedBox(height: 20),
+            ProfileFieldWidget(
+              label: "Full Name",
+              controller: nameController,
+              enabled: true,
+            ),
+            ProfileFieldWidget(label: "Email", controller: emailController),
+            ProfileFieldWidget(label: "Phone", controller: phoneController),
+            ProfileFieldWidget(label: "Bio", controller: bioController),
+            TextButton(
+              onPressed: _navigateToResumePage,
+              child: const Text("Manage Resume", style: TextStyle(color: primaryColor)),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor
+              ),
+              child: const Text(
+                "Save Changes",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
