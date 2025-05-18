@@ -7,9 +7,9 @@
         <compositeConfiguration>
           <compositeBuild compositeDefinitionSource="SCRIPT">
             <builds>
-              <build path="$USER_HOME$/Documents/flutter/packages/flutter_tools/gradle" name="gradle">
+              <build path="$PROJECT_DIR$/../../flutter_windows_3.29.3-stable/flutter/packages/flutter_tools/gradle" name="gradle">
                 <projects>
-                  <project path="$USER_HOME$/Documents/flutter/packages/flutter_tools/gradle" />
+                  <project path="$PROJECT_DIR$/../../flutter_windows_3.29.3-stable/flutter/packages/flutter_tools/gradle" />
                 </projects>
               </build>
             </builds>
@@ -20,9 +20,11 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-10.1.9/android" />
+            <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.28/android" />
+            <option value="$PROJECT_DIR$/../../flutter_windows_3.29.3-stable/flutter/packages/flutter_tools/gradle" />
             <option value="$PROJECT_DIR$/ojps_flutter/android" />
             <option value="$PROJECT_DIR$/ojps_flutter/android/app" />
-            <option value="$USER_HOME$/Documents/flutter/packages/flutter_tools/gradle" />
           </set>
         </option>
       </GradleProjectSettings>
