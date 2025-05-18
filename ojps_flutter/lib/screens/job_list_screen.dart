@@ -3,10 +3,17 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 
-class JobListScreen extends StatelessWidget {
+class JobListScreen extends StatefulWidget {
   final String categoryLabel;
 
   const JobListScreen({super.key, required this.categoryLabel});
+
+  @override
+  State<JobListScreen> createState() => _JobListScreenState();
+}
+
+class _JobListScreenState extends State<JobListScreen> {
+  List<bool> savedJobs = List<bool>.filled(10, false);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +36,7 @@ class JobListScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      categoryLabel,
+                      widget.categoryLabel,
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.06,
                         fontWeight: FontWeight.bold,
@@ -56,21 +63,30 @@ class JobListScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: savedJobs.length,
                 itemBuilder: (context, index) {
-                  return JobCard(
-                    title: 'Full-Stack Developer',
-                    location: 'Nablus-Rafidia',
-                    type: 'Full-Time',
-                    logoPath: 'assets/adham.jpg',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => JobDetailsJobSeekerScreen(),
-                        ),
-                      );
-                    },
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 1.0),
+                    child: JobCard(
+                      image: 'assets/adham.jpg',
+                      title: 'Full-Stack Developer',
+                      location: 'Nablus-Rafidia',
+                      type: 'Full-Time',
+                      isSaved: savedJobs[index],
+                      onSaveToggle: () {
+                        setState(() {
+                          savedJobs[index] = !savedJobs[index];
+                        });
+                      },
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => JobDetailsJobSeekerScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               ),

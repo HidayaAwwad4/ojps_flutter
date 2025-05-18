@@ -15,7 +15,13 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        if (index == 3) {
+          Navigator.pushNamed(context, '/job_status');
+        } else {
+          onTap(index);
+        }
+      },
       type: BottomNavigationBarType.fixed,
       backgroundColor: whiteColor,
       selectedItemColor: primaryColor,
@@ -48,8 +54,16 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.person_outline,
+            Icons.work_outline,
             color: currentIndex == 3 ? primaryColor : secondaryTextColor,
+            size: 25,
+          ),
+          label: 'Status',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.person_outline,
+            color: currentIndex == 4 ? primaryColor : secondaryTextColor,
             size: 25,
           ),
           label: 'Profile',
@@ -58,3 +72,5 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 }
+
+
