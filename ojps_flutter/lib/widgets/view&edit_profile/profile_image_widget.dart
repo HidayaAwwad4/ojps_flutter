@@ -28,7 +28,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
 
   void _uploadImage() async {
     setState(() {
-      imagePath = 'assets/sample_profile.png';
+      imagePath = 'assets/Profile_avatar.png';
     });
   }
 
