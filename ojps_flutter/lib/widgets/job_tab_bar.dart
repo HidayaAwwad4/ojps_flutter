@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
   const JobTabBar({super.key});
@@ -9,12 +10,14 @@ class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       decoration: const BoxDecoration(
         color: primaryColor,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(AppValues.tabBarRadius),
+        ),
         boxShadow: [
           BoxShadow(
             color: primaryTextColor,
-            blurRadius: 6,
-            offset: Offset(0, 2),
+            blurRadius: AppValues.tabBarBlurRadius,
+            offset: Offset(0, AppValues.tabBarOffsetY),
           ),
         ],
       ),
@@ -22,19 +25,19 @@ class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
         isScrollable: false,
         indicator: BoxDecoration(
           color: whiteColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppValues.tabBarRadius),
         ),
         labelColor: primaryColor,
         unselectedLabelColor: whiteColor,
         labelPadding: EdgeInsets.zero,
         labelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 14,
-          letterSpacing: 0.3,
+          fontSize: AppValues.tabBarFontSize,
+          letterSpacing: AppValues.tabBarLetterSpacing,
         ),
         unselectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.normal,
-          fontSize: 14,
+          fontSize: AppValues.tabBarFontSize,
         ),
         tabs: const [
           Tab(child: Center(child: Text('Under Review'))),

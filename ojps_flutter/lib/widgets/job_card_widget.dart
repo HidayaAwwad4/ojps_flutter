@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobCard extends StatelessWidget {
   final String image;
@@ -36,20 +37,22 @@ class JobCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppValues.cardRadius),
       child: Container(
-        padding: const EdgeInsets.all(14),
-        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(AppValues.cardPadding),
+        margin: const EdgeInsets.symmetric(vertical: AppValues.cardVerticalMargin),
         decoration: BoxDecoration(
           color: isSaved ? lightBlueBackgroundColor : cardBackgroundColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppValues.cardRadius),
           border: Border.all(color: isSaved ? primaryColor : lightBlueBackgroundColor),
           boxShadow: [
             BoxShadow(
-              color: isSaved ? primaryColor.withOpacity(0.3) : primaryColor.withOpacity(0.15),
-              blurRadius: 10,
-              spreadRadius: 1,
-              offset: const Offset(0, 4),
+              color: isSaved
+                  ? primaryColor.withOpacity(AppValues.shadowOpacitySaved)
+                  : primaryColor.withOpacity(AppValues.shadowOpacityLight),
+              blurRadius: AppValues.cardShadowBlur,
+              spreadRadius: AppValues.cardShadowSpread,
+              offset: const Offset(0, AppValues.shadowOffsetY),
             ),
           ],
         ),
@@ -58,9 +61,9 @@ class JobCard extends StatelessWidget {
           children: [
             CircleAvatar(
               backgroundImage: AssetImage(image),
-              radius: 26,
+              radius: AppValues.avatarRadius,
             ),
-            const SizedBox(width: 14),
+            const SizedBox(width: AppValues.cardSpacing),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,64 +72,60 @@ class JobCard extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.5,
+                      fontSize: AppValues.fontTitle,
                       color: primaryTextColor,
                     ),
                   ),
-                  const SizedBox(height: 4),
-
+                  const SizedBox(height: AppValues.extraSmallSpacing),
                   Text(
                     location,
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: AppValues.fontLocation,
                       color: secondaryTextColor,
                     ),
                   ),
-                  const SizedBox(height: 3),
-
+                  const SizedBox(height: AppValues.tinySpacing),
                   Text(
                     type,
                     style: const TextStyle(
-                      fontSize: 12.5,
+                      fontSize: AppValues.fontType,
                       color: secondaryTextColor,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
-
                   if (description != null || salary != null) ...[
-                    const SizedBox(height: 6),
+                    const SizedBox(height: AppValues.smallSpacing),
                     if (description != null)
                       Text(
                         description!,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: AppValues.fontDescription,
                           color: secondaryTextColor,
                         ),
                       ),
                     if (salary != null)
                       Padding(
-                        padding: const EdgeInsets.only(top: 2),
+                        padding: const EdgeInsets.only(top: AppValues.tinySpacing),
                         child: Text(
                           salary!,
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: AppValues.fontSalary,
                             color: primaryColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                   ],
-
                   if (statusLabel != null && statusColor != null)
                     Container(
-                      margin: const EdgeInsets.only(top: 6),
+                      margin: const EdgeInsets.only(top: AppValues.smallSpacing),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
                         color: statusColor!.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(AppValues.statusRadius),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -134,15 +133,15 @@ class JobCard extends StatelessWidget {
                           if (statusIcon != null)
                             Icon(
                               statusIcon,
-                              size: 14,
+                              size: AppValues.iconSizeStatus,
                               color: statusColor,
                             ),
                           if (statusIcon != null)
-                            const SizedBox(width: 4),
+                            const SizedBox(width: AppValues.extraSmallSpacing),
                           Text(
                             statusLabel!,
                             style: TextStyle(
-                              fontSize: 11.5,
+                              fontSize: AppValues.fontStatus,
                               color: statusColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -158,7 +157,7 @@ class JobCard extends StatelessWidget {
                 icon: Icon(
                   isSaved ? Icons.bookmark : Icons.bookmark_border,
                   color: primaryColor,
-                  size: 22,
+                  size: AppValues.iconSizeBookmark,
                 ),
                 onPressed: onSaveToggle,
                 tooltip: isSaved ? 'save' : 'save_job',
@@ -169,3 +168,4 @@ class JobCard extends StatelessWidget {
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class SearchBarWidget extends StatelessWidget {
   const SearchBarWidget({super.key});
@@ -10,19 +11,24 @@ class SearchBarWidget extends StatelessWidget {
       decoration: InputDecoration(
         hintText: "Search jobs",
         hintStyle: TextStyle(
-          color: secondaryTextColor.withOpacity(0.6),
+          color: secondaryTextColor.withOpacity(AppValues.searchBarHintTextOpacity),
+          fontSize: 14,
+          fontWeight: FontWeight.normal,
         ),
         prefixIcon: Icon(
           Icons.search,
           color: primaryColor,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppValues.searchBarBorderRadius),
           borderSide: BorderSide(color: primaryColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: primaryColor, width: 2),
+          borderRadius: BorderRadius.circular(AppValues.searchBarBorderRadius),
+          borderSide: BorderSide(
+            color: primaryColor,
+            width: AppValues.searchBarFocusedBorderWidth,
+          ),
         ),
       ),
     );

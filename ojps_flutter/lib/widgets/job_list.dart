@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobList extends StatefulWidget {
   final String status;
@@ -13,6 +14,33 @@ class JobList extends StatefulWidget {
 class _JobListState extends State<JobList> {
   late List<bool> savedJobs;
 
+  final List<Map<String, dynamic>> dummyJobs = [
+    {
+      'image': 'assets/adham.jpg',
+      'title': 'UI/UX Designer',
+      'location': 'New York, NY',
+      'type': 'Full-time',
+      'salary': '\$40/hr',
+      'status': AppValues.statusUnderReview,
+    },
+    {
+      'image': 'assets/adham.jpg',
+      'title': 'Frontend Developer',
+      'location': 'San Francisco, CA',
+      'type': 'Part-time',
+      'salary': '\$30/hr',
+      'status': AppValues.statusAccepted,
+    },
+    {
+      'image': 'assets/adham.jpg',
+      'title': 'Backend Developer',
+      'location': 'Remote',
+      'type': 'Contract',
+      'salary': '\$50/hr',
+      'status': AppValues.statusRejected,
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -21,23 +49,29 @@ class _JobListState extends State<JobList> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredJobs = dummyJobs.where((job) => job['status'] == widget.status).toList();
+    final filteredJobs =
+    dummyJobs.where((job) => job['status'] == widget.status).toList();
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppValues.jobListHorizontalPadding,
+        vertical: AppValues.jobListVerticalPadding,
+      ),
       itemCount: filteredJobs.length,
       itemBuilder: (context, index) {
         final job = filteredJobs[index];
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(bottom: AppValues.jobCardBottomPadding),
           child: JobCard(
             image: job['image'],
             title: job['title'],
             location: job['location'],
             type: job['type'],
-            onTap: () {
-            },
             salary: job['salary'],
+            onTap: () {
+              //  Navigator.pushNamed(context, '/job_details');
+            },
+
             isSaved: savedJobs[index],
             onSaveToggle: () {
               setState(() {
@@ -54,11 +88,11 @@ class _JobListState extends State<JobList> {
 
   String getStatusLabel(String status) {
     switch (status) {
-      case 'under_review':
+      case AppValues.statusUnderReview:
         return 'Under Review';
-      case 'accepted':
+      case AppValues.statusAccepted:
         return 'Accepted';
-      case 'rejected':
+      case AppValues.statusRejected:
         return 'Rejected';
       default:
         return '';
@@ -67,43 +101,14 @@ class _JobListState extends State<JobList> {
 
   Color getStatusColor(String status) {
     switch (status) {
-      case 'under_review':
+      case AppValues.statusUnderReview:
         return primaryColor;
-      case 'accepted':
+      case AppValues.statusAccepted:
         return successColor;
-      case 'rejected':
+      case AppValues.statusRejected:
         return closedColor;
       default:
         return secondaryTextColor;
     }
   }
 }
-
-
-final List<Map<String, dynamic>> dummyJobs = [
-  {
-    'image': 'assets/adham.jpg',
-    'title': 'Mobile Developer',
-    'location': 'Nablus',
-    'type': 'Full-Time',
-    'salary': '\$1200 / month',
-    'status': 'under_review',
-  },
-  {
-    'image': 'assets/adham.jpg',
-    'title': 'Backend Developer',
-    'location': 'Ramallah',
-    'type': 'Part-Time',
-    'salary': '\$800 / month',
-    'status': 'accepted',
-  },
-  {
-    'image': 'assets/adham.jpg',
-    'title': 'UI/UX Designer',
-    'location': 'Hebron',
-    'type': 'Freelance',
-    'salary': '\$1000 / month',
-    'status': 'rejected',
-  },
-];
-

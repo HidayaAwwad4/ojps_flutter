@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class SubmitButton extends StatefulWidget {
   const SubmitButton({super.key});
@@ -16,7 +17,7 @@ class _SubmitButtonState extends State<SubmitButton> {
     setState(() {
       _isLoading = true;
     });
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: AppValues.submitDelaySeconds));
 
     setState(() {
       _isLoading = false;
@@ -29,15 +30,14 @@ class _SubmitButtonState extends State<SubmitButton> {
       ),
     );
 
-
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: AppValues.submitSuccessDelaySeconds));
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: Duration(milliseconds: AppValues.animationDurationMs),
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _isLoading || _isSubmitted ? null : _handleSubmit,
@@ -46,13 +46,14 @@ class _SubmitButtonState extends State<SubmitButton> {
           foregroundColor: whiteColor,
           elevation: 4,
           shadowColor: primaryColor.withOpacity(0.3),
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(
+              vertical: AppValues.verticalButtonPadding),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppValues.borderRadiusButton),
           ),
         ),
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: AppValues.animationDurationMs),
           transitionBuilder: (child, animation) =>
               ScaleTransition(scale: animation, child: child),
           child: _isLoading
@@ -65,11 +66,12 @@ class _SubmitButtonState extends State<SubmitButton> {
             ),
           )
               : _isSubmitted
-              ? const Icon(Icons.check, size: 24, color: whiteColor)
+              ? const Icon(Icons.check,
+              size: AppValues.submitIconSize, color: whiteColor)
               : const Text(
             "Submit",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: AppValues.buttonFontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
