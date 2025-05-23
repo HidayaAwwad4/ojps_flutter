@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/job_card_vertical.dart';
 import '../models/job_model.dart';
+import '../services/job_service.dart';
+import '../widgets/job_card_vertical.dart';
 
 class JobPostingScreen extends StatefulWidget {
   final int tabIndex;
@@ -15,10 +16,39 @@ class _JobPostingScreenState extends State<JobPostingScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  List<Job> allJobs = [];
+  bool isLoading = true;
+  final int employerId = 37;
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.tabIndex);
+    _tabController =
+        TabController(length: 2, vsync: this, initialIndex: widget.tabIndex);
+    fetchEmployerJobs();
+  }
+
+  Future<void> fetchEmployerJobs() async {
+    try {
+      final jobService = JobService();
+      final jobsJson = await jobService.getJobsByEmployer(employerId);
+      final fetchedJobs =
+      jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
+
+      setState(() {
+        allJobs = fetchedJobs;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetching jobs: $e");
+      setState(() => isLoading = false);
+    }
+  }
+
+  void toggleJobStatus(Job job) {
+    setState(() {
+      job.isOpened = !job.isOpened;
+    });
   }
 
   @override
@@ -29,8 +59,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
 
   @override
   Widget build(BuildContext context) {
-    final openJobs = jobs.where((job) => job.isOpen).toList();
-    final closedJobs = jobs.where((job) => !job.isOpen).toList();
+    final openJobs = allJobs.where((job) => job.isOpened).toList();
+    final closedJobs = allJobs.where((job) => !job.isOpened).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,8 +73,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
         ),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: const Color(0xFF0273B1),
-          labelColor: const Color(0xFF0273B1),
+          indicatorColor: Color(0xFF0273B1),
+          labelColor: Color(0xFF0273B1),
           unselectedLabelColor: Colors.grey,
           tabs: const [
             Tab(text: 'Open Positions'),
@@ -52,7 +82,9 @@ class _JobPostingScreenState extends State<JobPostingScreen>
           ],
         ),
       ),
-      body: TabBarView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : TabBarView(
         controller: _tabController,
         children: [
           // Open Jobs
@@ -62,11 +94,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = openJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: (updatedJob) {
-                  setState(() {
-                    job.isOpen = !job.isOpen;
-                  });
-                },
+                onStatusChange: toggleJobStatus,
               );
             },
           ),
@@ -78,11 +106,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = closedJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: (updatedJob) {
-                  setState(() {
-                    job.isOpen = !job.isOpen;
-                  });
-                },
+                onStatusChange: toggleJobStatus,
               );
             },
           ),
