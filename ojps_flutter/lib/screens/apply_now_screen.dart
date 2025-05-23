@@ -87,4 +87,3 @@ class ApplyNow extends StatelessWidget {
     );
   }
 }
-

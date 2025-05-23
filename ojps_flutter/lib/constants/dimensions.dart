@@ -1,0 +1,13 @@
+const double defaultPadding = 16.0;
+const double defaultRadius = 12.0;
+const double borderRadius = 12.0;
+const double profileImageRadius = 50.0;
+const double iconSize = 24.0;
+const double fontSizeNormal = 16.0;
+const double height5 = 5.0;
+const double height10 = 10.0;
+const double height15 = 15.0;
+const double height20 = 20.0;
+const double width10 = 10.0;
+const double width15 = 15.0;
+const double radius20 = 20.0;

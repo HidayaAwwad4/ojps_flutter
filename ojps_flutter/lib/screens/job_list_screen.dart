@@ -98,4 +98,3 @@ class _JobListScreenState extends State<JobListScreen> {
     );
   }
 }
-

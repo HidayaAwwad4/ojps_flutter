@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      routes: appRoutes, // استخدم هنا الخريطة من ملف routes.dart
+      routes: appRoutes, 
     );
   }
 }

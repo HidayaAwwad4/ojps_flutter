@@ -52,4 +52,3 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
     );
   }
 }
-

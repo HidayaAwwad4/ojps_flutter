@@ -168,4 +168,3 @@ class JobCard extends StatelessWidget {
     );
   }
 }
-
