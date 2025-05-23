@@ -37,6 +37,7 @@ dependencies:
   file_picker: ^10.1.9
   open_file: ^3.5.10
   flutter_pdfview: ^1.4.0+1
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:

@@ -30,137 +30,56 @@ class ApplyNow extends StatelessWidget {
           },
         ),
       ),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 600),
-              child: const Text(
-                "Great work so far!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor,
-                ),
-              ),
-              builder: (context, value, child) => Opacity(
-                opacity: value,
-                child: Transform.translate(
-                  offset: Offset(0, (1 - value) * 20),
-                  child: child,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "You're almost there ",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: primaryColor,
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Please review your details and submit your application confidently.",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              decoration: BoxDecoration(
-                color: lightBlueBackgroundColor.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: primaryColor, width: 1),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Row(
-                    children: [
-                      Icon(Icons.insert_drive_file, color: primaryColor),
-                      SizedBox(width: 8),
-                      Text(
-                        "Your CV",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: 1),
+                duration: const Duration(milliseconds: 600),
+                child: const Text(
+                  "Great work so far!",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor,
                   ),
-                  SizedBox(height: 12),
-                  UploadedCvWidget(),
-                ],
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              "Cover Letter ",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 10),
-            const CoverLetterField(),
-            const SizedBox(height: 30),
-            const SubmitButton(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: whiteColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            )
-          ],
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
                 ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.check_circle, color: Colors.green, size: 50),
-                    SizedBox(height: 12),
-                    Text(
-                      "Application Submitted!",
-                      style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                        "We'll notify you once the employer reviews your application."),
-                  ],
+                builder: (context, value, child) => Opacity(
+                  opacity: value,
+                  child: Transform.translate(
+                    offset: Offset(0, (1 - value) * 20),
+                    child: child,
+                  ),
                 ),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            "Submit Application",
-            style: TextStyle(color: Colors.white, fontSize: 16),
+              const SizedBox(height: 12),
+              const Text(
+                "Please review your CV and make sure it's up to date.",
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: secondaryTextColor,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const UploadedCvWidget(),
+              const SizedBox(height: 24),
+              const Text(
+                "A short cover letter helps show your interest and skills.",
+                style: TextStyle(
+                  fontSize: 14,
+                  height: 1.5,
+                  color: secondaryTextColor,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const CoverLetterField(),
+              const SizedBox(height: 30),
+              const SubmitButton(),
+            ],
           ),
         ),
       ),

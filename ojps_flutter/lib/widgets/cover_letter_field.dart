@@ -59,7 +59,7 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
           ),
           child: TextField(
             controller: _controller,
-            maxLines: 12,
+            maxLines: 16,
             maxLength: _maxChars,
             focusNode: _focusNode,
             decoration: InputDecoration(

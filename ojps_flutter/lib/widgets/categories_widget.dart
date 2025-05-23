@@ -29,6 +29,33 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: List.generate(
+              totalPages,
+                  (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+                child: Container(
+                  width: 8,
+                  height: 8,
+                  margin: const EdgeInsets.only(left: 6),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: currentPage == index
+                        ? primaryColor
+                        : secondaryTextColor.withOpacity(0.3),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -86,5 +113,3 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
     );
   }
 }
-
-
