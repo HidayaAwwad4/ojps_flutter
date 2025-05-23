@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/screens/apply_now_screen.dart';
 
 class JobActionButtonsWidget extends StatelessWidget {
@@ -8,7 +9,7 @@ class JobActionButtonsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
       child: Column(
         children: [
           Tooltip(
@@ -20,16 +21,16 @@ class JobActionButtonsWidget extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: cardBackgroundColor,
                 foregroundColor: primaryTextColor,
-                minimumSize: const Size(double.infinity, 48),
+                minimumSize: const Size(double.infinity, AppValues.buttonHeight),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppValues.borderRadiusButton),
                   side: const BorderSide(color: primaryColor),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppValues.jobActionButtonsSpacing),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
@@ -43,10 +44,10 @@ class JobActionButtonsWidget extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               foregroundColor: whiteColor,
-              minimumSize: const Size(double.infinity, 48),
+              minimumSize: const Size(double.infinity, AppValues.buttonHeight),
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppValues.borderRadiusButton),
               ),
             ),
           ),
@@ -55,3 +56,4 @@ class JobActionButtonsWidget extends StatelessWidget {
     );
   }
 }
+

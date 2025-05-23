@@ -5,7 +5,7 @@ class ProfileImageWidget extends StatefulWidget {
   final String? imagePath;
   final bool isEditable;
 
-  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = true,});
+  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = false,});
 
   @override
   State<ProfileImageWidget> createState() => _ProfileImageWidgetState();
@@ -28,7 +28,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
 
   void _uploadImage() async {
     setState(() {
-      imagePath = 'assets/sample_profile.png';
+      imagePath = 'assets/Profile_avatar.png';
     });
   }
 

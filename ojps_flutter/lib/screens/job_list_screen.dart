@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
-import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 
 class JobListScreen extends StatefulWidget {
   final String categoryLabel;
@@ -22,7 +22,10 @@ class _JobListScreenState extends State<JobListScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppValues.horizontalPadding,
+                vertical: AppValues.topRowVerticalPadding,
+              ),
               child: Row(
                 children: [
                   InkWell(
@@ -30,7 +33,7 @@ class _JobListScreenState extends State<JobListScreen> {
                     child: Icon(
                       Icons.arrow_back,
                       color: primaryTextColor,
-                      size: 28,
+                      size: AppValues.backIconSize,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -38,8 +41,8 @@ class _JobListScreenState extends State<JobListScreen> {
                     child: Text(
                       widget.categoryLabel,
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06,
-                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.width * AppValues.categoryFontSizeRatio,
+                        fontWeight: AppValues.categoryFontWeight,
                         color: primaryTextColor,
                       ),
                     ),
@@ -48,13 +51,13 @@ class _JobListScreenState extends State<JobListScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Elevate your career with exclusive web\ndevelopment opportunities!',
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    fontSize: MediaQuery.of(context).size.width * AppValues.descriptionFontSizeRatio,
                     color: secondaryTextColor,
                   ),
                 ),
@@ -66,7 +69,10 @@ class _JobListScreenState extends State<JobListScreen> {
                 itemCount: savedJobs.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 1.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppValues.horizontalPadding,
+                      vertical: AppValues.jobCardVerticalPadding,
+                    ),
                     child: JobCard(
                       image: 'assets/adham.jpg',
                       title: 'Full-Stack Developer',
@@ -79,12 +85,7 @@ class _JobListScreenState extends State<JobListScreen> {
                         });
                       },
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => JobDetailsJobSeekerScreen(),
-                          ),
-                        );
+                        Navigator.pushNamed(context, '/job_details');
                       },
                     ),
                   );

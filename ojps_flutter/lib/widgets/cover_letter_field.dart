@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class CoverLetterField extends StatefulWidget {
   const CoverLetterField({super.key});
@@ -10,7 +11,7 @@ class CoverLetterField extends StatefulWidget {
 
 class _CoverLetterFieldState extends State<CoverLetterField> {
   final TextEditingController _controller = TextEditingController();
-  int _maxChars = 500;
+  final int _maxChars = AppValues.coverLetterMaxLength;
   bool _isFocused = false;
   late FocusNode _focusNode;
 
@@ -37,10 +38,10 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: AppValues.animationDurationMs),
           curve: Curves.easeInOut,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppValues.borderRadius),
             gradient: _isFocused
                 ? null
                 : LinearGradient(
@@ -54,12 +55,12 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
             color: _isFocused ? whiteColor : null,
             border: Border.all(
               color: primaryColor,
-              width: 1.2,
+              width: AppValues.borderWidth,
             ),
           ),
           child: TextField(
             controller: _controller,
-            maxLines: 16,
+            maxLines: AppValues.coverLetterMaxLines,
             maxLength: _maxChars,
             focusNode: _focusNode,
             decoration: InputDecoration(
@@ -67,7 +68,9 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
               hintStyle: TextStyle(color: secondaryTextColor.withOpacity(0.6)),
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              fillColor: _isFocused ? whiteColor : lightBlueBackgroundColor.withOpacity(0.1),
+              fillColor: _isFocused
+                  ? whiteColor
+                  : lightBlueBackgroundColor.withOpacity(0.1),
               filled: true,
               counterText: "${_controller.text.length}/$_maxChars",
             ),

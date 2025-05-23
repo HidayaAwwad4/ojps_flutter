@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/screens/VerificationCode.dart';
-import 'package:ojps_flutter/screens/employer_home.dart';
-import 'package:ojps_flutter/screens/splash_screen.dart';
-import 'package:ojps_flutter/screens/home_screen.dart';
-import 'package:ojps_flutter/screens/job_status_screen.dart';
-import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
-import 'package:ojps_flutter/screens/user_type.dart';
-import 'screens/Login_page.dart';
-import 'package:ojps_flutter/screens/main_screen.dart';
+import 'package:ojps_flutter/constants/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      home: EmployerHome() ,
-      /*theme: ThemeData(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,
         appBarTheme: AppBarTheme(
@@ -44,12 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/job_status': (context) => const JobStatusScreen(),
-        '/saved_jobs': (context) => const SavedJobsScreen(),
-      },*/
+      routes: appRoutes, 
     );
   }
 }

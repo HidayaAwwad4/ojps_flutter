@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import '../widgets/uploaded_cv_widget.dart';
-import '../widgets/cover_letter_field.dart';
-import '../widgets/submit_button.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
+import 'package:ojps_flutter/widgets/uploaded_cv_widget.dart';
+import 'package:ojps_flutter/widgets/cover_letter_field.dart';
+import 'package:ojps_flutter/widgets/submit_button.dart';
 
 class ApplyNow extends StatelessWidget {
   const ApplyNow({super.key});
@@ -20,7 +21,7 @@ class ApplyNow extends StatelessWidget {
           style: TextStyle(
             color: whiteColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 18,  // ممكن تفصل برضو اذا حبيت
           ),
         ),
         leading: IconButton(
@@ -31,18 +32,18 @@ class ApplyNow extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppValues.defaultPadding),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
-                duration: const Duration(milliseconds: 600),
+                duration: AppValues.tweenAnimationDuration,
                 child: const Text(
                   "Great work so far!",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: AppValues.titleFontSize,
                     fontWeight: FontWeight.bold,
                     color: primaryColor,
                   ),
@@ -50,34 +51,34 @@ class ApplyNow extends StatelessWidget {
                 builder: (context, value, child) => Opacity(
                   opacity: value,
                   child: Transform.translate(
-                    offset: Offset(0, (1 - value) * 20),
+                    offset: Offset(0, (1 - value) * AppValues.tweenTranslateOffset),
                     child: child,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppValues.smallVerticalSpace),
               const Text(
                 "Please review your CV and make sure it's up to date.",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppValues.bodyFontSize,
                   height: 1.5,
                   color: secondaryTextColor,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppValues.verticalSpaceAfterText),
               const UploadedCvWidget(),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppValues.largeVerticalSpace),
               const Text(
                 "A short cover letter helps show your interest and skills.",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppValues.bodyFontSize,
                   height: 1.5,
                   color: secondaryTextColor,
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: AppValues.verticalSpaceAfterText),
               const CoverLetterField(),
-              const SizedBox(height: 30),
+              const SizedBox(height: AppValues.extraLargeVerticalSpace),
               const SubmitButton(),
             ],
           ),
