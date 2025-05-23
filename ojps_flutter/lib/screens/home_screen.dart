@@ -3,6 +3,7 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/categories_widget.dart';
 import '../widgets/recommended_jobs_widget.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 import '../widgets/custom_bottom_nav.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,11 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: AppValues.smallVerticalSpace),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Hello Razan",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: AppValues.mainTitleFontSize,
                             fontWeight: FontWeight.bold,
                             color: primaryTextColor,
                           ),
@@ -56,43 +57,43 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Palestine, Qalqilya",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppValues.secondaryTextFontSize,
                             color: secondaryTextColor,
                           ),
                         ),
                       ],
                     ),
                     const CircleAvatar(
-                      radius: 20,
+                      radius: AppValues.profileAvatarRadius,
                       backgroundImage: AssetImage('assets/profile_picture.jpg'),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: AppValues.smallVerticalSpace),
                 const SearchBarWidget(),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppValues.largeVerticalSpace),
                 Text(
                   "Categories",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: AppValues.sectionTitleFontSize,
                     color: primaryTextColor,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: AppValues.smallVerticalSpace),
                 const CategoriesWidget(),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: AppValues.largeVerticalSpace),
                 Text(
                   "Recommended Jobs",
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: AppValues.sectionTitleFontSize,
                     color: primaryTextColor,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: const RecommendedJobsWidget(),
+                const SizedBox(height: AppValues.smallVerticalSpace),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: RecommendedJobsWidget(),
                 ),
               ],
             ),
@@ -106,4 +107,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

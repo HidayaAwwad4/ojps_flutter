@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
 
@@ -32,13 +33,9 @@ class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
               });
             },
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const JobDetailsJobSeekerScreen(),
-                ),
-              );
+              Navigator.pushNamed(context, '/job_details');
             },
+
           ),
         ),
         JobCardWrapper(
@@ -56,13 +53,9 @@ class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
               });
             },
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const JobDetailsJobSeekerScreen(),
-                ),
-              );
+              Navigator.pushNamed(context, '/job_details');
             },
+
           ),
         ),
         JobCardWrapper(
@@ -80,19 +73,16 @@ class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
               });
             },
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const JobDetailsJobSeekerScreen(),
-                ),
-              );
+              Navigator.pushNamed(context, '/job_details');
             },
+
           ),
         ),
       ],
     );
   }
 }
+
 class JobCardWrapper extends StatelessWidget {
   final Widget child;
 
@@ -101,7 +91,10 @@ class JobCardWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppValues.jobCardMarginHorizontal,
+        vertical: AppValues.jobCardMarginVertical,
+      ),
       width: double.infinity,
       child: child,
     );
