@@ -48,13 +48,13 @@ class NotificationItem extends StatelessWidget {
                 children: [
                   Text(title,
                       style: isNew
-                          ? textStyleWhiteBold
-                          : textStylePrimaryBold),
+                          ? AppValues.textStyleWhiteBold
+                          : AppValues.textStylePrimaryBold),
                   SizedBox(height: Dimensions.height5),
                   Text(subtitle,
                       style: isNew
-                          ? textStyleWhite
-                          : textStyleSmallGrey),
+                          ? AppValues.textStyleWhite
+                          : AppValues.textStyleSmallGrey),
                 ],
               ),
             ),
