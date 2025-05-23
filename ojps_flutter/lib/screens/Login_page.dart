@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ojps_flutter/constants/colors.dart';
 import 'user_type.dart';
 import 'Forgetpassword.dart';
 
@@ -9,7 +10,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color primaryColor = Color(0xFF0273B1);
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             Stack(
               children: [
                 ClipPath(
@@ -37,9 +36,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
-
-
                 Positioned(
                   top: 20,
                   left: 0,
@@ -94,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
 
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -116,10 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
-                              );
+                              Navigator.pushNamed(context, '/forgetPassword');
                             },
                             child: Text(
                               'Forget Password?',
@@ -132,7 +124,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
                     ),
-
 
                     SizedBox(
                       width: double.infinity,
@@ -180,10 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                         Text("Don't have an account?"),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => ChooseType()),
-                            );
+                            Navigator.pushReplacementNamed(context, '/chooseType');
                           },
                           child: Text(
                             "Sign Up",
@@ -265,6 +253,7 @@ class WaveClipper extends CustomClipper<Path> {
     path.close();
     return path;
   }
+
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
