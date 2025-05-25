@@ -1,4 +1,5 @@
 class Job {
+  int id;
   String title;
   String description;
   String salary;
@@ -14,6 +15,7 @@ class Job {
   int employerId;
 
   Job({
+    required this.id,
     required this.title,
     required this.description,
     required this.salary,
@@ -31,6 +33,7 @@ class Job {
 
   factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
+      id: json['id'],
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       salary: json['salary'] ?? '' ,
@@ -49,6 +52,7 @@ class Job {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'salary': salary,

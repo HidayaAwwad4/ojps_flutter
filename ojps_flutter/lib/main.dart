@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
+import 'package:ojps_flutter/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,9 +35,29 @@ class MyApp extends StatelessWidget {
           bodyLarge: TextStyle(color: primaryTextColor),
           bodyMedium: TextStyle(color: secondaryTextColor),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: whiteColor,
+          labelStyle: TextStyle(color: secondaryTextColor),
+          floatingLabelStyle: TextStyle(color: secondaryTextColor),
+          hintStyle: TextStyle(color: secondaryTextColor),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: primaryColor),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+        ),
       ),
-      initialRoute: '/',
-      routes: appRoutes, 
+      //initialRoute: '/',
+      //routes: appRoutes,
+      home: MainScreen()
     );
   }
 }

@@ -6,6 +6,9 @@ import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/job_list_screen.dart';
 
+import '../screens/create_job_screen.dart';
+import '../screens/employer_home.dart';
+
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
   '/home': (context) => const HomeScreen(),
@@ -13,4 +16,6 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/job_details': (context) => const JobDetailsJobSeekerScreen(),
   '/job_status': (context) => const JobStatusScreen(),
   '/saved_jobs': (context) => const SavedJobsScreen(),
+  '/employer_home': (context) => const EmployerHome(),
+  '/create-job': (context) => const CreateJobScreen(),
 };

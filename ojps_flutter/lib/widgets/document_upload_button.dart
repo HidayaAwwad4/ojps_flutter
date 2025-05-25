@@ -1,8 +1,10 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class DocumentUploadButton extends StatefulWidget {
-  const DocumentUploadButton({super.key});
+  final void Function(PlatformFile)? onFileSelected;
+
+  const DocumentUploadButton({super.key, this.onFileSelected});
 
   @override
   State<DocumentUploadButton> createState() => _DocumentUploadButtonState();
@@ -15,6 +17,7 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
     if (result != null) {
       final file = result.files.first;
       print('Selected file: ${file.name}');
+      widget.onFileSelected?.call(file);
     } else {
       print('No file selected.');
     }
@@ -31,5 +34,4 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
       ),
     );
   }
-}*/
-
+}

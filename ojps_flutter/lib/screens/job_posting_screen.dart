@@ -18,7 +18,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
 
   List<Job> allJobs = [];
   bool isLoading = true;
-  final int employerId = 37;
+  final int employerId = 38;
 
   @override
   void initState() {
