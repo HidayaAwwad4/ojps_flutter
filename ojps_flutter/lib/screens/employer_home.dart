@@ -1,3 +1,4 @@
+// lib/screens/employer_home.dart
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../models/job_model.dart';
@@ -31,7 +32,6 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
     try {
       final jobService = JobService();
       final jobsJson = await jobService.getJobsByEmployer(employerId);
-      print('Returned jobs JSON: $jobsJson');
       final fetchedJobs = jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
 
       setState(() {
@@ -45,9 +45,25 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
     }
   }
 
-  void toggleJobStatus(Job job) {
+  void handleStatusChange(Job updatedJob) {
     setState(() {
-      job.isOpened = !job.isOpened;
+      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        allJobs[index] = updatedJob;
+      }
+
+      index = filteredJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        filteredJobs[index] = updatedJob;
+      }
+    });
+  }
+
+
+  void handleJobDeleted(Job job) {
+    setState(() {
+      allJobs.removeWhere((j) => j.id == job.id);
+      filteredJobs.removeWhere((j) => j.id == job.id);
     });
   }
 
@@ -110,14 +126,16 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               title: 'Open jobs',
               jobs: openJobs,
               tabIndex: 0,
-              onStatusChange: toggleJobStatus,
+              onStatusChange: handleStatusChange,
+              onJobDeleted: handleJobDeleted,
             ),
             const SizedBox(height: 24),
             JobSectionWidget(
               title: 'Closed jobs',
               jobs: closedJobs,
               tabIndex: 1,
-              onStatusChange: toggleJobStatus,
+              onStatusChange: handleStatusChange,
+              onJobDeleted: handleJobDeleted,
             ),
           ],
         ),

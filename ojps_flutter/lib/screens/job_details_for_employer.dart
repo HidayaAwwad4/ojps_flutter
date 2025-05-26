@@ -30,7 +30,7 @@ class JobDetailsScreen extends StatelessWidget {
                       radius: 36,
                       backgroundImage: job.companyLogo != null
                           ? NetworkImage(fixUrl(job.companyLogo!))
-                          : const AssetImage('assets/images/default_logo.png') as ImageProvider,
+                          : const AssetImage('assets/default_logo.jpeg') as ImageProvider,
                       backgroundColor: primaryTextColor,
                     ),
                     const SizedBox(height: 8),
@@ -68,7 +68,7 @@ class JobDetailsScreen extends StatelessWidget {
                         children: [
                           DetailTile(title: 'Experience', value: job.experience),
                           const Divider(height: 1),
-                          DetailTile(title: 'Languages', value: job.languages), // ✅ تصحيح هنا
+                          DetailTile(title: 'Languages', value: job.languages),
                           const Divider(height: 1),
                           DetailTile(title: 'Employment', value: job.employment),
                           const Divider(height: 1),
@@ -111,12 +111,12 @@ class JobDetailsScreen extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: () {
-                       /* Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditJobScreen(job: job),
                           ),
-                        );*/
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,

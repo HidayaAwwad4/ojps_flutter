@@ -1,6 +1,7 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../models/job_model.dart';
+import '../services/job_service.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 
@@ -31,7 +32,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
     super.initState();
     titleController = TextEditingController(text: widget.job.title);
     descriptionController = TextEditingController(text: widget.job.description);
-    languageController = TextEditingController(text: widget.job.language);
+    languageController = TextEditingController(text: widget.job.languages);
     scheduleController = TextEditingController(text: widget.job.schedule);
     salaryController = TextEditingController(text: widget.job.salary);
 
@@ -80,33 +81,47 @@ class _EditJobScreenState extends State<EditJobScreen> {
           children: [
             CircleAvatar(
               radius: 16,
-              backgroundImage: AssetImage(widget.job.imageUrl),
+              backgroundImage: widget.job.companyLogo != null
+                  ? NetworkImage(widget.job.companyLogo!)
+                  : const AssetImage('assets/default_logo.jpeg') as ImageProvider,
             ),
             const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  //widget.job.companyName,
-                  "adahm",
-                  style: const TextStyle(color: primaryTextColor, fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  //widget.job.companyLocation,
-                  "nablus",
-                  style: const TextStyle(color: greyColor, fontSize: 12),
-                ),
-              ],
-            ),
           ],
         ),
         actions: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 12),
             child: ElevatedButton(
-              onPressed: isFormValid ? () {
-                Navigator.pop(context);
-              } : null,
+              onPressed: isFormValid
+                  ? () async {
+                final data = {
+                  'title': titleController.text,
+                  'description': descriptionController.text,
+                  'language': languageController.text,
+                  'schedule': scheduleController.text,
+                  'salary': salaryController.text,
+                  'experience': selectedExperience,
+                  'employment': selectedEmployment,
+                  'category': selectedCategory,
+                };
+
+                try {
+                  await JobService().updateJob(widget.job.id, data);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Job updated successfully')),
+                    );
+                    Navigator.pop(context, true);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update job: $e')),
+                    );
+                  }
+                }
+              }
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
                 foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
@@ -186,4 +201,3 @@ class _EditJobScreenState extends State<EditJobScreen> {
     );
   }
 }
-*/

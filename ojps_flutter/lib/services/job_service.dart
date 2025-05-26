@@ -25,10 +25,9 @@ class JobService {
     }
   }
 
-
   Future<Map<String, dynamic>> createJob(Map<String, dynamic> data) async {
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs'));
-
+    request.headers['Accept'] = 'application/json';
     data.forEach((key, value) {
       if (value != null && value is! File) {
         request.fields[key] = value.toString();
@@ -66,7 +65,6 @@ class JobService {
       throw Exception('Failed to create job: ${response.body}');
     }
   }
-
 
   Future<Map<String, dynamic>> updateJob(int id, Map<String, dynamic> data) async {
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs/$id?_method=PUT'));

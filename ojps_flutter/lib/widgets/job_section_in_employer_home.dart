@@ -8,6 +8,7 @@ class JobSectionWidget extends StatelessWidget {
   final List<Job> jobs;
   final int tabIndex;
   final Function(Job) onStatusChange;
+  final Function(Job)? onJobDeleted;
 
   const JobSectionWidget({
     super.key,
@@ -15,6 +16,7 @@ class JobSectionWidget extends StatelessWidget {
     required this.jobs,
     required this.tabIndex,
     required this.onStatusChange,
+    this.onJobDeleted,
   });
 
   @override
@@ -55,6 +57,7 @@ class JobSectionWidget extends StatelessWidget {
                 child: JobCardHorizontal(
                   job: jobs[index],
                   onStatusChange: onStatusChange,
+                  onJobDeleted: onJobDeleted,
                 ),
               );
             },

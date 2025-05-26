@@ -17,6 +17,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
   late TabController _tabController;
 
   List<Job> allJobs = [];
+  List<Job> filteredJobs = [];
   bool isLoading = true;
   final int employerId = 38;
 
@@ -37,6 +38,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
 
       setState(() {
         allJobs = fetchedJobs;
+        filteredJobs = fetchedJobs;
         isLoading = false;
       });
     } catch (e) {
@@ -45,9 +47,24 @@ class _JobPostingScreenState extends State<JobPostingScreen>
     }
   }
 
-  void toggleJobStatus(Job job) {
+  void handleStatusChange(Job updatedJob) {
     setState(() {
-      job.isOpened = !job.isOpened;
+      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        allJobs[index] = updatedJob;
+      }
+
+      index = filteredJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        filteredJobs[index] = updatedJob;
+      }
+    });
+  }
+
+  void handleJobDeleted(Job job) {
+    setState(() {
+      allJobs.removeWhere((j) => j.id == job.id);
+      filteredJobs.removeWhere((j) => j.id == job.id);
     });
   }
 
@@ -94,7 +111,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = openJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: toggleJobStatus,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
               );
             },
           ),
@@ -106,7 +124,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = closedJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: toggleJobStatus,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
               );
             },
           ),

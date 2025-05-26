@@ -32,11 +32,11 @@ class _ImageUploadButtonState extends State<ImageUploadButton> {
     return GestureDetector(
       onTap: _pickImage,
       child: CircleAvatar(
-        radius: 30,
+        radius: 40,
         backgroundColor: Colors.grey[300],
         backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
         child: _selectedImage == null
-            ? const Icon(Icons.camera_alt, color: Colors.grey, size: 30)
+            ? const Icon(Icons.camera_alt, color: Colors.grey, size: 40)
             : null,
       ),
     );

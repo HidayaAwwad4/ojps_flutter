@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../services/job_service.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/document_upload_button.dart';
 import '../widgets/dropdown_selector.dart';
+import '../widgets/image_upload_button.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -23,9 +26,31 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   String? selectedEmployment;
   String? selectedCategory;
 
-  final List<String> experienceList = ['0-1 years', '1-3 years', '3+ years', 'Not required',];
-  final List<String> employmentList = ['Full-Time', 'Part-Time', 'Remote', 'Contract', 'Internship', 'Temporary', 'Volunteer',];
-  final List<String> categoryList = ['Marketing', 'Technology', 'Design', 'Sales', 'Cooking', 'Other',];
+  File? selectedCompanyLogo;
+
+  final List<String> experienceList = [
+    '0-1 years',
+    '1-3 years',
+    '3+ years',
+    'Not required',
+  ];
+  final List<String> employmentList = [
+    'Full-Time',
+    'Part-Time',
+    'Remote',
+    'Contract',
+    'Internship',
+    'Temporary',
+    'Volunteer',
+  ];
+  final List<String> categoryList = [
+    'Marketing',
+    'Technology',
+    'Design',
+    'Sales',
+    'Cooking',
+    'Other',
+  ];
 
   bool get isFormValid {
     return jobTitle.isNotEmpty &&
@@ -51,8 +76,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         'experience': selectedExperience!,
         'employment': selectedEmployment!,
         'category': selectedCategory!,
-        'isOpened': true,
-        'company_logo': null,
+        'isOpened': 1,
+        'employer_id': 38,
+        'company_logo': selectedCompanyLogo,
         'documents': null,
       };
 
@@ -67,7 +93,10 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             content: const Text('Job posted successfully.'),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
                 child: const Text('OK'),
               ),
             ],
@@ -89,13 +118,16 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
       backgroundColor: const Color(0xFFF0F0F0),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const Icon(Icons.close, color: Colors.black),
+        elevation: 1,
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           TextButton(
             onPressed: isFormValid ? _submitForm : null,
             style: TextButton.styleFrom(
-              backgroundColor: isFormValid ? primaryColor : cardBackgroundColor,
+              backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -103,7 +135,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             child: Text(
               'Post',
               style: TextStyle(
-                color: isFormValid ? whiteColor : lightGrey,
+                color: isFormValid ? Colors.white : const Color(0xFFADADAD),
               ),
             ),
           ),
@@ -111,99 +143,111 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         children: [
-          const Row(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(backgroundColor: Colors.grey, radius: 20),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('TechGate', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Nablus', style: TextStyle(color: Colors.grey)),
-                ],
-              )
+              ImageUploadButton(
+                onImageSelected: (File? image) {
+                  setState(() {
+                    selectedCompanyLogo = image;
+                  });
+                },
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Upload your company logo',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ],
           ),
+
           const SizedBox(height: 20),
-          CustomTextField(
-            label: 'Job Title',
-            hint: 'Enter job title',
-            onChanged: (value) => setState(() => jobTitle = value),
+
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                CustomTextField(
+                  label: 'Job Title',
+                  hint: 'Enter job title',
+                  onChanged: (value) => setState(() => jobTitle = value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Job Description',
+                  hint: 'Describe the job',
+                  maxLines: 5,
+                  onChanged: (value) => setState(() => description = value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Location',
+                  hint: 'Enter job location',
+                  onChanged: (value) => setState(() => location = value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Languages',
+                  hint: 'e.g. English - Advanced',
+                  onChanged: (value) => setState(() => languages = value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Schedule',
+                  hint: 'e.g. Sunday to Thursday',
+                  onChanged: (value) => setState(() => schedule = value),
+                ),
+                const SizedBox(height: 16),
+                CustomTextField(
+                  label: 'Salary',
+                  hint: 'Hourly/ daily/ monthly',
+                  onChanged: (value) => setState(() => salary = value),
+                ),
+                const SizedBox(height: 16),
+                DropdownSelector(
+                  label: 'Experience',
+                  options: experienceList,
+                  selectedValue: selectedExperience,
+                  onChanged: (value) => setState(() => selectedExperience = value),
+                ),
+                const SizedBox(height: 16),
+                DropdownSelector(
+                  label: 'Employment',
+                  options: employmentList,
+                  selectedValue: selectedEmployment,
+                  onChanged: (value) => setState(() => selectedEmployment = value),
+                ),
+                const SizedBox(height: 16),
+                DropdownSelector(
+                  label: 'Category',
+                  options: categoryList,
+                  selectedValue: selectedCategory,
+                  onChanged: (value) => setState(() => selectedCategory = value),
+                ),
+                const SizedBox(height: 16),
+                const DocumentUploadButton(),
+              ],
+            ),
           ),
-          CustomTextField(
-            label: 'Job Description',
-            hint: 'Describe the job',
-            maxLines: 5,
-            onChanged: (value) => setState(() => description = value),
-          ),
-          CustomTextField(
-            label: 'Location',
-            hint: 'Enter job location',
-            onChanged: (value) => setState(() => location = value),
-          ),
-          const SizedBox(height: 12),
-          CustomTextField(
-            label: 'Languages',
-            hint: 'e.g. English - Advanced',
-            onChanged: (value) => setState(() => languages = value),
-          ),
-          const SizedBox(height: 12),
-          CustomTextField(
-            label: 'Schedule',
-            hint: 'e.g. Sunday to Thursday',
-            onChanged: (value) => setState(() => schedule = value),
-          ),
-          const SizedBox(height: 12),
-          CustomTextField(
-            label: 'Salary',
-            hint: 'Hourly/ daily/ monthly',
-            onChanged: (value) => setState(() => salary = value),
-          ),
-          const SizedBox(height: 12),
-          DropdownSelector(
-            label: 'Experience',
-            options: [
-              '0-1 years',
-              '1-3 years',
-              '3+ years',
-              'Not required',
-            ],
-            selectedValue: selectedExperience,
-            onChanged: (value) => setState(() => selectedExperience = value),
-          ),
-          const SizedBox(height: 12),
-          DropdownSelector(
-            label: 'Employment',
-            options: [
-              'Full-Time',
-              'Part-Time',
-              'Remote',
-              'Contract',
-              'Internship',
-              'Temporary',
-              'Volunteer',
-            ],
-            selectedValue: selectedEmployment,
-            onChanged: (value) => setState(() => selectedEmployment = value),
-          ),
-          const SizedBox(height: 12),
-          DropdownSelector(
-            label: 'Category',
-            options: [
-              'Marketing',
-              'Technology',
-              'Design',
-              'Sales',
-              'Cooking',
-              'Other',
-            ],
-            selectedValue: selectedCategory,
-            onChanged: (value) => setState(() => selectedCategory = value),
-          ),
-          const SizedBox(height: 12),
-          const DocumentUploadButton(),
         ],
       ),
     );
