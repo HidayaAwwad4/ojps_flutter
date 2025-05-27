@@ -74,7 +74,7 @@ class JobService {
         request.fields[key] = value.toString();
       }
     });
-
+  /*
     if (data['company_logo'] != null) {
       request.files.add(data['company_logo']);
     }
@@ -82,7 +82,7 @@ class JobService {
     if (data['documents'] != null) {
       request.files.add(data['documents']);
     }
-
+  */
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 

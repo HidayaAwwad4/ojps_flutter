@@ -20,7 +20,7 @@ class JobHeaderWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: AppValues.jobHeaderTitleFontSize,
             fontWeight: FontWeight.bold,
-            color: primaryTextColor,
+            color: Colorss.primaryTextColor,
           ),
         ),
         SizedBox(height: AppValues.jobDescSpacingHeight),
@@ -28,14 +28,14 @@ class JobHeaderWidget extends StatelessWidget {
           "Adham",
           style: TextStyle(
             fontSize: AppValues.jobHeaderNameFontSize,
-            color: primaryTextColor,
+            color: Colorss.primaryTextColor,
           ),
         ),
         Text(
           "Rafidia, Nablus",
           style: TextStyle(
             fontSize: AppValues.jobHeaderLocationFontSize,
-            color: secondaryTextColor,
+            color: Colorss.secondaryTextColor,
           ),
         ),
         SizedBox(height: AppValues.jobHeaderBottomSpacing),

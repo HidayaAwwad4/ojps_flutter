@@ -7,15 +7,28 @@ import 'edit_job_screen.dart';
 import '../widgets/detail_tile.dart';
 import '../widgets/header_bar.dart';
 
-class JobDetailsScreen extends StatelessWidget {
+class JobDetailsScreen extends StatefulWidget {
   final Job job;
 
   const JobDetailsScreen({super.key, required this.job});
 
   @override
+  State<JobDetailsScreen> createState() => _JobDetailsScreenState();
+}
+
+class _JobDetailsScreenState extends State<JobDetailsScreen> {
+  late Job job;
+
+  @override
+  void initState() {
+    super.initState();
+    job = widget.job;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -30,21 +43,19 @@ class JobDetailsScreen extends StatelessWidget {
                       radius: 36,
                       backgroundImage: job.companyLogo != null
                           ? NetworkImage(fixUrl(job.companyLogo!))
-                          : const AssetImage('assets/default_logo.jpeg') as ImageProvider,
-                      backgroundColor: primaryTextColor,
+                          : const AssetImage('assets/default-logo.png') as ImageProvider,
+                      backgroundColor: Colorss.primaryTextColor,
                     ),
                     const SizedBox(height: 8),
-
                     Text(
                       job.title,
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       job.location,
-                      style: const TextStyle(color: greyColor),
+                      style: const TextStyle(color: Colorss.greyColor),
                     ),
                     const SizedBox(height: 16),
-
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -58,10 +69,9 @@ class JobDetailsScreen extends StatelessWidget {
                       child: Text(job.description),
                     ),
                     const SizedBox(height: 20),
-
                     Container(
                       decoration: BoxDecoration(
-                        color: cardBackgroundColor,
+                        color: Colorss.cardBackgroundColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
@@ -80,9 +90,7 @@ class JobDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 16),
-
                     if (job.documents != null)
                       ElevatedButton.icon(
                         onPressed: () async {
@@ -94,10 +102,9 @@ class JobDetailsScreen extends StatelessWidget {
                             print('Could not launch $fixedUrl');
                           }
                         },
-
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: primaryTextColor,
-                          backgroundColor: cardBackgroundColor,
+                          foregroundColor: Colorss.primaryTextColor,
+                          backgroundColor: Colorss.cardBackgroundColor,
                           minimumSize: const Size(double.infinity, 48),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -106,26 +113,29 @@ class JobDetailsScreen extends StatelessWidget {
                         icon: const Icon(Icons.description),
                         label: const Text('View Documents'),
                       ),
-
                     const SizedBox(height: 20),
-
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final updatedJob = await Navigator.push<Job>(
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditJobScreen(job: job),
                           ),
                         );
+
+                        if (updatedJob != null) {
+                          setState(() {
+                            job = updatedJob;
+                          });
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        foregroundColor: whiteColor,
+                        backgroundColor: Colorss.primaryColor,
+                        foregroundColor: Colorss.whiteColor,
                         minimumSize: const Size(double.infinity, 48),
                       ),
                       child: const Text('Edit'),
                     ),
-
                     const SizedBox(height: 24),
                   ],
                 ),

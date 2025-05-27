@@ -25,7 +25,7 @@ class _ResumeSectionDropdownState extends State<ResumeSectionDropdown> {
       margin: EdgeInsets.only(bottom: defaultPadding),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: lightGrey),
+        side: const BorderSide(color: Colorss.lightGrey),
       ),
       child: Column(
         children: [

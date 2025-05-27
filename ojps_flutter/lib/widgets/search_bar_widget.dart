@@ -11,22 +11,22 @@ class SearchBarWidget extends StatelessWidget {
       decoration: InputDecoration(
         hintText: "Search jobs",
         hintStyle: TextStyle(
-          color: secondaryTextColor.withOpacity(AppValues.searchBarHintTextOpacity),
+          color: Colorss.secondaryTextColor.withOpacity(AppValues.searchBarHintTextOpacity),
           fontSize: 14,
           fontWeight: FontWeight.normal,
         ),
         prefixIcon: Icon(
           Icons.search,
-          color: primaryColor,
+          color: Colorss.primaryColor,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppValues.searchBarBorderRadius),
-          borderSide: BorderSide(color: primaryColor),
+          borderSide: BorderSide(color: Colorss.primaryColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppValues.searchBarBorderRadius),
           borderSide: BorderSide(
-            color: primaryColor,
+            color: Colorss.primaryColor,
             width: AppValues.searchBarFocusedBorderWidth,
           ),
         ),

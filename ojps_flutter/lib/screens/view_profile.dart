@@ -54,7 +54,7 @@ class ViewProfile extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor
+                  backgroundColor: Colorss.primaryColor
               ),
               child: const Text(
                 "View Resume",

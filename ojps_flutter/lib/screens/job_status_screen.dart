@@ -41,17 +41,17 @@ class _JobStatusScreenState extends State<JobStatusScreen> {
       child: DefaultTabController(
         length: AppValues.jobStatusTabCount,
         child: Scaffold(
-          backgroundColor: whiteColor,
+          backgroundColor: Colorss.whiteColor,
           appBar: AppBar(
             title: const Text(
               AppValues.jobStatusScreenTitle,
               style: TextStyle(fontWeight: AppValues.appBarTitleFontWeight),
             ),
-            backgroundColor: primaryColor,
+            backgroundColor: Colorss.primaryColor,
             centerTitle: AppValues.appBarCenterTitle,
             bottom: const JobTabBar(),
             elevation: 4,
-            shadowColor: primaryTextColor,
+            shadowColor: Colorss.primaryTextColor,
           ),
           body: const JobTabViews(),
           bottomNavigationBar: CustomBottomNavBar(

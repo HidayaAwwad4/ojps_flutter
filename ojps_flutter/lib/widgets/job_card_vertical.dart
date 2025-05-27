@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/models/applicant_model.dart';
-import '../constants/colors.dart';
 import '../models/job_model.dart';
-import '../screens/applicant_details.dart';
-import '../screens/job_applicants_employer.dart';
-import '../screens/job_details_for_employer.dart';
-import '../utils/network_utils.dart';
 import 'job_card_content.dart';
 
 class JobCardVertical extends StatelessWidget {

@@ -7,12 +7,12 @@ class JobDetailsJobSeekerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: primaryTextColor),
+          icon: const Icon(Icons.close, color: Colorss.primaryTextColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),

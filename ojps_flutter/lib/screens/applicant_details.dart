@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
-import '../models/applicant_model.dart';
+import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
 
@@ -14,11 +14,10 @@ class ApplicantDetailsScreen extends StatefulWidget {
 }
 
 class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
-  Applicant? _applicant;
+  Application? _applicant;
   bool _isLoading = true;
   late String _status;
   final ApplicationService _applicationService = ApplicationService();
-
 
   @override
   void initState() {
@@ -41,6 +40,33 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
       });
     }
   }
+  Future<void> _updateStatus(String newStatus) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final updated = await _applicationService.updateApplicantStatus(
+        _applicant!.id,
+        newStatus,
+      );
+      setState(() {
+        _status = updated.status;
+        _applicant = updated;
+        _isLoading = false;
+      });
+
+      Navigator.pop(context, updated);
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update status: $e')),
+      );
+    }
+  }
+
 
 
   @override
@@ -63,11 +89,11 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
     final bool isShortlisted = _status.toLowerCase() == 'shortlisted';
 
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       appBar: AppBar(
         title: const Text('Applicant Details'),
-        backgroundColor: whiteColor,
-        foregroundColor: primaryTextColor,
+        backgroundColor: Colorss.whiteColor,
+        foregroundColor: Colorss.primaryTextColor,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -81,7 +107,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
               _applicant!.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            Text(_applicant!.email, style: TextStyle(color: secondaryTextColor)),
+            Text(_applicant!.email, style: TextStyle(color: Colorss.secondaryTextColor)),
             const SizedBox(height: 4),
             _buildStatusBadge(),
             const SizedBox(height: 28),
@@ -90,11 +116,11 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
               alignment: Alignment.centerLeft,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  foregroundColor: whiteColor,
+                  backgroundColor: Colorss.primaryColor,
+                  foregroundColor: Colorss.whiteColor,
                 ),
                 onPressed: () {
-
+                  // open resume
                 },
                 child: const Text('View Resume'),
               ),
@@ -113,51 +139,37 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
+                if (isPending) ...[
+                  const SizedBox(width: 12),
+                  _buildActionButton(
+                    label: 'Shortlist',
+                    onPressed: () => _updateStatus('shortlisted'),
+                    backgroundColor: Colorss.cardBackgroundColor,
+                    foregroundColor: Colorss.primaryColor,
+                  ),
+                ],
                 if (isPending || isShortlisted) ...[
                   _buildActionButton(
                     label: 'Accept',
-                    onPressed: () {
-                      setState(() {
-                        _status = 'accepted';
-                        _applicant!.status = 'accepted';
-                      });
-                    },
-                    backgroundColor: primaryColor,
-                    foregroundColor: whiteColor,
+                    onPressed: () => _updateStatus('accepted'),
+                    backgroundColor: Colorss.openColor ,
+                    foregroundColor: Colorss.whiteColor,
                   ),
                   const SizedBox(width: 12),
                   _buildActionButton(
                     label: 'Reject',
-                    onPressed: () {
-                      setState(() {
-                        _status = 'rejected';
-                        _applicant!.status = 'rejected';
-                      });
-                    },
+                    onPressed: () => _updateStatus('rejected'),
                     backgroundColor: Colors.black12,
-                    foregroundColor: primaryTextColor,
+                    foregroundColor: Colorss.primaryTextColor,
                   ),
                 ],
-                if (isPending) ...[
-                  const SizedBox(width: 12),
-                  _buildActionButton(
-                    label: 'Add to Shortlist',
-                    onPressed: () {
-                      setState(() {
-                        _status = 'shortlisted';
-                        _applicant!.status = 'shortlisted';
-                      });
-                    },
-                    backgroundColor: Colors.orange.shade100,
-                    foregroundColor: Colors.orange.shade800,
-                  ),
-                ],
+
                 if (isAccepted) ...[
                   _buildActionButton(
                     label: 'Accepted',
                     onPressed: null,
-                    backgroundColor: lightBlueBackgroundColor,
-                    foregroundColor: primaryColor,
+                    backgroundColor: Colorss.lightBlueBackgroundColor,
+                    foregroundColor: Colorss.primaryColor,
                     tonal: true,
                   ),
                 ],
@@ -165,8 +177,8 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                   _buildActionButton(
                     label: 'Rejected',
                     onPressed: null,
-                    backgroundColor: cardBackgroundColor,
-                    foregroundColor: secondaryTextColor,
+                    backgroundColor: Colorss.cardBackgroundColor,
+                    foregroundColor: Colorss.secondaryTextColor,
                     tonal: true,
                   ),
                 ],
@@ -184,10 +196,9 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
       radius: 45,
       backgroundImage: _applicant!.imageUrl != null && _applicant!.imageUrl!.isNotEmpty
           ? NetworkImage(fixUrl(_applicant!.imageUrl!))
-          : const AssetImage('assets/Profile_avatar.png'),
+          : const AssetImage('assets/Profile_avatar.png') as ImageProvider,
     );
   }
-
 
   Widget _buildStatusBadge() {
     final statusColor = getStatusColor(_status);
@@ -236,11 +247,13 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'accepted':
-        return openColor;
+        return Colorss.openColor;
       case 'rejected':
-        return closedColor;
+        return Colorss.closedColor;
+      case 'pending':
+        return Colorss.pendingColor;
       default:
-        return pendingColor;
+        return Colorss.primaryColor;
     }
   }
 

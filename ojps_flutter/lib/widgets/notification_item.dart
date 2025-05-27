@@ -31,8 +31,8 @@ class NotificationItem extends StatelessWidget {
         ),
         padding: EdgeInsets.all(Dimensions.height10),
         decoration: BoxDecoration(
-          color: isNew ? primaryColor : Colors.white,
-          border: Border.all(color: primaryColor),
+          color: isNew ? Colorss.primaryColor : Colors.white,
+          border: Border.all(color: Colorss.primaryColor),
           borderRadius: BorderRadius.circular(Dimensions.radius20),
         ),
         child: Row(

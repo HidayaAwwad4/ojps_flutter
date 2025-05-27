@@ -50,23 +50,23 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
         controller: widget.controller,
         maxLines: widget.maxLines,
         enabled: widget.enabled,
-        cursorColor: primaryColor,
+        cursorColor: Colorss.primaryColor,
         decoration: InputDecoration(
           label: widget.icon != null
               ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(widget.icon, size: 18, color: _focusNode.hasFocus ? primaryColor : Colors.grey),
+              Icon(widget.icon, size: 18, color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey),
               const SizedBox(width: 4),
-              Text(widget.label, style: TextStyle(color: _focusNode.hasFocus ? primaryColor : Colors.grey)),
+              Text(widget.label, style: TextStyle(color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey)),
             ],
           )
               : Text(widget.label),
           labelStyle: TextStyle(
-            color: _focusNode.hasFocus ? primaryColor : Colors.grey,
+            color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey,
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2.0),
+            borderSide: BorderSide(color: Colorss.primaryColor, width: 2.0),
           ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),

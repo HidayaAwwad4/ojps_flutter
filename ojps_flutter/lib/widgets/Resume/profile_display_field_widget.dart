@@ -17,7 +17,7 @@ class ProfileDisplayFieldWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: primaryColor, size: 20),
+          Icon(icon, color: Colorss.primaryColor, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

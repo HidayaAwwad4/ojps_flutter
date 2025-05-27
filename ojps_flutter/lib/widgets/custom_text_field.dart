@@ -31,10 +31,10 @@ class CustomTextField extends StatelessWidget {
           hintText: hint,
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2),
+            borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
           ),
-          labelStyle: const TextStyle(color:greyColor),
-          floatingLabelStyle: const TextStyle(color: primaryColor),
+          labelStyle: const TextStyle(color:Colorss.greyColor),
+          floatingLabelStyle: const TextStyle(color: Colorss.primaryColor),
         ),
       ),
     );

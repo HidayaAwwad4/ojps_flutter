@@ -87,8 +87,8 @@ class _SplashScreenState extends State<SplashScreen>
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              lightBlueBackgroundColor,
-              customLightPurple,
+              Colorss.lightBlueBackgroundColor,
+              Colorss.customLightPurple,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: whiteColor.withOpacity(AppValues.logoShadowOpacity),
+                          color: Colorss.whiteColor.withOpacity(AppValues.logoShadowOpacity),
                           blurRadius: AppValues.logoShadowBlurRadius,
                           spreadRadius: AppValues.logoShadowSpreadRadius,
                         ),
@@ -131,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen>
                     "Find Your Dream Job",
                     style: TextStyle(
                       fontSize: AppValues.splashTextFontSize,
-                      color: primaryColor,
+                      color: Colorss.primaryColor,
                       fontWeight: FontWeight.bold,
                       letterSpacing: AppValues.splashTextLetterSpacing,
                     ),

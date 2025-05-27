@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
+import '../utils/network_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 
@@ -69,21 +70,21 @@ class _EditJobScreenState extends State<EditJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cardBackgroundColor,
+      backgroundColor: Colorss.cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: primaryTextColor),
+          icon: const Icon(Icons.close, color: Colorss.primaryTextColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
             CircleAvatar(
-              radius: 16,
+              radius: 24,
               backgroundImage: widget.job.companyLogo != null
-                  ? NetworkImage(widget.job.companyLogo!)
-                  : const AssetImage('assets/default_logo.jpeg') as ImageProvider,
+                  ? NetworkImage(fixUrl(widget.job.companyLogo!))
+                  : const AssetImage('assets/default-logo.png'),
             ),
             const SizedBox(width: 8),
           ],
@@ -111,7 +112,17 @@ class _EditJobScreenState extends State<EditJobScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Job updated successfully')),
                     );
-                    Navigator.pop(context, true);
+                    Navigator.pop(context, widget.job.copyWith(
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      languages: languageController.text,
+                      schedule: scheduleController.text,
+                      salary: salaryController.text,
+                      experience: selectedExperience,
+                      employment: selectedEmployment,
+                      category: selectedCategory,
+                    ));
+
                   }
                 } catch (e) {
                   if (context.mounted) {
@@ -123,8 +134,8 @@ class _EditJobScreenState extends State<EditJobScreen> {
               }
                   : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
+                backgroundColor: isFormValid ? Colorss.primaryColor : const Color(0xFFE8E8E8),
+                foregroundColor: isFormValid ? Colorss. whiteColor : const Color(0xFFADADAD),
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

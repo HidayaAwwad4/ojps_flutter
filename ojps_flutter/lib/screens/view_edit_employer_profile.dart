@@ -59,7 +59,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
             const SizedBox(height: 4),
             Text(
               emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
-              style: const TextStyle(color: secondaryTextColor),
+              style: const TextStyle(color: Colorss.secondaryTextColor),
             ),
             const SizedBox(height: 20),
             ProfileFieldWidget(
@@ -76,7 +76,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor
+                  backgroundColor: Colorss.primaryColor
               ),
               child: const Text(
                 "Save Changes",

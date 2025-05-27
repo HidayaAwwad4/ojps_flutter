@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
-import '../models/applicant_model.dart';
+import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
 import 'applicant_details.dart';
-// import 'applicant_details_screen.dart';
+
 
 class JobApplicantsScreen extends StatefulWidget {
   final int jobId;
@@ -16,19 +16,27 @@ class JobApplicantsScreen extends StatefulWidget {
 }
 class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
   final ApplicationService _applicationService = ApplicationService();
-  late Future<List<Applicant>> _applicantsFuture;
+  late Future<List<Application>> _applicantsFuture;
+  List<Application> _applicantsFutureData = [];
 
-  // حالة الفلتر الحالية (default = الجميع)
   String _selectedStatus = 'all';
 
   @override
   void initState() {
     super.initState();
-    _applicantsFuture = _applicationService.getApplicantsByJobId(widget.jobId);
+    _loadApplicants();
   }
 
-  // دالة لتصفية المتقدمين حسب الحالة المختارة
-  List<Applicant> _filterApplicants(List<Applicant> applicants) {
+  void _loadApplicants() {
+    _applicantsFuture = _applicationService.getApplicantsByJobId(widget.jobId);
+    _applicantsFuture.then((data) {
+      setState(() {
+        _applicantsFutureData = data;
+      });
+    });
+  }
+
+  List<Application> _filterApplicants(List<Application> applicants) {
     if (_selectedStatus == 'all') {
       return applicants;
     } else {
@@ -41,12 +49,11 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Applicants'),
-        backgroundColor: primaryColor,
-        foregroundColor: whiteColor,
+        backgroundColor: Colorss.primaryColor,
+        foregroundColor: Colorss.whiteColor,
       ),
       body: Column(
         children: [
-          // شريط الفلتر
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Colors.white,
@@ -63,20 +70,17 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
               ),
             ),
           ),
-
           Expanded(
-            child: FutureBuilder<List<Applicant>>(
+            child: FutureBuilder<List<Application>>(
               future: _applicantsFuture,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (snapshot.connectionState == ConnectionState.waiting && _applicantsFutureData.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return const Center(child: Text('Failed to load applicants'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No applicants found'));
                 }
 
-                final filteredApplicants = _filterApplicants(snapshot.data!);
+                final filteredApplicants = _filterApplicants(_applicantsFutureData);
 
                 if (filteredApplicants.isEmpty) {
                   return const Center(child: Text('No applicants found for this status'));
@@ -89,61 +93,66 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
                     final applicant = filteredApplicants[index];
                     return GestureDetector(
                       onTap: () async {
-                        final updatedApplicant = await Navigator.push<Applicant>(
+                        final updatedApplicant = await Navigator.push<Application>(
                           context,
                           MaterialPageRoute(
                             builder: (_) => ApplicantDetailsScreen(applicantId: applicant.id),
                           ),
                         );
+
+                        if (updatedApplicant != null) {
+                          setState(() {
+                            final i = _applicantsFutureData.indexWhere((a) => a.id == updatedApplicant.id);
+                            if (i != -1) {
+                              _applicantsFutureData[i] = updatedApplicant;
+                            }
+                            if (_selectedStatus != 'all' &&
+                                updatedApplicant.status.toLowerCase() != _selectedStatus) {
+                              _selectedStatus = updatedApplicant.status.toLowerCase();
+                            }
+                          });
+                        }
+
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: cardBackgroundColor,
-                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
                           children: [
                             CircleAvatar(
                               radius: 24,
-                              backgroundColor: Colors.grey[200],
                               backgroundImage: applicant.imageUrl != null
                                   ? NetworkImage(fixUrl(applicant.imageUrl!))
-                                  : const AssetImage('assets/Profile_avatar.png'),
+                                  : const AssetImage('assets/Profile_avatar.png') as ImageProvider,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    applicant.name,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  Text(applicant.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 4),
-                                  Text(
-                                    applicant.email,
-                                    style: const TextStyle(fontSize: 14, color: secondaryTextColor),
-                                  ),
+                                  Text(applicant.email, style: TextStyle(color: Colors.grey.shade600)),
                                 ],
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: _statusColor(applicant.status),
+                                color: getStatusColor(applicant.status).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                applicant.status,
-                                style: const TextStyle(
-                                  color: whiteColor,
-                                  fontWeight: FontWeight.w500,
+                                applicant.status.toUpperCase(),
+                                style: TextStyle(
+                                  color: getStatusColor(applicant.status),
                                   fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
@@ -161,39 +170,34 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
     );
   }
 
-  // زر الفلتر مع تغيير اللون عند التحديد
-  Widget _buildFilterButton(String label, String statusValue) {
-    final isSelected = _selectedStatus == statusValue;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? primaryColor : Colors.grey[300],
-          foregroundColor: isSelected ? whiteColor : Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          elevation: 0,
-        ),
-        onPressed: () {
-          setState(() {
-            _selectedStatus = statusValue;
-          });
-        },
-        child: Text(label),
-      ),
-    );
-  }
-
-  Color _statusColor(String status) {
+  Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'accepted':
-        return openColor;
+        return Colorss.openColor;
       case 'rejected':
-        return closedColor;
+        return Colorss.closedColor;
+      case 'pending':
+        return Colorss.pendingColor;
       default:
-        return const Color(0xFF0273B1);
+        return Colorss.primaryColor;
     }
+  }
+
+  Widget _buildFilterButton(String label, String status) {
+    final bool isSelected = _selectedStatus == status;
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        onSelected: (_) {
+          setState(() {
+            _selectedStatus = status;
+          });
+        },
+        selectedColor: Colorss.primaryColor,
+        labelStyle: TextStyle(color: isSelected ? Colorss.whiteColor : Colorss.primaryTextColor),
+      ),
+    );
   }
 }

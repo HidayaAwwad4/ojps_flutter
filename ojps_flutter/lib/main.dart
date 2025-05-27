@@ -16,37 +16,37 @@ class MyApp extends StatelessWidget {
       title: 'OJPS',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: primaryColor,
-        scaffoldBackgroundColor: whiteColor,
+        primaryColor: Colorss.primaryColor,
+        scaffoldBackgroundColor: Colorss.whiteColor,
         appBarTheme: AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: whiteColor,
+          backgroundColor: Colorss.primaryColor,
+          foregroundColor: Colorss.whiteColor,
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: primaryColor,
-          secondary: customLightPurple,
-          background: lightBlueBackgroundColor,
-          surface: cardBackgroundColor,
-          error: closedColor,
-          onPrimary: whiteColor,
-          onSecondary: secondaryTextColor,
+          primary: Colorss.primaryColor,
+          secondary: Colorss.customLightPurple,
+          background: Colorss.lightBlueBackgroundColor,
+          surface: Colorss.cardBackgroundColor,
+          error: Colorss.closedColor,
+          onPrimary: Colorss.whiteColor,
+          onSecondary: Colorss.secondaryTextColor,
         ),
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: primaryTextColor),
-          bodyMedium: TextStyle(color: secondaryTextColor),
+          bodyLarge: TextStyle(color: Colorss.primaryTextColor),
+          bodyMedium: TextStyle(color: Colorss.secondaryTextColor),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: whiteColor,
-          labelStyle: TextStyle(color: secondaryTextColor),
-          floatingLabelStyle: TextStyle(color: secondaryTextColor),
-          hintStyle: TextStyle(color: secondaryTextColor),
+          fillColor: Colorss.whiteColor,
+          labelStyle: TextStyle(color: Colorss.secondaryTextColor),
+          floatingLabelStyle: TextStyle(color: Colorss.secondaryTextColor),
+          hintStyle: TextStyle(color: Colorss.secondaryTextColor),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade300),
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
+            borderSide: BorderSide(color: Colorss.primaryColor),
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           border: OutlineInputBorder(
@@ -55,9 +55,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      //initialRoute: '/',
-      //routes: appRoutes,
-      home: MainScreen()
+      initialRoute: '/',
+      routes: appRoutes,
+      //home: MainScreen()
     );
   }
 }

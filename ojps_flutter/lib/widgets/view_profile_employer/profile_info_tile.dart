@@ -21,7 +21,7 @@ class ProfileInfoTile extends StatelessWidget {
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: primaryColor),
+        border: Border.all(color: Colorss.primaryColor),
         borderRadius: BorderRadius.circular(defaultRadius),
         boxShadow: [
           BoxShadow(
@@ -33,7 +33,7 @@ class ProfileInfoTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: primaryColor),
+          Icon(icon, color: Colorss.primaryColor),
           SizedBox(width: defaultPadding),
           Expanded(
             child: Column(

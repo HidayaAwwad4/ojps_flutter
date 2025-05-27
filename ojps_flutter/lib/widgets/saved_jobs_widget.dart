@@ -43,11 +43,11 @@ class _SavedJobsWidgetState extends State<SavedJobsWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.bookmark_border, size: AppValues.emptyIconSize, color: customLightPurple),
+            Icon(Icons.bookmark_border, size: AppValues.emptyIconSize, color: Colorss.customLightPurple),
             SizedBox(height: AppValues.emptySpacingHeight),
             Text(
               'No saved jobs yet.',
-              style: TextStyle(fontSize: AppValues.emptyTextFontSize, color: customLightPurple),
+              style: TextStyle(fontSize: AppValues.emptyTextFontSize, color: Colorss.customLightPurple),
             ),
           ],
         ),

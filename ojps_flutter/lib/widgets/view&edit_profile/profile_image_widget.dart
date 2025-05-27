@@ -38,11 +38,11 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundColor: profileColor,
+          backgroundColor: Colorss.profileColor,
           backgroundImage:
           imagePath != null ? AssetImage(imagePath!) : null,
           child: imagePath == null
-              ? Icon(Icons.person, size: 50, color: primaryColor)
+              ? Icon(Icons.person, size: 50, color: Colorss.primaryColor)
               : null,
         ),
         if (widget.isEditable)
@@ -60,7 +60,7 @@ class _ProfileImageWidgetState extends State<ProfileImageWidget> {
             ],
             child: const CircleAvatar(
               radius: 15,
-              backgroundColor: primaryColor,
+              backgroundColor: Colorss.primaryColor,
               child: Icon(Icons.edit, size: 15, color: Colors.white),
             ),
           ),

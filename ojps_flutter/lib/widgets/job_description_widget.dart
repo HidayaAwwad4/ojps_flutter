@@ -17,7 +17,7 @@ class JobDescriptionWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: AppValues.bodyFontSize,
               fontWeight: FontWeight.bold,
-              color: primaryTextColor,
+              color: Colorss.primaryTextColor,
             ),
           ),
           SizedBox(height: AppValues.sectionSpacing),
@@ -25,7 +25,7 @@ class JobDescriptionWidget extends StatelessWidget {
             "Work on server-side applications and APIs for smooth operations.",
             style: TextStyle(
               fontSize: AppValues.bodyFontSize,
-              color: secondaryTextColor,
+              color: Colorss.secondaryTextColor,
             ),
           ),
         ],

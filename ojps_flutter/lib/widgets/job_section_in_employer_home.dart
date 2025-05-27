@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/job_model.dart';
-import '../screens/job_posting_screen.dart';
 import 'job_card_horizontal.dart';
 
 class JobSectionWidget extends StatelessWidget {
@@ -30,16 +29,19 @@ class JobSectionWidget extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => JobPostingScreen(tabIndex: tabIndex),
-                  ),
+                  '/employer/job-posting',
+                  arguments: tabIndex,
                 );
               },
               child: const Text(
                 'See All',
-                style: TextStyle(fontSize: 14, color: Color(0xFF0273B1), fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF0273B1),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],

@@ -127,7 +127,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           TextButton(
             onPressed: isFormValid ? _submitForm : null,
             style: TextButton.styleFrom(
-              backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
+              backgroundColor: isFormValid ? Colorss.primaryColor : const Color(0xFFE8E8E8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

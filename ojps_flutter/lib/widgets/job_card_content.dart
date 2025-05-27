@@ -61,12 +61,12 @@ class _JobCardContentState extends State<JobCardContent> {
           final data = await JobService().getJobById(widget.job.id);
           final jobDetails = Job.fromJson(data);
           if (context.mounted) {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder: (_) => JobDetailsScreen(job: jobDetails),
-              ),
+              '/employer/job-details',
+              arguments: jobDetails,
             );
+
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +77,7 @@ class _JobCardContentState extends State<JobCardContent> {
       child: Container(
         padding: widget.padding ?? const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: cardBackgroundColor,
+          color: Colorss.cardBackgroundColor,
           borderRadius: BorderRadius.circular(12),
           boxShadow: const [
             BoxShadow(
@@ -96,31 +96,39 @@ class _JobCardContentState extends State<JobCardContent> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: widget.job.companyLogo != null &&
-                      widget.job.companyLogo!.isNotEmpty
-                      ? Image.network(
-                    fixUrl(widget.job.companyLogo!),
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/default_logo.jpeg',
-                        width: 40,
-                        height: 40,
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  )
-                      : Image.asset(
-                    'assets/default_logo.jpeg',
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
+                Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colorss.blackColor, width: 2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: widget.job.companyLogo != null && widget.job.companyLogo!.isNotEmpty
+                        ? Image.network(
+                      fixUrl(widget.job.companyLogo!),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/default-logo.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    )
+                        : Image.asset(
+                      'assets/default-logo.png',
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
+
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -136,7 +144,7 @@ class _JobCardContentState extends State<JobCardContent> {
                       Text(
                         widget.job.employment,
                         style: const TextStyle(
-                            fontSize: 13, color: secondaryTextColor),
+                            fontSize: 13, color: Colorss.secondaryTextColor),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -176,7 +184,7 @@ class _JobCardContentState extends State<JobCardContent> {
                         widget.job.isOpened
                             ? Icons.cancel_outlined
                             : Icons.check_circle_outline,
-                        color: widget.job.isOpened ? closedColor : openColor,
+                        color: widget.job.isOpened ?Colorss.closedColor : Colorss.openColor,
                         size: 20,
                       ),
                       const SizedBox(width: 4),
@@ -186,7 +194,7 @@ class _JobCardContentState extends State<JobCardContent> {
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                           color:
-                          widget.job.isOpened ? closedColor : openColor,
+                          widget.job.isOpened ? Colorss.closedColor : Colorss.openColor,
                         ),
                       ),
                     ],
@@ -199,7 +207,7 @@ class _JobCardContentState extends State<JobCardContent> {
               widget.job.description,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: secondaryTextColor),
+              style: const TextStyle(fontSize: 14, color: Colorss.secondaryTextColor),
             ),
             const SizedBox(height: 10),
             Text(
@@ -213,17 +221,16 @@ class _JobCardContentState extends State<JobCardContent> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              JobApplicantsScreen(jobId: widget.job.id),
-                        ),
+                        '/employer/job-applicants',
+                        arguments: widget.job.id,
                       );
+
                     },
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: whiteColor,
-                      backgroundColor: primaryColor,
+                      foregroundColor: Colorss.whiteColor,
+                      backgroundColor: Colorss.primaryColor,
                     ),
                     child: const Text('Applicants'),
                   ),
@@ -276,8 +283,8 @@ class _JobCardContentState extends State<JobCardContent> {
                       }
                     },
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: primaryColor),
-                      foregroundColor: primaryColor,
+                      side: const BorderSide(color: Colorss.primaryColor),
+                      foregroundColor: Colorss.primaryColor,
                     ),
                     child: const Text('Delete'),
                   ),
