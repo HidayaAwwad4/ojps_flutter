@@ -190,7 +190,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
       ),
 
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(defaultPadding),
+        padding: EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -324,7 +324,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: _saveResume,
-                style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                style: ElevatedButton.styleFrom(backgroundColor: Colorss.primaryColor),
                 child: const Text(
                   "Save & View Resume",
                   style: TextStyle(color: Colors.white),

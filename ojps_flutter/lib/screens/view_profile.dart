@@ -16,7 +16,7 @@ class ViewProfile extends StatelessWidget {
         leading: const BackButton(),
       ),
       body: Padding(
-        padding: EdgeInsets.all(defaultPadding),
+        padding: EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           children: [
             Center(
@@ -25,7 +25,7 @@ class ViewProfile extends StatelessWidget {
                 isEditable: false,
               ),
             ),
-            SizedBox(height: defaultPadding),
+            SizedBox(height: AppDimensions.defaultPadding),
 
 
             ProfileInfoTile(
@@ -54,7 +54,7 @@ class ViewProfile extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor
+                  backgroundColor: Colorss.primaryColor
               ),
               child: const Text(
                 "View Resume",

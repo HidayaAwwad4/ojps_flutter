@@ -22,7 +22,16 @@ class SearchWidget extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25),
+          borderSide: BorderSide(color: Colors.grey, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25),
+          borderSide: BorderSide(color: Colors.blue, width: 2),
+        ),
       ),
+
     );
   }
 }

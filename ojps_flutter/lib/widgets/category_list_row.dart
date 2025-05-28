@@ -36,14 +36,14 @@ class CategoryListRow extends StatelessWidget {
                     width: AppValues.categoryIconContainerSize,
                     height: AppValues.categoryIconContainerSize,
                     decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: Colorss.whiteColor,
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: primaryColor,
+                          color: Colorss.primaryColor,
                           width: AppValues.categoryBorderWidth),
                       boxShadow: [
                         BoxShadow(
-                          color: primaryColor.withOpacity(0.1),
+                          color: Colorss.primaryColor.withOpacity(0.1),
                           blurRadius: AppValues.categoryShadowBlur,
                           offset: AppValues.categoryShadowOffset,
                         ),
@@ -51,7 +51,7 @@ class CategoryListRow extends StatelessWidget {
                     ),
                     child: Icon(
                       category['icon'] as IconData,
-                      color: primaryColor,
+                      color: Colorss.primaryColor,
                       size: AppValues.categoryIconSize,
                     ),
                   ),
@@ -60,7 +60,7 @@ class CategoryListRow extends StatelessWidget {
                     category['label'] as String,
                     style: TextStyle(
                         fontSize: AppValues.categoryFontSize,
-                        color: secondaryTextColor),
+                        color: Colorss.secondaryTextColor),
                     textAlign: TextAlign.center,
                   ),
                 ],

@@ -46,15 +46,15 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
                 ? null
                 : LinearGradient(
               colors: [
-                primaryColor.withOpacity(0.1),
-                secondaryTextColor.withOpacity(0.1),
+                Colorss.primaryColor.withOpacity(0.1),
+                Colorss.secondaryTextColor.withOpacity(0.1),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            color: _isFocused ? whiteColor : null,
+            color: _isFocused ? Colorss.whiteColor : null,
             border: Border.all(
-              color: primaryColor,
+              color: Colorss.primaryColor,
               width: AppValues.borderWidth,
             ),
           ),
@@ -65,12 +65,12 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
             focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: "Write your Cover Letter...",
-              hintStyle: TextStyle(color: secondaryTextColor.withOpacity(0.6)),
+              hintStyle: TextStyle(color: Colorss.secondaryTextColor.withOpacity(0.6)),
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               fillColor: _isFocused
-                  ? whiteColor
-                  : lightBlueBackgroundColor.withOpacity(0.1),
+                  ? Colorss.whiteColor
+                  : Colorss.lightBlueBackgroundColor.withOpacity(0.1),
               filled: true,
               counterText: "${_controller.text.length}/$_maxChars",
             ),

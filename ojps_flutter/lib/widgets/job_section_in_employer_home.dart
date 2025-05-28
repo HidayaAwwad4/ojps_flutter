@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/job_model.dart';
-import '../screens/job_posting_screen.dart';
 import 'job_card_horizontal.dart';
 
 class JobSectionWidget extends StatelessWidget {
@@ -8,6 +7,7 @@ class JobSectionWidget extends StatelessWidget {
   final List<Job> jobs;
   final int tabIndex;
   final Function(Job) onStatusChange;
+  final Function(Job)? onJobDeleted;
 
   const JobSectionWidget({
     super.key,
@@ -15,6 +15,7 @@ class JobSectionWidget extends StatelessWidget {
     required this.jobs,
     required this.tabIndex,
     required this.onStatusChange,
+    this.onJobDeleted,
   });
 
   @override
@@ -28,16 +29,19 @@ class JobSectionWidget extends StatelessWidget {
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => JobPostingScreen(tabIndex: tabIndex),
-                  ),
+                  '/employer/job-posting',
+                  arguments: tabIndex,
                 );
               },
               child: const Text(
                 'See All',
-                style: TextStyle(fontSize: 14, color: Color(0xFF0273B1), fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF0273B1),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
@@ -55,6 +59,7 @@ class JobSectionWidget extends StatelessWidget {
                 child: JobCardHorizontal(
                   job: jobs[index],
                   onStatusChange: onStatusChange,
+                  onJobDeleted: onJobDeleted,
                 ),
               );
             },

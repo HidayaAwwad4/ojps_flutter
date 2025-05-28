@@ -26,22 +26,22 @@ class NotificationItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(
-          vertical: Dimensions.height5,
-          horizontal: Dimensions.width10,
+          vertical: Dimensions.AppDimensions.height5,
+          horizontal: Dimensions.AppDimensions.width10,
         ),
-        padding: EdgeInsets.all(Dimensions.height10),
+        padding: EdgeInsets.all(Dimensions.AppDimensions.height10),
         decoration: BoxDecoration(
-          color: isNew ? primaryColor : Colors.white,
-          border: Border.all(color: primaryColor),
-          borderRadius: BorderRadius.circular(Dimensions.radius20),
+          color: isNew ? Colorss.primaryColor : Colors.white,
+          border: Border.all(color: Colorss.primaryColor),
+          borderRadius: BorderRadius.circular(Dimensions.AppDimensions.radius20),
         ),
         child: Row(
           children: [
             CircleAvatar(
               backgroundImage: AssetImage(imageUrl),
-              radius: Dimensions.height20,
+              radius: Dimensions.AppDimensions.height20,
             ),
-            SizedBox(width: Dimensions.width10),
+            SizedBox(width: Dimensions.AppDimensions.width10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class NotificationItem extends StatelessWidget {
                       style: isNew
                           ? AppValues.textStyleWhiteBold
                           : AppValues.textStylePrimaryBold),
-                  SizedBox(height: Dimensions.height5),
+                  SizedBox(height: Dimensions.AppDimensions.height5),
                   Text(subtitle,
                       style: isNew
                           ? AppValues.textStyleWhite

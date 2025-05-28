@@ -47,7 +47,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
         leading: const BackButton(),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -60,7 +60,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
             const SizedBox(height: 4),
             Text(
               emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
-              style: const TextStyle(color: secondaryTextColor),
+              style: const TextStyle(color: Colorss.secondaryTextColor),
             ),
             const SizedBox(height: 20),
             ProfileFieldWidget(
@@ -73,13 +73,13 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
             ProfileFieldWidget(label: "Bio", controller: bioController),
             TextButton(
               onPressed: _navigateToResumePage,
-              child: const Text("Manage Resume", style: TextStyle(color: primaryColor)),
+              child: const Text("Manage Resume", style: TextStyle(color: Colorss.primaryColor)),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor
+                  backgroundColor: Colorss.primaryColor
               ),
               child: const Text(
                 "Save Changes",

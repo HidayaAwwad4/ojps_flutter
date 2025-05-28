@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -51,14 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(
                             fontSize: AppValues.mainTitleFontSize,
                             fontWeight: FontWeight.bold,
-                            color: primaryTextColor,
+                            color: Colorss.primaryTextColor,
                           ),
                         ),
                         Text(
                           "Palestine, Qalqilya",
                           style: TextStyle(
                             fontSize: AppValues.secondaryTextFontSize,
-                            color: secondaryTextColor,
+                            color: Colorss.secondaryTextColor,
                           ),
                         ),
                       ],
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Categories",
                   style: TextStyle(
                     fontSize: AppValues.sectionTitleFontSize,
-                    color: primaryTextColor,
+                    color: Colorss.primaryTextColor,
                   ),
                 ),
                 const SizedBox(height: AppValues.smallVerticalSpace),
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Recommended Jobs",
                   style: TextStyle(
                     fontSize: AppValues.sectionTitleFontSize,
-                    color: primaryTextColor,
+                    color: Colorss.primaryTextColor,
                   ),
                 ),
                 const SizedBox(height: AppValues.smallVerticalSpace),

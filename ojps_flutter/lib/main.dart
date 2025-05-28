@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
+import 'package:ojps_flutter/screens/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,28 +16,47 @@ class MyApp extends StatelessWidget {
       title: 'OJPS',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: primaryColor,
-        scaffoldBackgroundColor: whiteColor,
+        primaryColor: Colorss.primaryColor,
+        scaffoldBackgroundColor: Colorss.whiteColor,
         appBarTheme: AppBarTheme(
-          backgroundColor: primaryColor,
-          foregroundColor: whiteColor,
+          backgroundColor: Colorss.primaryColor,
+          foregroundColor: Colorss.whiteColor,
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: primaryColor,
-          secondary: customLightPurple,
-          background: lightBlueBackgroundColor,
-          surface: cardBackgroundColor,
-          error: closedColor,
-          onPrimary: whiteColor,
-          onSecondary: secondaryTextColor,
+          primary: Colorss.primaryColor,
+          secondary: Colorss.customLightPurple,
+          background: Colorss.lightBlueBackgroundColor,
+          surface: Colorss.cardBackgroundColor,
+          error: Colorss.closedColor,
+          onPrimary: Colorss.whiteColor,
+          onSecondary: Colorss.secondaryTextColor,
         ),
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: primaryTextColor),
-          bodyMedium: TextStyle(color: secondaryTextColor),
+          bodyLarge: TextStyle(color: Colorss.primaryTextColor),
+          bodyMedium: TextStyle(color: Colorss.secondaryTextColor),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colorss.whiteColor,
+          labelStyle: TextStyle(color: Colorss.secondaryTextColor),
+          floatingLabelStyle: TextStyle(color: Colorss.secondaryTextColor),
+          hintStyle: TextStyle(color: Colorss.secondaryTextColor),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colorss.primaryColor),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
         ),
       ),
       initialRoute: '/',
-      routes: appRoutes, 
+      routes: appRoutes,
     );
   }
 }
