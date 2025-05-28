@@ -17,4 +17,6 @@ class Colorss {
   static const Color lightGrey = Color(0xFFA0A4A5);
   static const Color successColor = Color(0xFF28A745);
   static const Color greyColor = Colors.grey;
+  static const Color buttonInactiveBackgroundColor = Color(0xFFE8E8E8);
+  static const Color buttonInactiveTextColor = Color(0xFFADADAD);
 }

@@ -44,7 +44,7 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: defaultPadding / 2),
+      padding: EdgeInsets.symmetric(vertical: AppDimensions.defaultPadding / 2),
       child: TextField(
         focusNode: _focusNode,
         controller: widget.controller,

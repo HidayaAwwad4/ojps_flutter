@@ -22,7 +22,7 @@ class _ResumeSectionDropdownState extends State<ResumeSectionDropdown> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: defaultPadding),
+      margin: EdgeInsets.only(bottom: AppDimensions.defaultPadding),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: Colorss.lightGrey),

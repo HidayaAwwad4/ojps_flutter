@@ -47,7 +47,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
         leading: const BackButton(),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

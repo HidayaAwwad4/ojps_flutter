@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: appRoutes,
-      //home: MainScreen()
     );
   }
 }

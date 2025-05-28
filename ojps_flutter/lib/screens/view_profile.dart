@@ -16,7 +16,7 @@ class ViewProfile extends StatelessWidget {
         leading: const BackButton(),
       ),
       body: Padding(
-        padding: EdgeInsets.all(defaultPadding),
+        padding: EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           children: [
             Center(
@@ -25,7 +25,7 @@ class ViewProfile extends StatelessWidget {
                 isEditable: false,
               ),
             ),
-            SizedBox(height: defaultPadding),
+            SizedBox(height: AppDimensions.defaultPadding),
 
 
             ProfileInfoTile(

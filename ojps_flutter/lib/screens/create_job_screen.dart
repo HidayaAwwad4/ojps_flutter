@@ -115,19 +115,19 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F0F0),
+      backgroundColor: Colorss.cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colorss.whiteColor,
         elevation: 1,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: Colorss.blackColor),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           TextButton(
             onPressed: isFormValid ? _submitForm : null,
             style: TextButton.styleFrom(
-              backgroundColor: isFormValid ? Colorss.primaryColor : const Color(0xFFE8E8E8),
+              backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -135,7 +135,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             child: Text(
               'Post',
               style: TextStyle(
-                color: isFormValid ? Colors.white : const Color(0xFFADADAD),
+                color: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
               ),
             ),
           ),
@@ -160,7 +160,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 child: Text(
                   'Upload your company logo',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: Colorss.greyColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -174,7 +174,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colorss.whiteColor,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(

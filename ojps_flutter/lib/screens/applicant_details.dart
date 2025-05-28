@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
 import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
@@ -67,8 +68,6 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -97,20 +96,20 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildProfileImage(),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.verticalSpacerLarge),
             Text(
               _applicant!.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: AppDimensions.fontSizeLarge, fontWeight: FontWeight.bold),
             ),
             Text(_applicant!.email, style: TextStyle(color: Colorss.secondaryTextColor)),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppDimensions.height5),
             _buildStatusBadge(),
-            const SizedBox(height: 28),
+            const SizedBox(height: AppDimensions.sectionSpacingLarge),
             buildSectionTitle('Resume:'),
             Align(
               alignment: Alignment.centerLeft,
@@ -125,22 +124,22 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 child: const Text('View Resume'),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimensions.height20),
             buildSectionTitle('Cover Letter:'),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
                 _applicant!.coverLetter ?? 'No cover letter provided.',
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: AppDimensions.fontSizeNormal),
               ),
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: AppDimensions.sectionSpacingLarge),
             buildSectionTitle('Actions:'),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppDimensions.height10),
             Row(
               children: [
                 if (isPending) ...[
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
                     label: 'Shortlist',
                     onPressed: () => _updateStatus('shortlisted'),
@@ -152,10 +151,10 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                   _buildActionButton(
                     label: 'Accept',
                     onPressed: () => _updateStatus('accepted'),
-                    backgroundColor: Colorss.openColor ,
+                    backgroundColor: Colorss.openColor,
                     foregroundColor: Colorss.whiteColor,
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
                     label: 'Reject',
                     onPressed: () => _updateStatus('rejected'),
@@ -184,7 +183,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 ],
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppDimensions.height20),
           ],
         ),
       ),
@@ -193,7 +192,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
 
   Widget _buildProfileImage() {
     return CircleAvatar(
-      radius: 45,
+      radius: AppDimensions.profileImageRadiusMedium,
       backgroundImage: _applicant!.imageUrl != null && _applicant!.imageUrl!.isNotEmpty
           ? NetworkImage(fixUrl(_applicant!.imageUrl!))
           : const AssetImage('assets/Profile_avatar.png') as ImageProvider,
@@ -203,10 +202,13 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
   Widget _buildStatusBadge() {
     final statusColor = getStatusColor(_status);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.badgePaddingHorizontal,
+        vertical: AppDimensions.badgePaddingVertical,
+      ),
       decoration: BoxDecoration(
         color: statusColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppDimensions.radius20),
       ),
       child: Text(
         _status.toUpperCase(),
@@ -262,7 +264,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
       alignment: Alignment.centerLeft,
       child: Text(
         text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold),
       ),
     );
   }

@@ -190,7 +190,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
       ),
 
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(defaultPadding),
+        padding: EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

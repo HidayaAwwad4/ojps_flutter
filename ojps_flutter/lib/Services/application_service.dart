@@ -60,8 +60,5 @@ class ApplicationService {
       throw Exception('Failed to update application status');
     }
   }
-
-
-
-
+  
 }
