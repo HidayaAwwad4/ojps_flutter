@@ -86,8 +86,8 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
           alignment: Alignment.centerLeft,
           child: TextButton.icon(
             onPressed: _addResponsibilityField,
-            icon: const Icon(Icons.add, color: primaryColor),
-            label: const Text("Add More", style: TextStyle(color: primaryColor)),
+            icon: const Icon(Icons.add, color: Colorss.primaryColor),
+            label: const Text("Add More", style: TextStyle(color: Colorss.primaryColor)),
           ),
         ),
         if (widget.onRemove != null)

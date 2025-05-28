@@ -9,13 +9,13 @@ class ResumeSectionTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: defaultPadding),
+      padding: EdgeInsets.symmetric(vertical: dimentions.defaultPadding),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
-          color: primaryColor,
+          color: Colorss.primaryColor,
         ),
       ),
     );

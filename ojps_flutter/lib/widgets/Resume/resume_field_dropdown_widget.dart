@@ -22,15 +22,15 @@ class _ResumeFieldDropdownWidgetState extends State<ResumeFieldDropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: defaultPadding),
+      margin: EdgeInsets.only(bottom: dimentions.defaultPadding),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(defaultRadius),
+        borderRadius: BorderRadius.circular(dimentions.defaultRadius),
         border: Border.all(color: Colors.grey.shade400),
       ),
       child: ExpansionTile(
         title: Text(widget.title, style: TextStyle(fontWeight: FontWeight.bold)),
-        childrenPadding: EdgeInsets.symmetric(horizontal: defaultPadding),
+        childrenPadding: EdgeInsets.symmetric(horizontal: dimentions.defaultPadding),
         initiallyExpanded: isExpanded,
         onExpansionChanged: (expanded) {
           setState(() => isExpanded = expanded);

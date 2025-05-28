@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constants/colors.dart' as colors;
 import '/constants/dimensions.dart';
 import '/constants/colors.dart';
 
@@ -22,10 +23,10 @@ class _ResumeSectionDropdownState extends State<ResumeSectionDropdown> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: defaultPadding),
+      margin: EdgeInsets.only(bottom: dimentions.defaultPadding),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: lightGrey),
+        side: BorderSide(color: Colorss.lightGrey),
       ),
       child: Column(
         children: [

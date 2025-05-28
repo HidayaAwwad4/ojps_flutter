@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/screens/notifications.dart';
 import 'package:ojps_flutter/screens/splash_screen.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
 import 'package:ojps_flutter/screens/job_status_screen.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'OJPS',
-      home: ViewResumeScreen() ,
+      home: Notifications() ,
       /*theme: ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: whiteColor,

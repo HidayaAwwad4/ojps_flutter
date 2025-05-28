@@ -69,7 +69,7 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
             ...resumeData!.workExperiences.map((exp) => ListTile(
               title: Text(exp.position),
               subtitle: Text("${exp.company}\n${exp.description}"),
-              trailing: Text(exp.duration , style: TextStyle(color: lightGrey )),
+              trailing: Text(exp.duration , style: TextStyle(color: Colorss.lightGrey )),
               isThreeLine: true,
             )),
 
@@ -77,7 +77,7 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
             ...resumeData!.educations.map((edu) => ListTile(
               title: Text(edu.degree),
               subtitle: Text("${edu.university}\n${edu.details}"),
-              trailing: Text(edu.duration , style: TextStyle(color: lightGrey),),
+              trailing: Text(edu.duration , style: TextStyle(color: Colorss.lightGrey),),
               isThreeLine: true,
             )),
 
@@ -87,8 +87,8 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
                 onPressed: () {
                   ResumeService.downloadResumeFile();
                 },
-                icon: Icon(Icons.download , color: primaryColor,),
-                label: Text("Download Resume (PDF,DOC)" , style: TextStyle(color: primaryColor),),
+                icon: Icon(Icons.download , color: Colorss.primaryColor,),
+                label: Text("Download Resume (PDF,DOC)" , style: TextStyle(color: Colorss.primaryColor),),
 
               ),
               Text("Download existing file", style: TextStyle(color: Colors.grey)),

@@ -17,12 +17,12 @@ class ProfileInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: defaultPadding / 2),
-      padding: EdgeInsets.all(defaultPadding),
+      margin: EdgeInsets.symmetric(vertical: dimentions.defaultPadding / 2),
+      padding: EdgeInsets.all(dimentions.defaultPadding),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: primaryColor),
-        borderRadius: BorderRadius.circular(defaultRadius),
+        border: Border.all(color: Colorss.primaryColor),
+        borderRadius: BorderRadius.circular(dimentions.defaultRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -33,8 +33,8 @@ class ProfileInfoTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: primaryColor),
-          SizedBox(width: defaultPadding),
+          Icon(icon, color: Colorss.primaryColor),
+          SizedBox(width: dimentions.defaultPadding),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
