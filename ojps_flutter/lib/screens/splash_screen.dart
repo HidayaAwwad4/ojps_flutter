@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,36 +26,46 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
 
     _logoController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: AppValues.logoAnimationDuration,
       vsync: this,
     );
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.1).animate(
+    _scaleAnimation = Tween<double>(
+      begin: AppValues.logoScaleBegin,
+      end: AppValues.logoScaleEnd,
+    ).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.easeOutBack),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+
+    _fadeAnimation = Tween<double>(
+      begin: AppValues.fadeBegin,
+      end: AppValues.fadeEnd,
+    ).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.easeIn),
     );
 
     _textController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: AppValues.textAnimationDuration,
       vsync: this,
     );
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.5),
+      begin: Offset(0, AppValues.textSlideBeginY),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeOut),
     );
 
-    _textFadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+    _textFadeAnimation = Tween<double>(
+      begin: AppValues.fadeBegin,
+      end: AppValues.fadeEnd,
+    ).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeIn),
     );
 
     _logoController.forward().whenComplete(() => _textController.forward());
 
-    Timer(const Duration(seconds: 4), () {
+    Timer(AppValues.splashScreenDuration, () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -92,15 +103,15 @@ class _SplashScreenState extends State<SplashScreen>
                 child: ScaleTransition(
                   scale: _scaleAnimation,
                   child: Container(
-                    width: 180,
-                    height: 180,
+                    width: AppValues.logoSize,
+                    height: AppValues.logoSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: whiteColor.withOpacity(0.8),
-                          blurRadius: 60,
-                          spreadRadius: 20,
+                          color: whiteColor.withOpacity(AppValues.logoShadowOpacity),
+                          blurRadius: AppValues.logoShadowBlurRadius,
+                          spreadRadius: AppValues.logoShadowSpreadRadius,
                         ),
                       ],
                     ),
@@ -111,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: AppValues.spaceBetweenLogoAndText),
               FadeTransition(
                 opacity: _textFadeAnimation,
                 child: SlideTransition(
@@ -119,10 +130,10 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Text(
                     "Find Your Dream Job",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: AppValues.splashTextFontSize,
                       color: primaryColor,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0,
+                      letterSpacing: AppValues.splashTextLetterSpacing,
                     ),
                   ),
                 ),
@@ -134,3 +145,4 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
+

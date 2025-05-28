@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class UploadedCvWidget extends StatefulWidget {
   const UploadedCvWidget({super.key});
@@ -16,9 +17,14 @@ class _UploadedCvWidgetState extends State<UploadedCvWidget>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(CurvedAnimation(
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: AppValues.animationDurationMs),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: AppValues.scaleBegin,
+      end: AppValues.scaleEnd,
+    ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     ));
@@ -48,36 +54,38 @@ class _UploadedCvWidgetState extends State<UploadedCvWidget>
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
-      onTap: () {
-      },
+      onTap: () {},
       child: ScaleTransition(
         scale: _scaleAnimation,
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppValues.defaultPadding),
           decoration: BoxDecoration(
             border: Border.all(color: primaryColor),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppValues.borderRadius),
             color: whiteColor,
             boxShadow: [
               BoxShadow(
-                color: primaryColor.withOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 6),
+                color: primaryColor.withOpacity(AppValues.boxShadowOpacity),
+                blurRadius: AppValues.boxShadowBlur,
+                offset: Offset(0, AppValues.boxShadowOffsetY),
               ),
             ],
             gradient: LinearGradient(
-              colors: [primaryColor.withOpacity(0.005), secondaryTextColor.withOpacity(0.005)],
+              colors: [
+                primaryColor.withOpacity(AppValues.gradientOpacity),
+                secondaryTextColor.withOpacity(AppValues.gradientOpacity),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 "cv_razan.pdf",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: AppValues.uploadedCvFontSize,
                   fontWeight: FontWeight.w500,
                   color: primaryColor,
                 ),
@@ -85,7 +93,7 @@ class _UploadedCvWidgetState extends State<UploadedCvWidget>
               Icon(
                 Icons.edit,
                 color: primaryColor,
-                size: 24,
+                size: AppValues.editIconSize,
               ),
             ],
           ),

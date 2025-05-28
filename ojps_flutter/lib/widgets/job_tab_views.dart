@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/widgets/job_list.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobTabViews extends StatelessWidget {
   const JobTabViews({super.key});
@@ -8,9 +9,9 @@ class JobTabViews extends StatelessWidget {
   Widget build(BuildContext context) {
     return const TabBarView(
       children: [
-        JobList(status: 'under_review'),
-        JobList(status: 'accepted'),
-        JobList(status: 'rejected'),
+        JobList(status: AppValues.statusUnderReview),
+        JobList(status: AppValues.statusAccepted),
+        JobList(status: AppValues.statusRejected),
       ],
     );
   }

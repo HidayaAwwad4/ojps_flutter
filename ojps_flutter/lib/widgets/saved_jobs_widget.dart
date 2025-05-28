@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 
 class SavedJobsWidget extends StatefulWidget {
   const SavedJobsWidget({super.key});
@@ -42,11 +43,11 @@ class _SavedJobsWidgetState extends State<SavedJobsWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.bookmark_border, size: 60, color: customLightPurple),
-            SizedBox(height: 16),
+            Icon(Icons.bookmark_border, size: AppValues.emptyIconSize, color: customLightPurple),
+            SizedBox(height: AppValues.emptySpacingHeight),
             Text(
               'No saved jobs yet.',
-              style: TextStyle(fontSize: 18, color:customLightPurple),
+              style: TextStyle(fontSize: AppValues.emptyTextFontSize, color: customLightPurple),
             ),
           ],
         ),
@@ -66,9 +67,7 @@ class _SavedJobsWidgetState extends State<SavedJobsWidget> {
           salary: job['salary']!,
           isSaved: true,
           onSaveToggle: () => removeJob(index),
-          onTap: () {
-
-          },
+          onTap: () {},
         );
       },
     );
