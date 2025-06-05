@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constants/spaces.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 import '/models/resume_model.dart';
@@ -62,7 +63,7 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(widget.icon, size: 18, color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey),
-              const SizedBox(width: 4),
+              Spaces.horizontal(4),
               Text(widget.label, style: TextStyle(color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey)),
             ],
           )
