@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../services/job_service.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/document_upload_button.dart';
 import '../widgets/dropdown_selector.dart';
@@ -129,7 +131,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             style: TextButton.styleFrom(
               backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
               ),
             ),
             child: Text(
@@ -139,11 +141,11 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          Spaces.horizontal(AppDimensions.horizontalSpacerLarge),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerLarge),
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -155,27 +157,25 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   });
                 },
               ),
-              const SizedBox(width: 12),
+              Spaces.horizontal(AppDimensions.spacingSmall),
               const Expanded(
                 child: Text(
                   'Upload your company logo',
                   style: TextStyle(
                     color: Colorss.greyColor,
-                    fontSize: 16,
+                    fontSize:AppDimensions.fontSizeNormal,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ],
           ),
-
-          const SizedBox(height: 20),
-
+          Spaces.vertical(AppDimensions.verticalSpacerLarge),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppDimensions.defaultPadding),
             decoration: BoxDecoration(
               color: Colorss.whiteColor,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black12.withOpacity(0.05),
@@ -191,59 +191,59 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                   hint: 'Enter job title',
                   onChanged: (value) => setState(() => jobTitle = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
                   label: 'Job Description',
                   hint: 'Describe the job',
-                  maxLines: 5,
+                  maxLines: AppDimensions.maxLinesJobDescription,
                   onChanged: (value) => setState(() => description = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
                   label: 'Location',
                   hint: 'Enter job location',
                   onChanged: (value) => setState(() => location = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
                   label: 'Languages',
                   hint: 'e.g. English - Advanced',
                   onChanged: (value) => setState(() => languages = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
                   label: 'Schedule',
                   hint: 'e.g. Sunday to Thursday',
                   onChanged: (value) => setState(() => schedule = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
                   label: 'Salary',
                   hint: 'Hourly/ daily/ monthly',
                   onChanged: (value) => setState(() => salary = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
                   label: 'Experience',
                   options: experienceList,
                   selectedValue: selectedExperience,
                   onChanged: (value) => setState(() => selectedExperience = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
                   label: 'Employment',
                   options: employmentList,
                   selectedValue: selectedEmployment,
                   onChanged: (value) => setState(() => selectedEmployment = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
                   label: 'Category',
                   options: categoryList,
                   selectedValue: selectedCategory,
                   onChanged: (value) => setState(() => selectedCategory = value),
                 ),
-                const SizedBox(height: 16),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 const DocumentUploadButton(),
               ],
             ),

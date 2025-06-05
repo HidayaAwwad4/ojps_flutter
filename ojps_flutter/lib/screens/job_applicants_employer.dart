@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
@@ -55,7 +57,7 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerSmall),
             color: Colors.white,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -87,7 +89,7 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
                 }
 
                 return ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppDimensions.defaultPadding),
                   itemCount: filteredApplicants.length,
                   itemBuilder: (context, index) {
                     final applicant = filteredApplicants[index];
@@ -115,43 +117,43 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
 
                       },
                       child: Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(12),
+                        margin: const EdgeInsets.only(bottom: AppDimensions.marginSmall),
+                        padding: const EdgeInsets.all(AppDimensions.paddingSmall),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                         ),
                         child: Row(
                           children: [
                             CircleAvatar(
-                              radius: 24,
+                              radius: AppDimensions.companyLogoRadiusSmall,
                               backgroundImage: applicant.imageUrl != null
                                   ? NetworkImage(fixUrl(applicant.imageUrl!))
                                   : const AssetImage('assets/Profile_avatar.png') as ImageProvider,
                             ),
-                            const SizedBox(width: 12),
+                            Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(applicant.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  const SizedBox(height: 4),
+                                  Spaces.vertical(AppDimensions.spacingTiny),
                                   Text(applicant.email, style: TextStyle(color: Colors.grey.shade600)),
                                 ],
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerSmall, vertical: AppDimensions.verticalSpacerExtraSmall),
                               decoration: BoxDecoration(
                                 color: getStatusColor(applicant.status).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
                               ),
                               child: Text(
                                 applicant.status.toUpperCase(),
                                 style: TextStyle(
                                   color: getStatusColor(applicant.status),
-                                  fontSize: 12,
+                                  fontSize: AppDimensions.fontSizeSmall,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -186,7 +188,7 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
   Widget _buildFilterButton(String label, String status) {
     final bool isSelected = _selectedStatus == status;
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.only(right: AppDimensions.paddingXSmall),
       child: ChoiceChip(
         label: Text(label),
         selected: isSelected,

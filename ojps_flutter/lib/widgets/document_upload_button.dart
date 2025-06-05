@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
+
 class DocumentUploadButton extends StatefulWidget {
   final void Function(PlatformFile)? onFileSelected;
 
@@ -27,29 +31,29 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: _pickDocument,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: 18),
         decoration: BoxDecoration(
           color: const Color(0xFFF9FAFB),
           border: Border.all(color: const Color(0xFFD9D9D9)),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
         ),
         child: Row(
           children: [
-            const Icon(Icons.upload_file, color: Color(0xFF0273B1)),
-            const SizedBox(width: 12),
+            const Icon(Icons.upload_file, color: Colorss.primaryColor),
+            Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
             Expanded(
               child: Text(
                 selectedFile != null ? selectedFile!.name : 'Click to upload a document',
                 style: TextStyle(
-                  color: selectedFile != null ? Colors.black : const Color(0xFF0273B1),
-                  fontSize: 16,
+                  color: selectedFile != null ? Colorss.primaryTextColor : Colorss.primaryColor,
+                  fontSize: AppDimensions.fontSizeNormal,
                   fontWeight: selectedFile != null ? FontWeight.normal : FontWeight.w500,
                 ),
               ),
             ),
-            const Icon(Icons.arrow_upward, size: 18, color: Color(0xFF0273B1)),
+            const Icon(Icons.arrow_upward, size: AppDimensions.iconSizeXSmall, color: Colorss.primaryColor),
           ],
         ),
       ),

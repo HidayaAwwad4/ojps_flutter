@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
-import '../screens/job_applicants_employer.dart';
-import '../screens/job_details_for_employer.dart';
 import '../services/job_service.dart';
 import '../utils/network_utils.dart';
 
@@ -32,7 +32,7 @@ class _JobCardContentState extends State<JobCardContent> {
     final updatedData = {'isOpened': newStatus ? 1 : 0};
 
     try {
-      await JobService().updateJob(widget.job.id!, updatedData);
+      await JobService().updateJob(widget.job.id, updatedData);
 
       final updatedJob = widget.job.copyWith(isOpened: newStatus);
 
@@ -75,10 +75,10 @@ class _JobCardContentState extends State<JobCardContent> {
         }
       },
       child: Container(
-        padding: widget.padding ?? const EdgeInsets.all(12),
+        padding: widget.padding ?? const EdgeInsets.all(AppDimensions.paddingSmall),
         decoration: BoxDecoration(
           color: Colorss.cardBackgroundColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
@@ -99,37 +99,37 @@ class _JobCardContentState extends State<JobCardContent> {
                 Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Colorss.whiteColor,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colorss.blackColor, width: 2),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(AppDimensions.searchBorderRadius),
                     child: widget.job.companyLogo != null && widget.job.companyLogo!.isNotEmpty
                         ? Image.network(
                       fixUrl(widget.job.companyLogo!),
-                      width: 40,
-                      height: 40,
+                      width: AppDimensions.jobCardImageSize,
+                      height: AppDimensions.jobCardImageSize,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
                           'assets/default-logo.png',
-                          width: 40,
-                          height: 40,
+                          width: AppDimensions.jobCardImageSize,
+                          height: AppDimensions.jobCardImageSize,
                           fit: BoxFit.cover,
                         );
                       },
                     )
                         : Image.asset(
                       'assets/default-logo.png',
-                      width: 40,
-                      height: 40,
+                      width: AppDimensions.jobCardImageSize,
+                      height: AppDimensions.jobCardImageSize,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
 
-                const SizedBox(width: 12),
+                Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,14 +137,14 @@ class _JobCardContentState extends State<JobCardContent> {
                       Text(
                         widget.job.title,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      Spaces.vertical(AppDimensions.spacingTiny),
                       Text(
                         widget.job.employment,
                         style: const TextStyle(
-                            fontSize: 13, color: Colorss.secondaryTextColor),
+                            fontSize: AppDimensions.fontSizeSmall, color: Colorss.secondaryTextColor),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -185,13 +185,13 @@ class _JobCardContentState extends State<JobCardContent> {
                             ? Icons.cancel_outlined
                             : Icons.check_circle_outline,
                         color: widget.job.isOpened ?Colorss.closedColor : Colorss.openColor,
-                        size: 20,
+                        size: AppDimensions.iconSizeSmall,
                       ),
-                      const SizedBox(width: 4),
+                      Spaces.horizontal(AppDimensions.horizontalSpacerExtraSmall),
                       Text(
                         widget.job.isOpened ? 'Closed' : 'Open',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: AppDimensions.fontSizeSmall,
                           fontWeight: FontWeight.w500,
                           color:
                           widget.job.isOpened ? Colorss.closedColor : Colorss.openColor,
@@ -202,20 +202,20 @@ class _JobCardContentState extends State<JobCardContent> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            Spaces.vertical(AppDimensions.spacingSmall),
             Text(
               widget.job.description,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 14, color: Colorss.secondaryTextColor),
+              style: const TextStyle(fontSize: AppDimensions.fontSizeSmall, color: Colorss.secondaryTextColor),
             ),
-            const SizedBox(height: 10),
+            Spaces.vertical(AppDimensions.verticalSpacerMediumSmall),
             Text(
               widget.job.salary.toString(),
               style:
-              const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              const TextStyle(fontSize: AppDimensions.fontSizeSmall, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            Spaces.vertical(AppDimensions.verticalSpacerMedium),
             Row(
               children: [
                 Expanded(
@@ -235,7 +235,7 @@ class _JobCardContentState extends State<JobCardContent> {
                     child: const Text('Applicants'),
                   ),
                 ),
-                const SizedBox(width: 10),
+                Spaces.horizontal(AppDimensions.horizontalSpacerSmall),
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () async {
@@ -262,7 +262,7 @@ class _JobCardContentState extends State<JobCardContent> {
 
                       if (confirm == true) {
                         try {
-                          await JobService().deleteJob(widget.job.id!);
+                          await JobService().deleteJob(widget.job.id);
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

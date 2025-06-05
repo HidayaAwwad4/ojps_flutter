@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/dimensions.dart';
 import '../models/job_model.dart';
 import 'job_card_content.dart';
 
@@ -17,12 +18,12 @@ class JobCardVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerMediumSmall),
       child: JobCardContent(
         job: job,
         onStatusChange: onStatusChange,
         onJobDeleted: onJobDeleted,
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         showVerticalLayout: true,
       ),
     );

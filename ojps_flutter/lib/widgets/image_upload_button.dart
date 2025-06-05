@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+
 class ImageUploadButton extends StatefulWidget {
   final void Function(File?) onImageSelected;
 
@@ -32,11 +35,11 @@ class _ImageUploadButtonState extends State<ImageUploadButton> {
     return GestureDetector(
       onTap: _pickImage,
       child: CircleAvatar(
-        radius: 40,
-        backgroundColor: Colors.grey[300],
+        radius: AppDimensions.jobCardImageSize,
+        backgroundColor: Colorss.lightGrey,
         backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
         child: _selectedImage == null
-            ? const Icon(Icons.camera_alt, color: Colors.grey, size: 40)
+            ? const Icon(Icons.camera_alt, color: Colorss.greyColor, size: AppDimensions.iconSizeLarge)
             : null,
       ),
     );

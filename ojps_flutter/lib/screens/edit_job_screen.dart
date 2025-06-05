@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../utils/network_utils.dart';
@@ -86,12 +88,12 @@ class _EditJobScreenState extends State<EditJobScreen> {
                   ? NetworkImage(fixUrl(widget.job.companyLogo!))
                   : const AssetImage('assets/default-logo.png'),
             ),
-            const SizedBox(width: 8),
+            Spaces.horizontal(AppDimensions.spacingSmall),
           ],
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
+            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.marginSmall),
             child: ElevatedButton(
               onPressed: isFormValid
                   ? () async {
@@ -134,11 +136,11 @@ class _EditJobScreenState extends State<EditJobScreen> {
               }
                   : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? Colorss.primaryColor : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? Colorss. whiteColor : const Color(0xFFADADAD),
+                backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
+                foregroundColor: isFormValid ? Colorss. whiteColor : Colorss.buttonInactiveTextColor,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge)),
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerXLarge, vertical: AppDimensions.verticalSpacerMediumSmall),
               ),
               child: const Text('Save'),
             ),
@@ -146,7 +148,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all( AppDimensions.defaultPadding),
         child: ListView(
           children: [
             CustomTextField(
@@ -205,7 +207,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                 updateFormValidity();
               },
             ),
-            const SizedBox(height: 20),
+            Spaces.vertical(AppDimensions.verticalSpacerLarge),
           ],
         ),
       ),
