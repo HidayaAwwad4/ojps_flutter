@@ -17,20 +17,16 @@ import '../screens/job_posting_screen.dart';
 import '../screens/main_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
- // '/': (context) => const SplashScreen(),
+  '/': (context) => const SplashScreen(),
   '/home': (context) => const HomeScreen(),
   '/job_list': (context) => JobListScreen(categoryLabel: 'Your Category'),
   '/job_details': (context) => const JobDetailsJobSeekerScreen(),
   '/job_status': (context) => const JobStatusScreen(),
   '/saved_jobs': (context) => const SavedJobsScreen(),
-  '/': (context) {
+  '/employer/main-screen': (context) {
     final initialIndex = ModalRoute.of(context)!.settings.arguments as int? ?? 0;
     return MainScreen(initialIndex: initialIndex);
   },
-  /*'/employer/main-screen': (context) {
-    final initialIndex = ModalRoute.of(context)!.settings.arguments as int? ?? 0;
-    return MainScreen(initialIndex: initialIndex);
-  },*/
   '/employer-home': (context) => const EmployerHome(),
   '/employer/create-job': (context) => const CreateJobScreen(),
   '/employer/edit-job': (context) {
