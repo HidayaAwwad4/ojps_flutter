@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/screens/main_screen.dart';
+import 'package:ojps_flutter/screens/Login_page.dart';
+import 'package:ojps_flutter/screens/Forgetpassword.dart';
+import 'package:ojps_flutter/screens/user_type.dart';
 
 void main() {
   runApp(const MyApp());
