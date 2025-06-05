@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
-
 import '../constants/dimensions.dart' as Dimensions;
 
 class NotificationItem extends StatelessWidget {
@@ -33,7 +32,15 @@ class NotificationItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: isNew ? Colorss.primaryColor : Colors.white,
           border: Border.all(color: Colorss.primaryColor),
-          borderRadius: BorderRadius.circular(Dimensions.AppDimensions.radius20),
+          borderRadius: BorderRadius.circular(Dimensions.AppDimensions.radius50),
+          boxShadow: [
+            BoxShadow(
+              color: Colorss.primaryColor,
+              spreadRadius: 0.1,
+              blurRadius: 3,
+              offset: const Offset(1,2),
+            )
+          ]
         ),
         child: Row(
           children: [

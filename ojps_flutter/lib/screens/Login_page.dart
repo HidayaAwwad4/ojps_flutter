@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                         fontWeight: FontWeight.bold,
                         fontSize: 28,
                         letterSpacing: 1,
-                        color: primaryColor,
+                        color: Colorss.primaryColor,
                       ),
                     ),
                     SizedBox(height: 3),
@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
+                          backgroundColor: Colorss.primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             "Sign Up",
-                            style: TextStyle(color: primaryColor),
+                            style: TextStyle(color: Colorss.primaryColor),
                           ),
                         ),
                       ],
@@ -204,13 +204,13 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: obscureText,
         validator: validator,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: primaryColor),
+          prefixIcon: Icon(icon, color: Colorss.primaryColor),
           labelText: label,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2.0),
+            borderSide: BorderSide(color: Colorss.primaryColor, width: 2.0),
             borderRadius: BorderRadius.circular(12),
           ),
         ),
