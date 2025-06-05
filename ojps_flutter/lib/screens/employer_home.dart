@@ -1,10 +1,9 @@
-// lib/screens/employer_home.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
-import '../models/job_model.dart';
-import '../services/job_service.dart';
+import '../providers/employer_jobs_provider.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';
 import '../widgets/search_for_employer.dart';
@@ -18,72 +17,28 @@ class EmployerHome extends StatefulWidget {
 
 class _EmployerHomeScreenState extends State<EmployerHome> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isFirstLoad = true;
 
-  List<Job> allJobs = [];
-  List<Job> filteredJobs = [];
-  bool isLoading = true;
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstLoad) {
+      Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
+      _isFirstLoad = false;
+    }
+  }
   @override
   void initState() {
     super.initState();
-    fetchEmployerJobs();
   }
 
-  Future<void> fetchEmployerJobs() async {
-    try {
-      final jobService = JobService();
-
-      final employerId = await jobService.getEmployerId();
-      final jobsJson = await jobService.getJobsByEmployer(employerId);
-      final fetchedJobs = jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
-
-      setState(() {
-        allJobs = fetchedJobs;
-        filteredJobs = fetchedJobs;
-        isLoading = false;
-      });
-    } catch (e) {
-      print("Error fetching jobs: $e");
-      setState(() => isLoading = false);
-    }
-  }
-
-  void handleStatusChange(Job updatedJob) {
-    setState(() {
-      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
-      if (index != -1) {
-        allJobs[index] = updatedJob;
-      }
-
-      index = filteredJobs.indexWhere((job) => job.id == updatedJob.id);
-      if (index != -1) {
-        filteredJobs[index] = updatedJob;
-      }
-    });
-  }
-
-  void handleJobDeleted(Job job) {
-    setState(() {
-      allJobs.removeWhere((j) => j.id == job.id);
-      filteredJobs.removeWhere((j) => j.id == job.id);
-    });
-  }
-
-  void searchJobs(String query) {
-    final searchResults = allJobs.where((job) {
-      final jobTitle = job.title.toLowerCase();
-      final searchQuery = query.toLowerCase();
-      return jobTitle.contains(searchQuery);
-    }).toList();
-    setState(() {
-      filteredJobs = searchResults;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    final openJobs = filteredJobs.where((job) => job.isOpened).toList();
-    final closedJobs = filteredJobs.where((job) => !job.isOpened).toList();
+
+    final provider = Provider.of<EmployerJobsProvider>(context);
+    final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
+    final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -107,10 +62,10 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
           ),
         ],
       ),
-      body: isLoading
+      body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-        onRefresh: fetchEmployerJobs,
+        onRefresh: provider.fetchJobs,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge),
           child: ListView(
@@ -119,7 +74,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               Spaces.vertical(AppDimensions.horizontalSpacerNormal),
               SearchWidget(
                 searchController: _searchController,
-                onSearchChanged: searchJobs,
+                onSearchChanged: provider.searchJobs,
               ),
               Spaces.vertical(AppDimensions.verticalSpacerMedium),
               JobSummaryWidget(
@@ -131,16 +86,16 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
                 title: 'Open jobs',
                 jobs: openJobs,
                 tabIndex: 0,
-                onStatusChange: handleStatusChange,
-                onJobDeleted: handleJobDeleted,
+                onStatusChange: provider.updateJobStatusByJob,
+                onJobDeleted: provider.deleteJobByJob,
               ),
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: 'Closed jobs',
                 jobs: closedJobs,
                 tabIndex: 1,
-                onStatusChange: handleStatusChange,
-                onJobDeleted: handleJobDeleted,
+                onStatusChange: provider.updateJobStatusByJob,
+                onJobDeleted: provider.deleteJobByJob,
               ),
             ],
           ),

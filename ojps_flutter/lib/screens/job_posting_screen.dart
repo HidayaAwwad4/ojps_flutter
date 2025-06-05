@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/colors.dart';
-import '../models/job_model.dart';
-import '../services/job_service.dart';
+import '../providers/employer_jobs_provider.dart';
 import '../widgets/job_card_vertical.dart';
+import '../models/job_model.dart';
 
 class JobPostingScreen extends StatefulWidget {
   final int tabIndex;
@@ -16,63 +17,30 @@ class JobPostingScreen extends StatefulWidget {
 class _JobPostingScreenState extends State<JobPostingScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  List<Job> allJobs = [];
-  bool isLoading = true;
+  bool _isFirstLoad = true;
 
   @override
   void initState() {
     super.initState();
     _tabController =
         TabController(length: 2, vsync: this, initialIndex: widget.tabIndex);
-    fetchEmployerJobs();
-  }
-
-  Future<void> fetchEmployerJobs() async {
-    try {
-      final jobService = JobService();
-
-      final employerId = await jobService.getEmployerId(); // ✅ استخدام السيرفيس
-      final jobsJson = await jobService.getJobsByEmployer(employerId);
-
-      final fetchedJobs =
-      jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
-
-      setState(() {
-        allJobs = fetchedJobs;
-        isLoading = false;
-      });
-    } catch (e) {
-      print("Error fetching jobs: $e");
-      setState(() => isLoading = false);
-    }
-  }
-
-  void handleStatusChange(Job updatedJob) {
-    setState(() {
-      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
-      if (index != -1) {
-        allJobs[index] = updatedJob;
-      }
-    });
-  }
-
-  void handleJobDeleted(Job job) {
-    setState(() {
-      allJobs.removeWhere((j) => j.id == job.id);
-    });
   }
 
   @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstLoad) {
+      Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
+      _isFirstLoad = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final openJobs = allJobs.where((job) => job.isOpened).toList();
-    final closedJobs = allJobs.where((job) => !job.isOpened).toList();
+    final provider = Provider.of<EmployerJobsProvider>(context);
+
+    final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
+    final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +62,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
           ],
         ),
       ),
-      body: isLoading
+      body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : TabBarView(
         controller: _tabController,
@@ -106,8 +74,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = openJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: handleStatusChange,
-                onJobDeleted: handleJobDeleted,
+                onStatusChange: provider.updateJobStatusByJob,
+                onJobDeleted: provider.deleteJobByJob,
               );
             },
           ),
@@ -119,13 +87,19 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = closedJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: handleStatusChange,
-                onJobDeleted: handleJobDeleted,
+                onStatusChange: provider.updateJobStatusByJob,
+                onJobDeleted: provider.deleteJobByJob,
               );
             },
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
