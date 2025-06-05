@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../utils/network_utils.dart';
 import 'edit_job_screen.dart';
@@ -35,27 +37,27 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
             const HeaderBar(),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.defaultPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 36,
+                      radius: AppDimensions.companyLogoRadiusInJobDetails,
                       backgroundImage: job.companyLogo != null
                           ? NetworkImage(fixUrl(job.companyLogo!))
                           : const AssetImage('assets/default-logo.png') as ImageProvider,
                       backgroundColor: Colorss.primaryTextColor,
                     ),
-                    const SizedBox(height: 8),
+                    Spaces.vertical(AppDimensions.spacingXSmall),
                     Text(
                       job.title,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: AppDimensions.fontSizeMedium, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       job.location,
                       style: const TextStyle(color: Colorss.greyColor),
                     ),
-                    const SizedBox(height: 16),
+                    Spaces.vertical(AppDimensions.verticalSpacerMedium),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -63,16 +65,16 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    Spaces.vertical(AppDimensions.spacingTiny),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(job.description),
                     ),
-                    const SizedBox(height: 20),
+                    Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     Container(
                       decoration: BoxDecoration(
                         color: Colorss.cardBackgroundColor,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                       ),
                       child: Column(
                         children: [
@@ -90,7 +92,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    Spaces.vertical(AppDimensions.verticalSpacerMedium),
                     if (job.documents != null)
                       ElevatedButton.icon(
                         onPressed: () async {
@@ -105,15 +107,15 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colorss.primaryTextColor,
                           backgroundColor: Colorss.cardBackgroundColor,
-                          minimumSize: const Size(double.infinity, 48),
+                          minimumSize: const Size(double.infinity, AppDimensions.minimumSizeButton),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                           ),
                         ),
                         icon: const Icon(Icons.description),
                         label: const Text('View Documents'),
                       ),
-                    const SizedBox(height: 20),
+                    Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     ElevatedButton(
                       onPressed: () async {
                         final updatedJob = await Navigator.push<Job>(
@@ -132,11 +134,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colorss.primaryColor,
                         foregroundColor: Colorss.whiteColor,
-                        minimumSize: const Size(double.infinity, 48),
+                        minimumSize: const Size(double.infinity, AppDimensions.minimumSizeButton),
                       ),
                       child: const Text('Edit'),
                     ),
-                    const SizedBox(height: 24),
+                    Spaces.vertical(AppDimensions.verticalSpacerXLarge),
                   ],
                 ),
               ),

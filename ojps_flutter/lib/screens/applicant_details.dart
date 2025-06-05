@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
@@ -88,11 +89,11 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
     final bool isShortlisted = _status.toLowerCase() == 'shortlisted';
 
     return Scaffold(
-      backgroundColor: Colorss.whiteColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Applicant Details'),
-        backgroundColor: Colorss.whiteColor,
-        foregroundColor: Colorss.primaryTextColor,
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -101,15 +102,16 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildProfileImage(),
-            const SizedBox(height: AppDimensions.verticalSpacerLarge),
+            Spaces.vertical(AppDimensions.verticalSpacerLarge),
+            //const SizedBox(height: AppDimensions.verticalSpacerLarge),
             Text(
               _applicant!.name,
               style: const TextStyle(fontSize: AppDimensions.fontSizeLarge, fontWeight: FontWeight.bold),
             ),
-            Text(_applicant!.email, style: TextStyle(color: Colorss.secondaryTextColor)),
-            const SizedBox(height: AppDimensions.height5),
+            Text(_applicant!.email, style:Theme.of(context).textTheme.bodyMedium),
+            Spaces.vertical(AppDimensions.height5),
             _buildStatusBadge(),
-            const SizedBox(height: AppDimensions.sectionSpacingLarge),
+            Spaces.vertical(AppDimensions.sectionSpacingLarge),
             buildSectionTitle('Resume:'),
             Align(
               alignment: Alignment.centerLeft,
@@ -124,7 +126,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 child: const Text('View Resume'),
               ),
             ),
-            const SizedBox(height: AppDimensions.height20),
+            Spaces.vertical(AppDimensions.height20),
             buildSectionTitle('Cover Letter:'),
             Align(
               alignment: Alignment.centerLeft,
@@ -133,13 +135,13 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 style: const TextStyle(fontSize: AppDimensions.fontSizeNormal),
               ),
             ),
-            const SizedBox(height: AppDimensions.sectionSpacingLarge),
+            Spaces.vertical(AppDimensions.sectionSpacingLarge),
             buildSectionTitle('Actions:'),
-            const SizedBox(height: AppDimensions.height10),
+            Spaces.vertical(AppDimensions.height10),
             Row(
               children: [
                 if (isPending) ...[
-                  const SizedBox(width: AppDimensions.horizontalSpacerMedium),
+                  Spaces.horizontal(AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
                     label: 'Shortlist',
                     onPressed: () => _updateStatus('shortlisted'),
@@ -154,7 +156,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                     backgroundColor: Colorss.openColor,
                     foregroundColor: Colorss.whiteColor,
                   ),
-                  const SizedBox(width: AppDimensions.horizontalSpacerMedium),
+                  Spaces.horizontal(AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
                     label: 'Reject',
                     onPressed: () => _updateStatus('rejected'),
@@ -183,7 +185,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 ],
               ],
             ),
-            const SizedBox(height: AppDimensions.height20),
+            Spaces.vertical( AppDimensions.height20),
           ],
         ),
       ),

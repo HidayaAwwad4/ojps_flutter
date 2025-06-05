@@ -1,6 +1,8 @@
 // lib/screens/employer_home.dart
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../widgets/job_section_in_employer_home.dart';
@@ -20,7 +22,6 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   List<Job> allJobs = [];
   List<Job> filteredJobs = [];
   bool isLoading = true;
-  final int employerId = 38;
 
   @override
   void initState() {
@@ -31,6 +32,8 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   Future<void> fetchEmployerJobs() async {
     try {
       final jobService = JobService();
+
+      final employerId = await jobService.getEmployerId();
       final jobsJson = await jobService.getJobsByEmployer(employerId);
       final fetchedJobs = jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
 
@@ -90,13 +93,13 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello, Hidaya', style: TextStyle(fontSize: 18, color: Colorss.primaryTextColor)),
-            Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: Colorss.secondaryTextColor)),
+            Text('Hello, Hidaya', style: TextStyle(fontSize: AppDimensions.fontSizeMedium, color: Colorss.primaryTextColor)),
+            Text('AL-Adham Company', style: TextStyle(fontSize: AppDimensions.fontSizeSmall, color: Colorss.secondaryTextColor)),
           ],
         ),
         actions: const [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: AppDimensions.defaultPadding),
             child: CircleAvatar(
               backgroundImage: AssetImage('assets/adham.jpg'),
               radius: 18,
@@ -109,21 +112,21 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
           : RefreshIndicator(
         onRefresh: fetchEmployerJobs,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge),
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
-              const SizedBox(height: 12),
+              Spaces.vertical(AppDimensions.horizontalSpacerNormal),
               SearchWidget(
                 searchController: _searchController,
                 onSearchChanged: searchJobs,
               ),
-              const SizedBox(height: 16),
+              Spaces.vertical(AppDimensions.verticalSpacerMedium),
               JobSummaryWidget(
                 openJobsCount: openJobs.length,
                 closedJobsCount: closedJobs.length,
               ),
-              const SizedBox(height: 24),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: 'Open jobs',
                 jobs: openJobs,
@@ -131,7 +134,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
                 onStatusChange: handleStatusChange,
                 onJobDeleted: handleJobDeleted,
               ),
-              const SizedBox(height: 24),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: 'Closed jobs',
                 jobs: closedJobs,

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           surface: Colorss.cardBackgroundColor,
           error: Colorss.closedColor,
           onPrimary: Colorss.whiteColor,
-          onSecondary: Colorss.secondaryTextColor,
+          onSecondary: Colorss.blackColor,
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colorss.primaryTextColor),

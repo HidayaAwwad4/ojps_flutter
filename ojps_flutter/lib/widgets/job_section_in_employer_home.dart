@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
 import '../models/job_model.dart';
 import 'job_card_horizontal.dart';
 
@@ -25,7 +27,7 @@ class JobSectionWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
             const Spacer(),
             GestureDetector(
               onTap: () {
@@ -38,24 +40,24 @@ class JobSectionWidget extends StatelessWidget {
               child: const Text(
                 'See All',
                 style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF0273B1),
+                  fontSize: AppDimensions.fontSizeSmall,
+                  color: Colorss.primaryColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
         SizedBox(
-          height: 270,
+          height: AppDimensions.horizontalJobListHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: jobs.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            separatorBuilder: (context, index) => const SizedBox(width: AppDimensions.horizontalSpacerLarge),
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 320,
+                width: AppDimensions.jobCardHorizontalWidth,
                 child: JobCardHorizontal(
                   job: jobs[index],
                   onStatusChange: onStatusChange,

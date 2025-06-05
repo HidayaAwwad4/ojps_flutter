@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../widgets/job_card_vertical.dart';
@@ -17,9 +18,7 @@ class _JobPostingScreenState extends State<JobPostingScreen>
   late TabController _tabController;
 
   List<Job> allJobs = [];
-  List<Job> filteredJobs = [];
   bool isLoading = true;
-  final int employerId = 38;
 
   @override
   void initState() {
@@ -32,13 +31,15 @@ class _JobPostingScreenState extends State<JobPostingScreen>
   Future<void> fetchEmployerJobs() async {
     try {
       final jobService = JobService();
+
+      final employerId = await jobService.getEmployerId(); // ✅ استخدام السيرفيس
       final jobsJson = await jobService.getJobsByEmployer(employerId);
+
       final fetchedJobs =
       jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
 
       setState(() {
         allJobs = fetchedJobs;
-        filteredJobs = fetchedJobs;
         isLoading = false;
       });
     } catch (e) {
@@ -53,18 +54,12 @@ class _JobPostingScreenState extends State<JobPostingScreen>
       if (index != -1) {
         allJobs[index] = updatedJob;
       }
-
-      index = filteredJobs.indexWhere((job) => job.id == updatedJob.id);
-      if (index != -1) {
-        filteredJobs[index] = updatedJob;
-      }
     });
   }
 
   void handleJobDeleted(Job job) {
     setState(() {
       allJobs.removeWhere((j) => j.id == job.id);
-      filteredJobs.removeWhere((j) => j.id == job.id);
     });
   }
 
@@ -86,13 +81,13 @@ class _JobPostingScreenState extends State<JobPostingScreen>
         centerTitle: true,
         title: const Text(
           'Job Postings',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colorss.primaryTextColor),
         ),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Color(0xFF0273B1),
-          labelColor: Color(0xFF0273B1),
-          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colorss.primaryColor,
+          labelColor: Colorss.primaryColor,
+          unselectedLabelColor: Colorss.greyColor,
           tabs: const [
             Tab(text: 'Open Positions'),
             Tab(text: 'Closed Positions'),
