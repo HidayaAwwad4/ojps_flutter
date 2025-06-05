@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/constants/dimensions.dart';
-import '/widgets/view&edit_profile/profile_field_widget.dart';
 
 class ResumeFieldDropdownWidget extends StatefulWidget {
   final String title;

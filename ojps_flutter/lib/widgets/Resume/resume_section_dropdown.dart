@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart' as colors;
 import '/constants/dimensions.dart';
 import '/constants/colors.dart';
 
@@ -44,7 +43,7 @@ class _ResumeSectionDropdownState extends State<ResumeSectionDropdown> {
           ),
           if (_isExpanded)
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(12.0),
               child: Column(
                 children: widget.children,
               ),

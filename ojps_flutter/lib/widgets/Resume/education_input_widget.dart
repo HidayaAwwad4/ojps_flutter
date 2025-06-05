@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../constants/spaces.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
@@ -86,7 +87,7 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            Spaces.horizontal(10),
             Expanded(
               child: GestureDetector(
                 onTap: () => _pickDate(endDateController),

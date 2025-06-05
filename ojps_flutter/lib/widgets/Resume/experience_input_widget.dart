@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../constants/spaces.dart';
 import '/constants/colors.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 
@@ -65,7 +66,7 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            Spaces.horizontal(10),
             Expanded(
               child: GestureDetector(
                 onTap: () => _pickDate(endDateController),
@@ -76,7 +77,7 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        Spaces.vertical(10),
         const Align(
           alignment: Alignment.centerLeft,
           child: Text("Responsibilities / Achievements", style: TextStyle(fontWeight: FontWeight.bold)),

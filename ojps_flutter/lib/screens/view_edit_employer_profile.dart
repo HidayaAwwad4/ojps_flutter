@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/spaces.dart';
 import '/widgets/view&edit_profile/profile_image_widget.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '../constants/colors.dart';
@@ -55,18 +56,18 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ProfileImageWidget(),
-            const SizedBox(height: 10),
+             Spaces.vertical(10),
             Text(
               nameController.text.isEmpty ? "Your Name" : nameController.text,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            const SizedBox(height: 4),
+            Spaces.vertical(4),
             Text(
               emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
               style: const TextStyle(color: Colorss.secondaryTextColor),
             ),
 
-            const SizedBox(height: 20),
+            Spaces.vertical(20),
             ProfileFieldWidget(
               label: "Full Name",
               controller: nameController,

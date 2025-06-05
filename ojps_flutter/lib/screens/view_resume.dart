@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import '../constants/spaces.dart';
 import '../widgets/view&edit_profile/profile_image_widget.dart';
 import '../widgets/Resume/profile_display_field_widget.dart';
 import '../models/resume_model.dart';
@@ -54,12 +55,12 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
         child: Column(
           children: [
             ProfileImageWidget(imagePath: resumeData!.imageUrl, isEditable: false),
-            SizedBox(height: 10),
+            Spaces.vertical(10),
             Text(
               resumeData!.fullName,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            Spaces.vertical(10),
             ProfileDisplayFieldWidget(icon: Icons.email, value: resumeData!.email),
             ProfileDisplayFieldWidget(icon: Icons.location_on, value: resumeData!.location),
             ProfileDisplayFieldWidget(icon: Icons.phone, value: resumeData!.phone),
@@ -84,7 +85,7 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
             )),
 
             if (hasUploadedFile) ...[
-              SizedBox(height: 20),
+              Spaces.vertical(20),
               ElevatedButton.icon(
                 onPressed: () {
                   ResumeService.downloadResumeFile();
