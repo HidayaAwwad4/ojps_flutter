@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import '../services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ojps_flutter/constants/colors.dart';
+import 'user_type.dart';
+import 'Forgetpassword.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color primaryColor = const Color(0xFF0273B1);
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
-
-  bool isLoading = false; // ✅ تم تعريف المتغير
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     height: screenHeight * 0.4,
                     width: double.infinity,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/img1.png'),
                         fit: BoxFit.cover,
@@ -54,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
               child: Form(
@@ -61,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 8),
+                    SizedBox(height: 1),
                     Text(
                       'Log In',
                       style: TextStyle(
@@ -72,13 +68,14 @@ class _LoginPageState extends State<LoginPage> {
                         color: primaryColor,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 3),
+                    Text(
                       'Welcome back! Please login to your account.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 2),
+
                     _buildTextFormField(
                       label: 'Email',
                       icon: Icons.email,
@@ -92,32 +89,42 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    _buildTextFormField(
-                      label: 'Password',
-                      icon: Icons.lock,
-                      controller: passwordController,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forget_password');
-                        },
-                        child: const Text(
-                          'Forget Password?',
-                          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTextFormField(
+                          label: 'Password',
+                          icon: Icons.lock,
+                          controller: passwordController,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/forgetPassword');
+                            },
+                            child: Text(
+                              'Forget Password?',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+
                     SizedBox(
                       width: double.infinity,
                       height: 45,
@@ -128,97 +135,48 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: isLoading
-                            ? null
-                            : () async {
-                          if (!_formKey.currentState!.validate()) return;
-                          setState(() {
-                            isLoading = true;
-                          });
-
-                          final loginData = {
-                            'email': emailController.text.trim(),
-                            'password': passwordController.text.trim(),
-                          };
-
-                          try {
-                            final response = await _authService.login(loginData);
-
-                            if (response.statusCode == 200) {
-                              final data = jsonDecode(response.body);
-                              final token = data['token'];
-                              final roleId = data['user']['role_id'];
-
-                              final prefs = await SharedPreferences.getInstance();
-                              await prefs.setString('token', token);
-                              await prefs.setInt('role_id', roleId);
-
-                              if (!context.mounted) return;
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Login successful!')),
-                              );
-
-                              if (roleId == 1) {
-                                Navigator.pushReplacementNamed(context, '/employer-home');
-                              } else {
-                                Navigator.pushReplacementNamed(context, '/home');
-                              }
-                            } else {
-                              final error = jsonDecode(response.body);
-                              final message = error['message'] ?? 'Login failed';
-
-                              if (!context.mounted) return;
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(message), backgroundColor: Colors.red),
-                              );
-                            }
-                          } catch (e) {
-                            if (!context.mounted) return;
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Something went wrong: $e'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          } finally {
-                            if (mounted) {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            print('Email: ${emailController.text}');
+                            print('Password: ${passwordController.text}');
+                          } else {
+                            print("Validation failed");
                           }
                         },
-                        child: isLoading
-                            ? const Center(child: CircularProgressIndicator(color: Colors.white))
-                            : const Text('Log In', style: TextStyle(color: Colors.white, fontSize: 16)),
+                        child: Text(
+                          'Log In',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const Text("Or sign in with", style: TextStyle(color: Colors.black54)),
-                    const SizedBox(height: 5),
+
+                    SizedBox(height: 20),
+                    Text("Or sign in with", style: TextStyle(color: Colors.black54)),
+                    SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         _buildSocialIcon('assets/Fasebook.png'),
-                        const SizedBox(width: 30),
+                        SizedBox(width: 30),
                         _buildSocialIcon('assets/linkedin.png'),
-                        const SizedBox(width: 30),
+                        SizedBox(width: 30),
                         _buildSocialIcon('assets/google1.png'),
                       ],
                     ),
-                    const SizedBox(height: 10),
+
+                    SizedBox(height: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don't have an account?"),
+                        Text("Don't have an account?"),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/choose_type');
+                            Navigator.pushReplacementNamed(context, '/chooseType');
                           },
-                          child: Text("Sign Up", style: TextStyle(color: primaryColor)),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(color: primaryColor),
+                          ),
                         ),
                       ],
                     ),
@@ -263,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildSocialIcon(String assetPath) {
     return GestureDetector(
       onTap: () {
-        debugPrint("Tapped on $assetPath");
+        print("Tapped on $assetPath");
       },
       child: CircleAvatar(
         backgroundColor: Colors.white,
@@ -283,10 +241,14 @@ class WaveClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(size.width * 0.25, size.height,
-        size.width * 0.5, size.height - 40);
-    path.quadraticBezierTo(size.width * 0.75, size.height - 80,
-        size.width, size.height - 40);
+    path.quadraticBezierTo(
+      size.width * 0.25, size.height,
+      size.width * 0.5, size.height - 40,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.75, size.height - 80,
+      size.width, size.height - 40,
+    );
     path.lineTo(size.width, 0);
     path.close();
     return path;

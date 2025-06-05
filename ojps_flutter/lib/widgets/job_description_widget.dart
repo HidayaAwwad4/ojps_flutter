@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobDescriptionWidget extends StatelessWidget {
   const JobDescriptionWidget({super.key});
@@ -8,25 +7,18 @@ class JobDescriptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
           Text(
             "Description",
-            style: TextStyle(
-              fontSize: AppValues.bodyFontSize,
-              fontWeight: FontWeight.bold,
-              color: primaryTextColor,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: primaryTextColor),
           ),
-          SizedBox(height: AppValues.sectionSpacing),
+          SizedBox(height: 4),
           Text(
             "Work on server-side applications and APIs for smooth operations.",
-            style: TextStyle(
-              fontSize: AppValues.bodyFontSize,
-              color: secondaryTextColor,
-            ),
+            style: TextStyle(fontSize: 13, color: secondaryTextColor),
           ),
         ],
       ),

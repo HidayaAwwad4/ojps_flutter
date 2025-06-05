@@ -1,102 +1,143 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
-import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
-import 'package:ojps_flutter/widgets/job_card_widget.dart';
 
-class RecommendedJobsWidget extends StatefulWidget {
+class RecommendedJobsWidget extends StatelessWidget {
   const RecommendedJobsWidget({super.key});
-
-  @override
-  State<RecommendedJobsWidget> createState() => _RecommendedJobsWidgetState();
-}
-
-class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
-  List<bool> savedJobs = [false, false, false];
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'UI/UX Designer',
-            location: 'Ramallah',
-            type: 'Part-Time',
-            description: 'Design user interfaces with a focus on usability and beauty.',
-            salary: '\$500 - \$800 Salary/Month',
-            isSaved: savedJobs[0],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[0] = !savedJobs[0];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
+      children: const [
+        JobCard(
+          image: 'assets/adham.jpg',
+          title: 'Full-Stack Developer',
+          location: 'Nablus-Rafidia',
+          type: 'Full-Time',
+          description: 'Responsible for developing front-end and back-end systems.',
+          salary: '\$800 - \$1000 Salary/Month',
         ),
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'Frontend Developer',
-            location: 'Nablus',
-            type: 'Full-Time',
-            description: 'Develop beautiful and performant web applications.',
-            salary: '\$1000 - \$1500 Salary/Month',
-            isSaved: savedJobs[1],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[1] = !savedJobs[1];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
-        ),
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'Backend Developer',
-            location: 'Hebron',
-            type: 'Contract',
-            description: 'Build scalable and secure backend services.',
-            salary: '\$1200 - \$1700 Salary/Month',
-            isSaved: savedJobs[2],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[2] = !savedJobs[2];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
+        JobCard(
+          image: 'assets/adham.jpg',
+          title: 'UI/UX Designer',
+          location: 'Ramallah',
+          type: 'Part-Time',
+          description: 'Design user interfaces with a focus on usability and beauty.',
+          salary: '\$500 - \$800 Salary/Month',
         ),
       ],
     );
   }
 }
 
-class JobCardWrapper extends StatelessWidget {
-  final Widget child;
+class JobCard extends StatefulWidget {
+  final String image;
+  final String title;
+  final String location;
+  final String type;
+  final String description;
+  final String salary;
 
-  const JobCardWrapper({super.key, required this.child});
+  const JobCard({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.location,
+    required this.type,
+    required this.description,
+    required this.salary,
+  });
+
+  @override
+  State<JobCard> createState() => _JobCardState();
+}
+
+class _JobCardState extends State<JobCard> {
+  bool isSaved = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppValues.jobCardMarginHorizontal,
-        vertical: AppValues.jobCardMarginVertical,
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: cardBackgroundColor,
+        borderRadius: BorderRadius.circular(16),
       ),
-      width: double.infinity,
-      child: child,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              ClipOval(
+                child: Image.asset(
+                  widget.image,
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: primaryTextColor,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            isSaved ? Icons.bookmark : Icons.bookmark_border,
+                            color: primaryColor,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isSaved = !isSaved;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${widget.location} • ${widget.type}",
+                      style: TextStyle(
+                        color: secondaryTextColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.description,
+            style: TextStyle(
+              fontSize: 12,
+              color: secondaryTextColor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.salary,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: primaryColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

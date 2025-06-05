@@ -3,30 +3,9 @@ import '../widgets/search_bar_widget.dart';
 import '../widgets/categories_widget.dart';
 import '../widgets/recommended_jobs_widget.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
-import '../widgets/custom_bottom_nav.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
-  void _onTap(int index) {
-    if (index == 1) {
-      Navigator.pushNamed(context, '/saved_jobs');
-    } else if (index == 3) {
-      Navigator.pushNamed(context, '/job_status');
-    } else {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: AppValues.smallVerticalSpace),
+                const SizedBox(height: 10),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -49,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Hello Razan",
                           style: TextStyle(
-                            fontSize: AppValues.mainTitleFontSize,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: primaryTextColor,
                           ),
@@ -57,52 +37,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "Palestine, Qalqilya",
                           style: TextStyle(
-                            fontSize: AppValues.secondaryTextFontSize,
+                            fontSize: 14,
                             color: secondaryTextColor,
                           ),
                         ),
                       ],
                     ),
                     const CircleAvatar(
-                      radius: AppValues.profileAvatarRadius,
+                      radius: 20,
                       backgroundImage: AssetImage('assets/profile_picture.jpg'),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppValues.smallVerticalSpace),
+                const SizedBox(height: 10),
                 const SearchBarWidget(),
-                const SizedBox(height: AppValues.largeVerticalSpace),
-                Text(
-                  "Categories",
-                  style: TextStyle(
-                    fontSize: AppValues.sectionTitleFontSize,
-                    color: primaryTextColor,
-                  ),
-                ),
-                const SizedBox(height: AppValues.smallVerticalSpace),
+                const SizedBox(height: 20),
                 const CategoriesWidget(),
-
-                const SizedBox(height: AppValues.largeVerticalSpace),
+                const SizedBox(height: 20),
                 Text(
                   "Recommended Jobs",
                   style: TextStyle(
-                    fontSize: AppValues.sectionTitleFontSize,
+                    fontSize: 18,
                     color: primaryTextColor,
                   ),
                 ),
-                const SizedBox(height: AppValues.smallVerticalSpace),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: RecommendedJobsWidget(),
-                ),
+                const SizedBox(height: 10),
+                const RecommendedJobsWidget(),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
+
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: secondaryTextColor,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: 'Save'),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notification'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
       ),
     );
   }

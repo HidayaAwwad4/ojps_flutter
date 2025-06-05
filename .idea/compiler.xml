@@ -3,9 +3,6 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="android.file_selector_android" target="23" />
-      <module name="android.open_file_android" target="23" />
-      <module name="gradle.main" target="11" />
-      <module name="gradle.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../models/job_model.dart';
-import '../services/job_service.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';
 import '../widgets/search_for_employer.dart';
+
 
 class EmployerHome extends StatefulWidget {
   const EmployerHome({super.key});
@@ -15,44 +15,16 @@ class EmployerHome extends StatefulWidget {
 
 class _EmployerHomeScreenState extends State<EmployerHome> {
   final TextEditingController _searchController = TextEditingController();
-
-  List<Job> allJobs = [];
-  List<Job> filteredJobs = [];
-  bool isLoading = true;
-  final int employerId = 37;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchEmployerJobs();
-  }
-
-  Future<void> fetchEmployerJobs() async {
-    try {
-      final jobService = JobService();
-      final jobsJson = await jobService.getJobsByEmployer(employerId);
-      print('Returned jobs JSON: $jobsJson');
-      final fetchedJobs = jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
-
-      setState(() {
-        allJobs = fetchedJobs;
-        filteredJobs = fetchedJobs;
-        isLoading = false;
-      });
-    } catch (e) {
-      print("Error fetching jobs: $e");
-      setState(() => isLoading = false);
-    }
-  }
+  List<Job> filteredJobs = List.from(jobs);
 
   void toggleJobStatus(Job job) {
     setState(() {
-      job.isOpened = !job.isOpened;
+      job.isOpen = !job.isOpen;
     });
   }
 
   void searchJobs(String query) {
-    final searchResults = allJobs.where((job) {
+    final searchResults = jobs.where((job) {
       final jobTitle = job.title.toLowerCase();
       final searchQuery = query.toLowerCase();
       return jobTitle.contains(searchQuery);
@@ -64,8 +36,8 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
 
   @override
   Widget build(BuildContext context) {
-    final openJobs = filteredJobs.where((job) => job.isOpened).toList();
-    final closedJobs = filteredJobs.where((job) => !job.isOpened).toList();
+    final openJobs = filteredJobs.where((job) => job.isOpen).toList();
+    final closedJobs = filteredJobs.where((job) => !job.isOpen).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +47,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello, Hidaya', style: TextStyle(fontSize: 18, color: primaryTextColor)),
+            Text('Welcome Back!', style: TextStyle(fontSize: 18, color: primaryTextColor)),
             Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: secondaryTextColor)),
           ],
         ),
@@ -89,9 +61,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [

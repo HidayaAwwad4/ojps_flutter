@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../models/job_model.dart';
 import 'edit_job_screen.dart';
@@ -127,4 +127,3 @@ class JobDetailsScreen extends StatelessWidget {
     );
   }
 }
-*/

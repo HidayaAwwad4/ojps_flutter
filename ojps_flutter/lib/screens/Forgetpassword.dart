@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'VerificationCode.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({super.key});
   @override
   _ForgetPasswordPageState createState() => _ForgetPasswordPageState();
 }

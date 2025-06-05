@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/widgets/job_details_job_seeker_widget.dart';
-class JobDetailsJobSeekerScreen extends StatelessWidget {
-  const JobDetailsJobSeekerScreen({Key? key}) : super(key: key);
+
+class JobDetailsJopSeekerScreen extends StatelessWidget {
+  const JobDetailsJopSeekerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,3 +21,4 @@ class JobDetailsJobSeekerScreen extends StatelessWidget {
     );
   }
 }
+

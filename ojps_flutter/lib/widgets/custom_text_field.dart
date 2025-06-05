@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -21,7 +19,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppValues.textFieldVerticalPadding),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         controller: controller,
         maxLines: maxLines,
@@ -31,10 +29,10 @@ class CustomTextField extends StatelessWidget {
           hintText: hint,
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2),
+            borderSide: BorderSide(color: Color(0xFF0273B1), width: 2),
           ),
-          labelStyle: const TextStyle(color:lightBlueBackgroundColor),
-          floatingLabelStyle: const TextStyle(color: primaryColor),
+          labelStyle: const TextStyle(color: Colors.grey),
+          floatingLabelStyle: TextStyle(color: Color(0xFF0273B1)),
         ),
       ),
     );

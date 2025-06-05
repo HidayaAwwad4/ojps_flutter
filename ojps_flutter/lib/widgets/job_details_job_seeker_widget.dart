@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/widgets/job_header_widget.dart';
 import 'package:ojps_flutter/widgets/job_description_widget.dart';
 import 'package:ojps_flutter/widgets/job_info_box_widget.dart';
@@ -15,13 +14,14 @@ class JobDetailsJopSeekerWidget extends StatelessWidget {
         children: const [
           JobHeaderWidget(),
           JobDescriptionWidget(),
-          SizedBox(height: AppValues.jobDetailsSpacing),
+          SizedBox(height: 16),
           JobInfoBoxWidget(),
-          SizedBox(height: AppValues.jobDetailsSpacing),
+          SizedBox(height: 16),
           JobActionButtonsWidget(),
-          SizedBox(height: AppValues.jobDetailsBottomSpacing),
+          SizedBox(height: 24),
         ],
       ),
     );
   }
 }
+

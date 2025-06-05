@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'package:ojps_flutter/constants/text_styles.dart';
 
 class JobHeaderWidget extends StatelessWidget {
   const JobHeaderWidget({super.key});
@@ -9,36 +8,24 @@ class JobHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        SizedBox(height: AppValues.jobDescSpacingHeight * 0.5),
+        SizedBox(height: 2),
         CircleAvatar(
-          radius: AppValues.avatarRadius,
+          radius: 36,
           backgroundImage: AssetImage('assets/adham.jpg'),
         ),
-        SizedBox(height: AppValues.jobHeaderSpacing),
+        SizedBox(height: 12),
         Text(
           "Backend Developer",
           style: TextStyle(
-            fontSize: AppValues.jobHeaderTitleFontSize,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
             color: primaryTextColor,
           ),
         ),
-        SizedBox(height: AppValues.jobDescSpacingHeight),
-        Text(
-          "Adham",
-          style: TextStyle(
-            fontSize: AppValues.jobHeaderNameFontSize,
-            color: primaryTextColor,
-          ),
-        ),
-        Text(
-          "Rafidia, Nablus",
-          style: TextStyle(
-            fontSize: AppValues.jobHeaderLocationFontSize,
-            color: secondaryTextColor,
-          ),
-        ),
-        SizedBox(height: AppValues.jobHeaderBottomSpacing),
+        SizedBox(height: 4),
+        Text("Adham", style: TextStyle(fontSize: 16, color: primaryTextColor)),
+        Text("Rafidia, Nablus", style: TextStyle(fontSize: 14, color: secondaryTextColor)),
+        SizedBox(height: 20),
       ],
     );
   }
