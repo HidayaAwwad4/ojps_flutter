@@ -27,9 +27,15 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
       _isFirstLoad = false;
     }
   }
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
     final provider = Provider.of<EmployerJobsProvider>(context);
     final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
     final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();

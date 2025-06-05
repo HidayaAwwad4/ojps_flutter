@@ -64,26 +64,27 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 0 ? CupertinoIcons.house_fill : CupertinoIcons.house),
+            icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 1 ? CupertinoIcons.briefcase_fill : CupertinoIcons.briefcase),
+            icon: Icon(_currentIndex == 1 ? Icons.work : Icons.work_outline),
             label: 'Jobs',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 2 ? CupertinoIcons.add_circled_solid : CupertinoIcons.add_circled),
+            icon: Icon(_currentIndex == 2 ? Icons.add_circle : Icons.add_circle_outline),
             label: 'Post',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 3 ? CupertinoIcons.bell_fill : CupertinoIcons.bell),
+            icon: Icon(_currentIndex == 3 ? Icons.notifications : Icons.notifications_none),
             label: 'Notification',
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 4 ? CupertinoIcons.person_fill : CupertinoIcons.person),
+            icon: Icon(_currentIndex == 4 ? Icons.person : Icons.person_outline),
             label: 'Profile',
           ),
         ],
+
       ),
     );
   }
