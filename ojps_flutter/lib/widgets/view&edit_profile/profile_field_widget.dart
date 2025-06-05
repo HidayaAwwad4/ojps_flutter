@@ -9,6 +9,8 @@ class ProfileFieldWidget extends StatefulWidget {
   final bool enabled;
   final IconData? icon;
   final int maxLines;
+  final TextInputType keyboardType;
+  final String? Function(String?)? validator;
 
   const ProfileFieldWidget({
     Key? key,
@@ -17,6 +19,8 @@ class ProfileFieldWidget extends StatefulWidget {
     this.enabled = true,
     this.icon,
     this.maxLines = 1,
+    this.keyboardType = TextInputType.text,
+    this.validator
   }) : super(key: key);
 
   @override
@@ -44,12 +48,13 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: dimentions.defaultPadding / 2),
-      child: TextField(
+      padding: EdgeInsets.symmetric(vertical: AppDimensions.defaultPadding / 2),
+      child: TextFormField(
         focusNode: _focusNode,
         controller: widget.controller,
         maxLines: widget.maxLines,
         enabled: widget.enabled,
+        keyboardType: widget.keyboardType,
         cursorColor: Colorss.primaryColor,
         decoration: InputDecoration(
           label: widget.icon != null
@@ -72,6 +77,7 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
             borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
           ),
         ),
+        validator: widget.validator
       ),
     );
   }

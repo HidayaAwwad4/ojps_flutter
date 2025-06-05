@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants/colors.dart';
-import '../constants/dimensions.dart';
+import '../constants/text_styles.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '/widgets/Resume/resume_field_dropdown_widget.dart';
 
@@ -190,7 +190,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
       ),
 
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(dimentions.defaultPadding),
+        padding: EdgeInsets.all(AppValues.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

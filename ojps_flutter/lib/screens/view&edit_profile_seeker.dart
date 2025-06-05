@@ -44,10 +44,14 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
       appBar: AppBar(
         title: const Text("Profile"),
         centerTitle: true,
-        leading: const BackButton(),
+        leading: BackButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(dimentions.defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -77,7 +81,24 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                final name = nameController.text;
+                final email = emailController.text;
+                final phone = phoneController.text;
+                final bio = bioController.text;
+
+
+                print("Saved Profile:");
+                print("Name: $name");
+                print("Email: $email");
+                print("Phone: $phone");
+                print("Bio: $bio");
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Profile changes saved.")),
+                );
+              },
+
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colorss.primaryColor
               ),

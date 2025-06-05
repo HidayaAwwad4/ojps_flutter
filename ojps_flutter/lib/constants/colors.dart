@@ -15,5 +15,7 @@ class Colorss {
   static const Color successColor = Color(0xFF28A745);
   static const Color greyColor = Colors.grey;
   static const Color profileColor = Color(0xFFE8EEF1);
-  static  Color lightGrey = Color(0xFFA0A4A5);
+  static  const Color lightGrey = Color(0xFFA0A4A5);
+  static const Color successValidation = Colors.green;
+  static const Color failValidation = Colors.red;
 }

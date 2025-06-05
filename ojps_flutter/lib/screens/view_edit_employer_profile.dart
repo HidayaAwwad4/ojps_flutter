@@ -18,6 +18,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
   final TextEditingController companyController = TextEditingController(text: "Rami Tech");
   final TextEditingController locationController = TextEditingController(text: "Ramallah");
   final TextEditingController bioController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -45,8 +46,11 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
         centerTitle: true,
         leading: const BackButton(),
       ),
+
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(dimentions.defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
+       child : Form(
+          key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -61,20 +65,85 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
               emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
               style: const TextStyle(color: Colorss.secondaryTextColor),
             ),
+
             const SizedBox(height: 20),
             ProfileFieldWidget(
               label: "Full Name",
               controller: nameController,
+              keyboardType: TextInputType.text,
               enabled: true,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty){
+                  return 'Name is required';
+                } else if (value.trim().length < 4){
+                  return 'Name must be at least 4 characters';
+                }
+                return null;
+
+              } ,
             ),
-            ProfileFieldWidget(label: "Email", controller: emailController),
-            ProfileFieldWidget(label: "Phone", controller: phoneController),
-            ProfileFieldWidget(label: "Company", controller: companyController),
-            ProfileFieldWidget(label: "Location", controller: locationController),
-            ProfileFieldWidget(label: "Bio", controller: bioController),
+
+
+            ProfileFieldWidget(
+                label: "Email",
+                controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    return 'Enter a valid email address';
+                  }
+                  return null;
+              },
+            ),
+
+
+            ProfileFieldWidget(
+                label: "Phone",
+                controller: phoneController,
+              keyboardType: TextInputType.phone,
+            ),
+
+
+            ProfileFieldWidget(
+                label: "Company"
+                , controller: companyController
+            ),
+
+
+            ProfileFieldWidget(
+                label: "Location",
+                controller: locationController
+            ),
+
+
+            ProfileFieldWidget(
+                label: "Bio",
+                controller: bioController,
+              keyboardType: TextInputType.multiline,
+            ),
+
+
+
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_formKey.currentState!.validate()){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Changes saved successfully'),
+                        backgroundColor: Colorss.successValidation,
+                      )
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please complete all required fields correctly'),
+                      )
+                  );
+                }
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colorss.primaryColor
               ),
@@ -85,6 +154,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
             ),
           ],
         ),
+       ),
       ),
     );
   }

@@ -9,7 +9,7 @@ class ResumeSectionTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: dimentions.defaultPadding),
+      padding: EdgeInsets.symmetric(vertical: AppDimensions.defaultPadding),
       child: Text(
         title,
         style: TextStyle(

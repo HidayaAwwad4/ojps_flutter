@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
-import '../constants/dimensions.dart' as Dimensions;
 import '../widgets/notification_item.dart';
+import '../constants/dimensions.dart';
+
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -52,8 +53,8 @@ class _NotificationsState extends State<Notifications> {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: Dimensions.dimentions.width15, vertical: Dimensions.dimentions.height10),
-          child: Text(title, style: texttStyles.textStyleHeader),
+              horizontal: AppDimensions.width15, vertical: AppDimensions.height10),
+          child: Text(title, style: AppValues.textStyleHeader),
         ),
         ...List.generate(list.length, (index) {
           final item = list[index];
@@ -73,7 +74,7 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications", style: texttStyles.textStyleAppBar ),
+        title: Text("Notifications", style: AppValues.textStyleAppBar ),
         centerTitle: true,
         elevation: 0,
       ),
