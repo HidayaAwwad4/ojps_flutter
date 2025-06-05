@@ -1,64 +1,93 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
-import 'package:ojps_flutter/widgets/custom_bottom_nav.dart';
 
 class JobListScreen extends StatefulWidget {
-  const JobListScreen({super.key});
+  final String categoryLabel;
+
+  const JobListScreen({super.key, required this.categoryLabel});
 
   @override
-  _JobListScreenState createState() => _JobListScreenState();
+  State<JobListScreen> createState() => _JobListScreenState();
 }
 
 class _JobListScreenState extends State<JobListScreen> {
-  int _currentIndex = 0;
-  void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
+  List<bool> savedJobs = List<bool>.filled(10, false);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppValues.horizontalPadding,
+                vertical: AppValues.topRowVerticalPadding,
+              ),
+              child: Row(
                 children: [
-                  Text(
-                    'Web Developer',
-                    style: TextStyle(
-                     fontSize: MediaQuery.of(context).size.width * 0.06,
-                      fontWeight: FontWeight.bold,
-                      color: primaryTextColor,
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colorss.primaryTextColor,
+                      size: AppValues.backIconSize,
                     ),
                   ),
-                  SizedBox(height: 6),
-                  Text(
-                    'Elevate your career with exclusive web\ndevelopment opportunities!',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.04,
-                      color: secondaryTextColor,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      widget.categoryLabel,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * AppValues.categoryFontSizeRatio,
+                        fontWeight: AppValues.categoryFontWeight,
+                        color: Colorss.primaryTextColor,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Elevate your career with exclusive web\ndevelopment opportunities!',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * AppValues.descriptionFontSizeRatio,
+                    color: Colorss.secondaryTextColor,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: savedJobs.length,
                 itemBuilder: (context, index) {
-                  return const JobCard(
-                    title: 'Full-Stack Developer',
-                    location: 'Nablus-Rafidia',
-                    type: 'Full-Time',
-                    logoPath: 'assets/adham.jpg',
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppValues.horizontalPadding,
+                      vertical: AppValues.jobCardVerticalPadding,
+                    ),
+                    child: JobCard(
+                      image: 'assets/adham.jpg',
+                      title: 'Full-Stack Developer',
+                      location: 'Nablus-Rafidia',
+                      type: 'Full-Time',
+                      isSaved: savedJobs[index],
+                      onSaveToggle: () {
+                        setState(() {
+                          savedJobs[index] = !savedJobs[index];
+                        });
+                      },
+                      onTap: () {
+                        Navigator.pushNamed(context, '/job_details');
+                      },
+                    ),
                   );
                 },
               ),
@@ -66,12 +95,6 @@ class _JobListScreenState extends State<JobListScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-      ),
     );
   }
 }
-
-

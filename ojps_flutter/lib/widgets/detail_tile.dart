@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
+
 class DetailTile extends StatelessWidget {
   final String title;
   final String value;
@@ -9,7 +12,7 @@ class DetailTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.spacingSmall, horizontal: AppDimensions.horizontalSpacerLarge),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -17,12 +20,12 @@ class DetailTile extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: AppDimensions.fontSizeSmall,
                 color: Colors.black87,
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          Spaces.horizontal(AppDimensions.verticalSpacerMedium),
           Text(
             value,
             style: const TextStyle(

@@ -1,187 +1,173 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../constants/colors.dart';
-import '../models/applicant_model.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
+import '../models/application_model.dart';
+import '../services/application_service.dart';
+import '../utils/network_utils.dart';
+import 'applicant_details.dart';
 
-class ApplicantDetailsScreen extends StatefulWidget {
-  final Applicant applicant;
 
-  const ApplicantDetailsScreen({super.key, required this.applicant});
+class JobApplicantsScreen extends StatefulWidget {
+  final int jobId;
+
+  const JobApplicantsScreen({super.key, required this.jobId});
 
   @override
-  State<ApplicantDetailsScreen> createState() => _ApplicantDetailsScreenState();
+  _JobApplicantsScreenState createState() => _JobApplicantsScreenState();
 }
+class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
+  final ApplicationService _applicationService = ApplicationService();
+  late Future<List<Application>> _applicantsFuture;
+  List<Application> _applicantsFutureData = [];
 
-class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
-  late String _status;
+  String _selectedStatus = 'all';
 
   @override
   void initState() {
     super.initState();
-    _status = widget.applicant.status;
+    _loadApplicants();
+  }
+
+  void _loadApplicants() {
+    _applicantsFuture = _applicationService.getApplicantsByJobId(widget.jobId);
+    _applicantsFuture.then((data) {
+      setState(() {
+        _applicantsFutureData = data;
+      });
+    });
+  }
+
+  List<Application> _filterApplicants(List<Application> applicants) {
+    if (_selectedStatus == 'all') {
+      return applicants;
+    } else {
+      return applicants.where((a) => a.status.toLowerCase() == _selectedStatus).toList();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat.yMMMMd().format(widget.applicant.appliedAt);
-
-    final bool isPending = _status == 'pending';
-    final bool isAccepted = _status == 'accepted';
-    final bool isRejected = _status == 'rejected';
-
     return Scaffold(
-      backgroundColor: whiteColor,
       appBar: AppBar(
-        title: const Text('Applicant Details'),
-        backgroundColor: whiteColor,
-        foregroundColor: primaryTextColor,
-        elevation: 0,
+        title: const Text('Applicants'),
+        backgroundColor: Colorss.primaryColor,
+        foregroundColor: Colorss.whiteColor,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildProfileImage(),
-            const SizedBox(height: 16),
-            Text(
-              widget.applicant.name,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text(widget.applicant.email, style: TextStyle(color: secondaryTextColor)),
-            const SizedBox(height: 4),
-            Text(
-              'Applied on: $formattedDate',
-              style: TextStyle(color: secondaryTextColor.withOpacity(0.7)),
-            ),
-            const SizedBox(height: 12),
-            _buildStatusBadge(),
-            const SizedBox(height: 28),
-            buildSectionTitle('Resume:'),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: primaryColor,
-                  foregroundColor: whiteColor,
-                ),
-                onPressed: () {},
-                child: const Text('View Resume'),
-              ),
-            ),
-            const SizedBox(height: 24),
-            buildSectionTitle('Cover Letter:'),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.applicant.coverLetter ?? 'No cover letter provided.',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 28),
-            buildSectionTitle('Actions:'),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                if (isPending) ...[
-                  _buildActionButton(
-                    label: 'Accept',
-                    onPressed: () {
-                      setState(() {
-                        _status = 'accepted';
-                        widget.applicant.status = 'accepted';
-                      });
-                    },
-                    backgroundColor: primaryColor,
-                    foregroundColor: whiteColor,
-                  ),
-                  const SizedBox(width: 16),
-                  _buildActionButton(
-                    label: 'Reject',
-                    onPressed: () {
-                      setState(() {
-                        _status = 'rejected';
-                        widget.applicant.status = 'rejected';
-                      });
-                    },
-                    backgroundColor: Colors.black12,
-                    foregroundColor: primaryTextColor,
-                  ),
-                ] else if (isAccepted) ...[
-                  _buildActionButton(
-                    label: 'Accepted',
-                    onPressed: null,
-                    backgroundColor: lightBlueBackgroundColor,
-                    foregroundColor: primaryColor,
-                    tonal: true,
-                  ),
-                ] else if (isRejected) ...[
-                  _buildActionButton(
-                    label: 'Rejected',
-                    onPressed: null,
-                    backgroundColor: cardBackgroundColor,
-                    foregroundColor: secondaryTextColor,
-                    tonal: true,
-                  ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerSmall),
+            color: Colors.white,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildFilterButton('All', 'all'),
+                  _buildFilterButton('Pending', 'pending'),
+                  _buildFilterButton('Shortlisted', 'shortlisted'),
+                  _buildFilterButton('Accepted', 'accepted'),
+                  _buildFilterButton('Rejected', 'rejected'),
                 ],
-              ],
+              ),
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
+          Expanded(
+            child: FutureBuilder<List<Application>>(
+              future: _applicantsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting && _applicantsFutureData.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Failed to load applicants'));
+                }
 
-  Widget _buildProfileImage() {
-    return CircleAvatar(
-      radius: 45,
-      backgroundImage: AssetImage(
-        widget.applicant.imageUrl ?? 'assets/default_profile.png',
-      ),
-    );
-  }
+                final filteredApplicants = _filterApplicants(_applicantsFutureData);
 
-  Widget _buildStatusBadge() {
-    final statusColor = getStatusColor(_status);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        _status.toUpperCase(),
-        style: TextStyle(
-          color: statusColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
+                if (filteredApplicants.isEmpty) {
+                  return const Center(child: Text('No applicants found for this status'));
+                }
 
-  Widget _buildActionButton({
-    required String label,
-    required VoidCallback? onPressed,
-    required Color backgroundColor,
-    required Color foregroundColor,
-    bool tonal = false,
-  }) {
-    final style = FilledButton.styleFrom(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-    );
-    return Expanded(
-      child: tonal
-          ? FilledButton.tonal(
-        onPressed: onPressed,
-        style: style,
-        child: Text(label),
-      )
-          : FilledButton(
-        onPressed: onPressed,
-        style: style,
-        child: Text(label),
+                return ListView.builder(
+                  padding: const EdgeInsets.all(AppDimensions.defaultPadding),
+                  itemCount: filteredApplicants.length,
+                  itemBuilder: (context, index) {
+                    final applicant = filteredApplicants[index];
+                    return GestureDetector(
+                      onTap: () async {
+                        final updatedApplicant = await Navigator.push<Application>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ApplicantDetailsScreen(applicantId: applicant.id),
+                          ),
+                        );
+
+                        if (updatedApplicant != null) {
+                          setState(() {
+                            final i = _applicantsFutureData.indexWhere((a) => a.id == updatedApplicant.id);
+                            if (i != -1) {
+                              _applicantsFutureData[i] = updatedApplicant;
+                            }
+                            if (_selectedStatus != 'all' &&
+                                updatedApplicant.status.toLowerCase() != _selectedStatus) {
+                              _selectedStatus = updatedApplicant.status.toLowerCase();
+                            }
+                          });
+                        }
+
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: AppDimensions.marginSmall),
+                        padding: const EdgeInsets.all(AppDimensions.paddingSmall),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+                        ),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: AppDimensions.companyLogoRadiusSmall,
+                              backgroundImage: applicant.imageUrl != null
+                                  ? NetworkImage(fixUrl(applicant.imageUrl!))
+                                  : const AssetImage('assets/Profile_avatar.png') as ImageProvider,
+                            ),
+                            Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(applicant.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  Spaces.vertical(AppDimensions.spacingTiny),
+                                  Text(applicant.email, style: TextStyle(color: Colors.grey.shade600)),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerSmall, vertical: AppDimensions.verticalSpacerExtraSmall),
+                              decoration: BoxDecoration(
+                                color: getStatusColor(applicant.status).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
+                              ),
+                              child: Text(
+                                applicant.status.toUpperCase(),
+                                style: TextStyle(
+                                  color: getStatusColor(applicant.status),
+                                  fontSize: AppDimensions.fontSizeSmall,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -189,20 +175,30 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'accepted':
-        return openColor;
+        return Colorss.openColor;
       case 'rejected':
-        return closedColor;
+        return Colorss.closedColor;
+      case 'pending':
+        return Colorss.pendingColor;
       default:
-        return pendingColor;
+        return Colorss.primaryColor;
     }
   }
 
-  Widget buildSectionTitle(String text) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+  Widget _buildFilterButton(String label, String status) {
+    final bool isSelected = _selectedStatus == status;
+    return Padding(
+      padding: const EdgeInsets.only(right: AppDimensions.paddingXSmall),
+      child: ChoiceChip(
+        label: Text(label),
+        selected: isSelected,
+        onSelected: (_) {
+          setState(() {
+            _selectedStatus = status;
+          });
+        },
+        selectedColor: Colorss.primaryColor,
+        labelStyle: TextStyle(color: isSelected ? Colorss.whiteColor : Colorss.primaryTextColor),
       ),
     );
   }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 class HeaderBar extends StatelessWidget {
   const HeaderBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.defaultPadding, vertical: AppDimensions.paddingSmall),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -13,7 +16,7 @@ class HeaderBar extends StatelessWidget {
             onTap: () => Navigator.pop(context),
             child: const Icon(Icons.close),
           ),
-          const SizedBox(width: 24),
+          Spaces.horizontal(AppDimensions.horizontalSpacerXLarge),
         ],
       ),
     );

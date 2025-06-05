@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../constants/colors.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
@@ -19,8 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = const [
     EmployerHome(),
     JobPostingScreen(tabIndex: 0),
-    CreateJobScreen(),
-    // Placeholder widgets for Notification and Profile
+    Scaffold(body: Center(child: Text(''))),
     Scaffold(body: Center(child: Text('Notifications'))),
     Scaffold(body: Center(child: Text('Profile'))),
   ];
@@ -31,18 +31,36 @@ class _MainScreenState extends State<MainScreen> {
     _currentIndex = widget.initialIndex;
   }
 
+  void _openCreateJobScreen() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateJobScreen(),
+        fullscreenDialog: true,
+      ),
+    );
+
+    setState(() {
+      _currentIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _currentIndex,
-        activeColor: const Color(0xFF0273B1),
-        inactiveColor: Colors.black,
+        activeColor: Colorss.primaryColor,
+        inactiveColor: Colorss.primaryTextColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
+
+          if (index == 2) {
+            _openCreateJobScreen();
+          }
         },
         items: [
           BottomNavigationBarItem(

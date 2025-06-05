@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import '../../services/job_service.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../widgets/custom_text_field.dart';
-import '../widgets/dropdown_selector.dart';
 import '../widgets/document_upload_button.dart';
+import '../widgets/dropdown_selector.dart';
+import '../widgets/image_upload_button.dart';
 
 class CreateJobScreen extends StatefulWidget {
   const CreateJobScreen({super.key});
@@ -12,183 +18,237 @@ class CreateJobScreen extends StatefulWidget {
 }
 
 class _CreateJobScreenState extends State<CreateJobScreen> {
-  bool isFormValid = false;
-  String? selectedExperience;
-  String? selectedEmployment;
-  String? selectedCategory;
   String jobTitle = '';
   String description = '';
+  String location = '';
   String languages = '';
   String schedule = '';
   String salary = '';
+  String? selectedExperience;
+  String? selectedEmployment;
+  String? selectedCategory;
 
-  void updateFormValidity() {
-    setState(() {
-      isFormValid = jobTitle.isNotEmpty &&
-          description.isNotEmpty &&
-          languages.isNotEmpty &&
-          schedule.isNotEmpty &&
-          salary.isNotEmpty &&
-          selectedExperience != null &&
-          selectedEmployment != null &&
-          selectedCategory != null;
-    });
+  File? selectedCompanyLogo;
+
+  final List<String> experienceList = [
+    '0-1 years',
+    '1-3 years',
+    '3+ years',
+    'Not required',
+  ];
+  final List<String> employmentList = [
+    'Full-Time',
+    'Part-Time',
+    'Remote',
+    'Contract',
+    'Internship',
+    'Temporary',
+    'Volunteer',
+  ];
+  final List<String> categoryList = [
+    'Marketing',
+    'Technology',
+    'Design',
+    'Sales',
+    'Cooking',
+    'Other',
+  ];
+
+  bool get isFormValid {
+    return jobTitle.isNotEmpty &&
+        description.isNotEmpty &&
+        location.isNotEmpty &&
+        languages.isNotEmpty &&
+        schedule.isNotEmpty &&
+        salary.isNotEmpty &&
+        selectedExperience != null &&
+        selectedEmployment != null &&
+        selectedCategory != null;
+  }
+
+  Future<void> _submitForm() async {
+    try {
+      final data = {
+        'title': jobTitle,
+        'description': description,
+        'location': location,
+        'languages': languages,
+        'schedule': schedule,
+        'salary': double.tryParse(salary) ?? 0.0,
+        'experience': selectedExperience!,
+        'employment': selectedEmployment!,
+        'category': selectedCategory!,
+        'isOpened': 1,
+        'employer_id': 38,
+        'company_logo': selectedCompanyLogo,
+        'documents': null,
+      };
+
+
+      await JobService().createJob(data);
+
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Success'),
+            content: const Text('Job posted successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:cardBackgroundColor,
+      backgroundColor: Colorss.cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
-        elevation: 0,
+        backgroundColor: Colorss.whiteColor,
+        elevation: 1,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: primaryTextColor),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const Icon(Icons.close, color: Colorss.blackColor),
+          onPressed: () => Navigator.pop(context),
         ),
-        title: Row(
-          children: [
-            const CircleAvatar(
-              radius: 16,
-              backgroundImage: AssetImage('assets/adham.jpg'),
+        actions: [
+          TextButton(
+            onPressed: isFormValid ? _submitForm : null,
+            style: TextButton.styleFrom(
+              backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
+              ),
             ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Adham',
-                  style: TextStyle(color:primaryTextColor, fontSize: 14, fontWeight: FontWeight.w500),
+            child: Text(
+              'Post',
+              style: TextStyle(
+                color: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
+              ),
+            ),
+          ),
+          Spaces.horizontal(AppDimensions.horizontalSpacerLarge),
+        ],
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerLarge),
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ImageUploadButton(
+                onImageSelected: (File? image) {
+                  setState(() {
+                    selectedCompanyLogo = image;
+                  });
+                },
+              ),
+              Spaces.horizontal(AppDimensions.spacingSmall),
+              const Expanded(
+                child: Text(
+                  'Upload your company logo',
+                  style: TextStyle(
+                    color: Colorss.greyColor,
+                    fontSize:AppDimensions.fontSizeNormal,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                Text(
-                  'Rafidia, Nablus',
-                  style: TextStyle(color: greyColor, fontSize: 12),
+              ),
+            ],
+          ),
+          Spaces.vertical(AppDimensions.verticalSpacerLarge),
+          Container(
+            padding: const EdgeInsets.all(AppDimensions.defaultPadding),
+            decoration: BoxDecoration(
+              color: Colorss.whiteColor,
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
-          ],
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            child: ElevatedButton(
-              onPressed: isFormValid ? () {} : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+            child: Column(
+              children: [
+                CustomTextField(
+                  label: 'Job Title',
+                  hint: 'Enter job title',
+                  onChanged: (value) => setState(() => jobTitle = value),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              ),
-              child: const Text('Post'),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                CustomTextField(
+                  label: 'Job Description',
+                  hint: 'Describe the job',
+                  maxLines: AppDimensions.maxLinesJobDescription,
+                  onChanged: (value) => setState(() => description = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                CustomTextField(
+                  label: 'Location',
+                  hint: 'Enter job location',
+                  onChanged: (value) => setState(() => location = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                CustomTextField(
+                  label: 'Languages',
+                  hint: 'e.g. English - Advanced',
+                  onChanged: (value) => setState(() => languages = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                CustomTextField(
+                  label: 'Schedule',
+                  hint: 'e.g. Sunday to Thursday',
+                  onChanged: (value) => setState(() => schedule = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                CustomTextField(
+                  label: 'Salary',
+                  hint: 'Hourly/ daily/ monthly',
+                  onChanged: (value) => setState(() => salary = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                DropdownSelector(
+                  label: 'Experience',
+                  options: experienceList,
+                  selectedValue: selectedExperience,
+                  onChanged: (value) => setState(() => selectedExperience = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                DropdownSelector(
+                  label: 'Employment',
+                  options: employmentList,
+                  selectedValue: selectedEmployment,
+                  onChanged: (value) => setState(() => selectedEmployment = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                DropdownSelector(
+                  label: 'Category',
+                  options: categoryList,
+                  selectedValue: selectedCategory,
+                  onChanged: (value) => setState(() => selectedCategory = value),
+                ),
+                Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                const DocumentUploadButton(),
+              ],
             ),
           ),
         ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            CustomTextField(
-              label: 'Job Title',
-              onChanged: (value) {
-                jobTitle = value;
-                updateFormValidity();
-              },
-            ),
-            CustomTextField(
-              label: 'Description',
-              maxLines: 4,
-              onChanged: (value) {
-                description = value;
-                updateFormValidity();
-              },
-            ),
-            CustomTextField(
-              label: 'Languages',
-              hint: 'e.g. English - Advanced',
-              onChanged: (value) {
-                languages = value;
-                updateFormValidity();
-              },
-            ),
-            CustomTextField(
-              label: 'Schedule',
-              hint: 'e.g. Sunday to Thursday',
-              onChanged: (value) {
-                schedule = value;
-                updateFormValidity();
-              },
-            ),
-            CustomTextField(
-              label: 'Salary',
-              hint: 'Hourly/ daily/ monthly',
-              onChanged: (value) {
-                salary = value;
-                updateFormValidity();
-              },
-            ),
-            DropdownSelector(
-              label: 'Experience',
-              options: [
-                '0-1 years',
-                '1-3 years',
-                '3+ years',
-                'Not required',
-              ],
-              selectedValue: selectedExperience,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedExperience = newValue;
-                });
-                updateFormValidity();
-              },
-            ),
-            DropdownSelector(
-              label: 'Employment',
-              options: [
-                'Full-Time',
-                'Part-Time',
-                'Remote',
-                'Contract',
-                'Internship',
-                'Temporary',
-                'Volunteer',
-              ],
-              selectedValue: selectedEmployment,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedEmployment = newValue;
-                });
-                updateFormValidity();
-              },
-            ),
-            DropdownSelector(
-              label: 'Category',
-              options: [
-                'Marketing',
-                'Technology',
-                'Design',
-                'Sales',
-                'Cooking',
-                'Other',
-              ],
-              selectedValue: selectedCategory,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedCategory = newValue;
-                });
-                updateFormValidity();
-              },
-            ),
-            const SizedBox(height: 20),
-            //DocumentUploadButton(),
-          ],
-        ),
       ),
     );
   }

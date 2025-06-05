@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
+
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
 
 class DropdownSelector extends StatelessWidget {
   final String label;
@@ -17,16 +20,16 @@ class DropdownSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.verticalSpacerSmall),
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xFF0273B1), width: 2),
+            borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
           ),
-          labelStyle: const TextStyle(color: Colors.grey),
-          floatingLabelStyle: TextStyle(color: Color(0xFF0273B1)),
+          labelStyle: const TextStyle(color: Colorss.greyColor),
+          floatingLabelStyle: TextStyle(color: Colorss.primaryColor),
         ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
