@@ -60,20 +60,20 @@ class _UploadedCvWidgetState extends State<UploadedCvWidget>
         child: Container(
           padding: const EdgeInsets.all(AppValues.defaultPadding),
           decoration: BoxDecoration(
-            border: Border.all(color: primaryColor),
+            border: Border.all(color: Colorss.primaryColor),
             borderRadius: BorderRadius.circular(AppValues.borderRadius),
-            color: whiteColor,
+            color: Colorss.whiteColor,
             boxShadow: [
               BoxShadow(
-                color: primaryColor.withOpacity(AppValues.boxShadowOpacity),
+                color: Colorss.primaryColor.withOpacity(AppValues.boxShadowOpacity),
                 blurRadius: AppValues.boxShadowBlur,
                 offset: Offset(0, AppValues.boxShadowOffsetY),
               ),
             ],
             gradient: LinearGradient(
               colors: [
-                primaryColor.withOpacity(AppValues.gradientOpacity),
-                secondaryTextColor.withOpacity(AppValues.gradientOpacity),
+                Colorss.primaryColor.withOpacity(AppValues.gradientOpacity),
+                Colorss.secondaryTextColor.withOpacity(AppValues.gradientOpacity),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -87,12 +87,12 @@ class _UploadedCvWidgetState extends State<UploadedCvWidget>
                 style: TextStyle(
                   fontSize: AppValues.uploadedCvFontSize,
                   fontWeight: FontWeight.w500,
-                  color: primaryColor,
+                  color: Colorss.primaryColor,
                 ),
               ),
               Icon(
                 Icons.edit,
-                color: primaryColor,
+                color: Colorss.primaryColor,
                 size: AppValues.editIconSize,
               ),
             ],

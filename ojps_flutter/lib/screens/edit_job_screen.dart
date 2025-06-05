@@ -1,6 +1,10 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
+import '../services/job_service.dart';
+import '../utils/network_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 
@@ -31,7 +35,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
     super.initState();
     titleController = TextEditingController(text: widget.job.title);
     descriptionController = TextEditingController(text: widget.job.description);
-    languageController = TextEditingController(text: widget.job.language);
+    languageController = TextEditingController(text: widget.job.languages);
     scheduleController = TextEditingController(text: widget.job.schedule);
     salaryController = TextEditingController(text: widget.job.salary);
 
@@ -68,51 +72,75 @@ class _EditJobScreenState extends State<EditJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cardBackgroundColor,
+      backgroundColor: Colorss.cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: primaryTextColor),
+          icon: const Icon(Icons.close, color: Colorss.primaryTextColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
             CircleAvatar(
-              radius: 16,
-              backgroundImage: AssetImage(widget.job.imageUrl),
+              radius: 24,
+              backgroundImage: widget.job.companyLogo != null
+                  ? NetworkImage(fixUrl(widget.job.companyLogo!))
+                  : const AssetImage('assets/default-logo.png'),
             ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  //widget.job.companyName,
-                  "adahm",
-                  style: const TextStyle(color: primaryTextColor, fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  //widget.job.companyLocation,
-                  "nablus",
-                  style: const TextStyle(color: greyColor, fontSize: 12),
-                ),
-              ],
-            ),
+            Spaces.horizontal(AppDimensions.spacingSmall),
           ],
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
+            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.marginSmall),
             child: ElevatedButton(
-              onPressed: isFormValid ? () {
-                Navigator.pop(context);
-              } : null,
+              onPressed: isFormValid
+                  ? () async {
+                final data = {
+                  'title': titleController.text,
+                  'description': descriptionController.text,
+                  'language': languageController.text,
+                  'schedule': scheduleController.text,
+                  'salary': salaryController.text,
+                  'experience': selectedExperience,
+                  'employment': selectedEmployment,
+                  'category': selectedCategory,
+                };
+
+                try {
+                  await JobService().updateJob(widget.job.id, data);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Job updated successfully')),
+                    );
+                    Navigator.pop(context, widget.job.copyWith(
+                      title: titleController.text,
+                      description: descriptionController.text,
+                      languages: languageController.text,
+                      schedule: scheduleController.text,
+                      salary: salaryController.text,
+                      experience: selectedExperience,
+                      employment: selectedEmployment,
+                      category: selectedCategory,
+                    ));
+
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to update job: $e')),
+                    );
+                  }
+                }
+              }
+                  : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
+                backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
+                foregroundColor: isFormValid ? Colorss. whiteColor : Colorss.buttonInactiveTextColor,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge)),
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerXLarge, vertical: AppDimensions.verticalSpacerMediumSmall),
               ),
               child: const Text('Save'),
             ),
@@ -120,7 +148,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all( AppDimensions.defaultPadding),
         child: ListView(
           children: [
             CustomTextField(
@@ -179,11 +207,10 @@ class _EditJobScreenState extends State<EditJobScreen> {
                 updateFormValidity();
               },
             ),
-            const SizedBox(height: 20),
+            Spaces.vertical(AppDimensions.verticalSpacerLarge),
           ],
         ),
       ),
     );
   }
 }
-*/

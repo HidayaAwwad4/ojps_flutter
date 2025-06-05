@@ -1,5 +1,8 @@
+// lib/screens/employer_home.dart
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../widgets/job_section_in_employer_home.dart';
@@ -19,7 +22,6 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   List<Job> allJobs = [];
   List<Job> filteredJobs = [];
   bool isLoading = true;
-  final int employerId = 37;
 
   @override
   void initState() {
@@ -30,8 +32,9 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   Future<void> fetchEmployerJobs() async {
     try {
       final jobService = JobService();
+
+      final employerId = await jobService.getEmployerId();
       final jobsJson = await jobService.getJobsByEmployer(employerId);
-      print('Returned jobs JSON: $jobsJson');
       final fetchedJobs = jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
 
       setState(() {
@@ -45,9 +48,24 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
     }
   }
 
-  void toggleJobStatus(Job job) {
+  void handleStatusChange(Job updatedJob) {
     setState(() {
-      job.isOpened = !job.isOpened;
+      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        allJobs[index] = updatedJob;
+      }
+
+      index = filteredJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        filteredJobs[index] = updatedJob;
+      }
+    });
+  }
+
+  void handleJobDeleted(Job job) {
+    setState(() {
+      allJobs.removeWhere((j) => j.id == job.id);
+      filteredJobs.removeWhere((j) => j.id == job.id);
     });
   }
 
@@ -69,19 +87,19 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello, Hidaya', style: TextStyle(fontSize: 18, color: primaryTextColor)),
-            Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: secondaryTextColor)),
+            Text('Hello, Hidaya', style: TextStyle(fontSize: AppDimensions.fontSizeMedium, color: Colorss.primaryTextColor)),
+            Text('AL-Adham Company', style: TextStyle(fontSize: AppDimensions.fontSizeSmall, color: Colorss.secondaryTextColor)),
           ],
         ),
         actions: const [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: AppDimensions.defaultPadding),
             child: CircleAvatar(
               backgroundImage: AssetImage('assets/adham.jpg'),
               radius: 18,
@@ -91,35 +109,41 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
-          children: [
-            const SizedBox(height: 12),
-            SearchWidget(
-              searchController: _searchController,
-              onSearchChanged: searchJobs,
-            ),
-            const SizedBox(height: 16),
-            JobSummaryWidget(
-              openJobsCount: openJobs.length,
-              closedJobsCount: closedJobs.length,
-            ),
-            const SizedBox(height: 24),
-            JobSectionWidget(
-              title: 'Open jobs',
-              jobs: openJobs,
-              tabIndex: 0,
-              onStatusChange: toggleJobStatus,
-            ),
-            const SizedBox(height: 24),
-            JobSectionWidget(
-              title: 'Closed jobs',
-              jobs: closedJobs,
-              tabIndex: 1,
-              onStatusChange: toggleJobStatus,
-            ),
-          ],
+          : RefreshIndicator(
+        onRefresh: fetchEmployerJobs,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge),
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              Spaces.vertical(AppDimensions.horizontalSpacerNormal),
+              SearchWidget(
+                searchController: _searchController,
+                onSearchChanged: searchJobs,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerMedium),
+              JobSummaryWidget(
+                openJobsCount: openJobs.length,
+                closedJobsCount: closedJobs.length,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
+              JobSectionWidget(
+                title: 'Open jobs',
+                jobs: openJobs,
+                tabIndex: 0,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
+              JobSectionWidget(
+                title: 'Closed jobs',
+                jobs: closedJobs,
+                tabIndex: 1,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
+              ),
+            ],
+          ),
         ),
       ),
     );

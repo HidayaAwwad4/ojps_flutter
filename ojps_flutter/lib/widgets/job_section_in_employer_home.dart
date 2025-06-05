@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
 import '../models/job_model.dart';
-import '../screens/job_posting_screen.dart';
 import 'job_card_horizontal.dart';
 
 class JobSectionWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class JobSectionWidget extends StatelessWidget {
   final List<Job> jobs;
   final int tabIndex;
   final Function(Job) onStatusChange;
+  final Function(Job)? onJobDeleted;
 
   const JobSectionWidget({
     super.key,
@@ -15,6 +17,7 @@ class JobSectionWidget extends StatelessWidget {
     required this.jobs,
     required this.tabIndex,
     required this.onStatusChange,
+    this.onJobDeleted,
   });
 
   @override
@@ -24,37 +27,41 @@ class JobSectionWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => JobPostingScreen(tabIndex: tabIndex),
-                  ),
+                  '/employer/job-posting',
+                  arguments: tabIndex,
                 );
               },
               child: const Text(
                 'See All',
-                style: TextStyle(fontSize: 14, color: Color(0xFF0273B1), fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: AppDimensions.fontSizeSmall,
+                  color: Colorss.primaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
         SizedBox(
-          height: 270,
+          height: AppDimensions.horizontalJobListHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: jobs.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            separatorBuilder: (context, index) => const SizedBox(width: AppDimensions.horizontalSpacerLarge),
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 320,
+                width: AppDimensions.jobCardHorizontalWidth,
                 child: JobCardHorizontal(
                   job: jobs[index],
                   onStatusChange: onStatusChange,
+                  onJobDeleted: onJobDeleted,
                 ),
               );
             },

@@ -32,7 +32,7 @@ class _JobListScreenState extends State<JobListScreen> {
                     onTap: () => Navigator.pop(context),
                     child: Icon(
                       Icons.arrow_back,
-                      color: primaryTextColor,
+                      color: Colorss.primaryTextColor,
                       size: AppValues.backIconSize,
                     ),
                   ),
@@ -43,7 +43,7 @@ class _JobListScreenState extends State<JobListScreen> {
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * AppValues.categoryFontSizeRatio,
                         fontWeight: AppValues.categoryFontWeight,
-                        color: primaryTextColor,
+                        color: Colorss.primaryTextColor,
                       ),
                     ),
                   ),
@@ -58,7 +58,7 @@ class _JobListScreenState extends State<JobListScreen> {
                   'Elevate your career with exclusive web\ndevelopment opportunities!',
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.width * AppValues.descriptionFontSizeRatio,
-                    color: secondaryTextColor,
+                    color: Colorss.secondaryTextColor,
                   ),
                 ),
               ),

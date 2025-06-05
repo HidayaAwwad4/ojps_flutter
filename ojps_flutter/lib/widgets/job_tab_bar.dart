@@ -9,13 +9,13 @@ class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: primaryColor,
+        color: Colorss.primaryColor,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(AppValues.tabBarRadius),
         ),
         boxShadow: [
           BoxShadow(
-            color: primaryTextColor,
+            color: Colorss.primaryTextColor,
             blurRadius: AppValues.tabBarBlurRadius,
             offset: Offset(0, AppValues.tabBarOffsetY),
           ),
@@ -24,11 +24,11 @@ class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
       child: TabBar(
         isScrollable: false,
         indicator: BoxDecoration(
-          color: whiteColor,
+          color: Colorss.whiteColor,
           borderRadius: BorderRadius.circular(AppValues.tabBarRadius),
         ),
-        labelColor: primaryColor,
-        unselectedLabelColor: whiteColor,
+        labelColor: Colorss.primaryColor,
+        unselectedLabelColor: Colorss.whiteColor,
         labelPadding: EdgeInsets.zero,
         labelStyle: const TextStyle(
           fontWeight: FontWeight.bold,

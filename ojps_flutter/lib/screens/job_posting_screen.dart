@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../widgets/job_card_vertical.dart';
@@ -18,7 +19,6 @@ class _JobPostingScreenState extends State<JobPostingScreen>
 
   List<Job> allJobs = [];
   bool isLoading = true;
-  final int employerId = 37;
 
   @override
   void initState() {
@@ -31,7 +31,10 @@ class _JobPostingScreenState extends State<JobPostingScreen>
   Future<void> fetchEmployerJobs() async {
     try {
       final jobService = JobService();
+
+      final employerId = await jobService.getEmployerId(); // ✅ استخدام السيرفيس
       final jobsJson = await jobService.getJobsByEmployer(employerId);
+
       final fetchedJobs =
       jobsJson.map<Job>((json) => Job.fromJson(json)).toList();
 
@@ -45,9 +48,18 @@ class _JobPostingScreenState extends State<JobPostingScreen>
     }
   }
 
-  void toggleJobStatus(Job job) {
+  void handleStatusChange(Job updatedJob) {
     setState(() {
-      job.isOpened = !job.isOpened;
+      int index = allJobs.indexWhere((job) => job.id == updatedJob.id);
+      if (index != -1) {
+        allJobs[index] = updatedJob;
+      }
+    });
+  }
+
+  void handleJobDeleted(Job job) {
+    setState(() {
+      allJobs.removeWhere((j) => j.id == job.id);
     });
   }
 
@@ -69,13 +81,13 @@ class _JobPostingScreenState extends State<JobPostingScreen>
         centerTitle: true,
         title: const Text(
           'Job Postings',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colorss.primaryTextColor),
         ),
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Color(0xFF0273B1),
-          labelColor: Color(0xFF0273B1),
-          unselectedLabelColor: Colors.grey,
+          indicatorColor: Colorss.primaryColor,
+          labelColor: Colorss.primaryColor,
+          unselectedLabelColor: Colorss.greyColor,
           tabs: const [
             Tab(text: 'Open Positions'),
             Tab(text: 'Closed Positions'),
@@ -94,7 +106,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = openJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: toggleJobStatus,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
               );
             },
           ),
@@ -106,7 +119,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = closedJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: toggleJobStatus,
+                onStatusChange: handleStatusChange,
+                onJobDeleted: handleJobDeleted,
               );
             },
           ),

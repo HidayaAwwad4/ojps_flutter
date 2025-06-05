@@ -35,11 +35,11 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       appBar: AppBar(
         title: const Text(AppValues.savedJobsScreenTitle),
         centerTitle: AppValues.appBarCenterTitle,
-        backgroundColor: primaryColor,
+        backgroundColor: Colorss.primaryColor,
       ),
       body: const Padding(
         padding: EdgeInsets.all(AppValues.savedJobsPadding),
