@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'signup_page.dart';
 
 class ChooseType extends StatefulWidget {
+  const ChooseType({super.key});
   @override
   _ChooseTypeState createState() => _ChooseTypeState();
 }

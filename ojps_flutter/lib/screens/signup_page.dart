@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'Login_page.dart';
+import 'package:ojps_flutter/Services/auth_service.dart';
+import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   final String selectedType;
-  SignUpPage({required this.selectedType});
+  const SignUpPage({Key? key, required this.selectedType}) : super(key: key);
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -11,11 +14,15 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color primaryColor = Color(0xFF0273B1);
+  final Color primaryColor = const Color(0xFF0273B1);
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
+
+  final AuthService authService = AuthService();
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,6 @@ class _SignUpPageState extends State<SignUpPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             Stack(
               children: [
                 Image.asset(
@@ -39,22 +45,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ],
             ),
-
-
             Transform.translate(
-              offset: Offset(0, -60),
+              offset: const Offset(0, -60),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     children: [
                       Image.asset('assets/app_logo.png', height: 70),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         'Sign Up',
                         style: TextStyle(
@@ -63,14 +68,14 @@ class _SignUpPageState extends State<SignUpPage> {
                           color: primaryColor,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         'Welcome! You are signing up as a ${widget.selectedType == 'employer' ? 'Employer' : 'Job Seeker'}.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                        style:
+                        const TextStyle(fontSize: 16, color: Colors.black54),
                       ),
-                      SizedBox(height: 20),
-
+                      const SizedBox(height: 20),
 
                       if (widget.selectedType == 'employer')
                         _buildTextField(
@@ -95,9 +100,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: passwordController,
                         isPassword: true,
                       ),
+                      const SizedBox(height: 30),
 
-                      SizedBox(height: 30),
-                      SizedBox(
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : SizedBox(
                         width: double.infinity,
                         height: 50,
                         child: ElevatedButton(
@@ -107,43 +114,38 @@ class _SignUpPageState extends State<SignUpPage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              print("Signed up");
-                            }
-                          },
-                          child: Text('Sign Up', style: TextStyle(color: Colors.white, fontSize: 16)),
+                          onPressed: _submitSignUp,
+                          child: const Text('Sign Up',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 16)),
                         ),
                       ),
-                      SizedBox(height: 16),
 
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an account?"),
+                          const Text("Already have an account?"),
                           TextButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => LoginPage()),
-                              );
+                              Navigator.pushReplacementNamed(context, '/');
                             },
                             child: Text("Log in", style: TextStyle(color: primaryColor)),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _buildSocialIcon('assets/google1.png'),
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           _buildSocialIcon('assets/Fasebook.png'),
-                          SizedBox(width: 30),
+                          const SizedBox(width: 30),
                           _buildSocialIcon('assets/linkedin.png'),
                         ],
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),
@@ -176,7 +178,8 @@ class _SignUpPageState extends State<SignUpPage> {
             borderSide: BorderSide.none,
           ),
         ),
-        validator: (value) => value == null || value.isEmpty ? 'Field required' : null,
+        validator: (value) =>
+        value == null || value.isEmpty ? 'Field required' : null,
       ),
     );
   }
@@ -194,5 +197,59 @@ class _SignUpPageState extends State<SignUpPage> {
         onPressed: () {},
       ),
     );
+  }
+
+  void _submitSignUp() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    Map<String, dynamic> data = {
+      'email': emailController.text.trim(),
+      'password': passwordController.text.trim(),
+      'password_confirmation': passwordController.text.trim(),
+      'role_id': widget.selectedType == 'employer' ? 1 : 2,
+    };
+
+    if (widget.selectedType == 'employer') {
+      data['company_name'] = companyController.text.trim();
+    } else {
+      data['name'] = nameController.text.trim();
+    }
+
+    try {
+      final response = await authService.register(data);
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Registration successful!')),
+        );
+
+        // نقل حسب النوع باستخدام Named Routes
+        if (widget.selectedType == 'employer') {
+          Navigator.pushReplacementNamed(context, '/employer-home');
+        } else {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+      } else {
+        final errorData = jsonDecode(response.body);
+        String message = errorData['message'] ?? 'Registration failed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 }
