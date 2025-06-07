@@ -6,12 +6,15 @@ import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/job_list_screen.dart';
 
-import '../screens/manage_resume.dart';
-import '../screens/notifications.dart';
-import '../screens/view&edit_profile_seeker.dart';
-import '../screens/view_edit_employer_profile.dart';
-import '../screens/view_profile.dart';
-import '../screens/view_resume.dart';
+import '../models/job_model.dart';
+import '../screens/applicant_details.dart';
+import '../screens/create_job_screen.dart';
+import '../screens/edit_job_screen.dart';
+import '../screens/employer_home.dart';
+import '../screens/job_applicants_employer.dart';
+import '../screens/job_details_for_employer.dart';
+import '../screens/job_posting_screen.dart';
+import '../screens/main_screen.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
@@ -46,10 +49,4 @@ final Map<String, WidgetBuilder> appRoutes = {
     final tabIndex = ModalRoute.of(context)!.settings.arguments as int;
     return JobPostingScreen(tabIndex: tabIndex);
   },
-  '/view_profile_employer':(context)=> const ViewEditEmployerProfile(),
-  '/view_profile_seeker':(context)=> const ViewEditSeekerProfile(),
-  '/view_seeker_profile_employer':(context)=> const  ViewProfile(),
-  '/view_resume':(context)=> const ViewResumeScreen(),
-  '/manage_resume':(context)=> const ManageResumeScreen(),
-  '/notifications':(context)=> const Notifications(),
 };

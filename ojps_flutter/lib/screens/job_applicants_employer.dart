@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
@@ -6,7 +7,6 @@ import '../models/application_model.dart';
 import '../services/application_service.dart';
 import '../utils/network_utils.dart';
 import 'applicant_details.dart';
-
 
 class JobApplicantsScreen extends StatefulWidget {
   final int jobId;
@@ -16,6 +16,7 @@ class JobApplicantsScreen extends StatefulWidget {
   @override
   _JobApplicantsScreenState createState() => _JobApplicantsScreenState();
 }
+
 class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
   final ApplicationService _applicationService = ApplicationService();
   late Future<List<Application>> _applicantsFuture;
@@ -50,24 +51,27 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Applicants'),
+        title: Text(tr('job_applicants')),
         backgroundColor: Colorss.primaryColor,
         foregroundColor: Colorss.whiteColor,
       ),
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerSmall),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.horizontalSpacerLarge,
+              vertical: AppDimensions.verticalSpacerSmall,
+            ),
             color: Colors.white,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildFilterButton('All', 'all'),
-                  _buildFilterButton('Pending', 'pending'),
-                  _buildFilterButton('Shortlisted', 'shortlisted'),
-                  _buildFilterButton('Accepted', 'accepted'),
-                  _buildFilterButton('Rejected', 'rejected'),
+                  _buildFilterButton(tr('filter_all'), 'all'),
+                  _buildFilterButton(tr('filter_pending'), 'pending'),
+                  _buildFilterButton(tr('filter_shortlisted'), 'shortlisted'),
+                  _buildFilterButton(tr('filter_accepted'), 'accepted'),
+                  _buildFilterButton(tr('filter_rejected'), 'rejected'),
                 ],
               ),
             ),
@@ -79,13 +83,13 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting && _applicantsFutureData.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return const Center(child: Text('Failed to load applicants'));
+                  return Center(child: Text(tr('loading_error')));
                 }
 
                 final filteredApplicants = _filterApplicants(_applicantsFutureData);
 
                 if (filteredApplicants.isEmpty) {
-                  return const Center(child: Text('No applicants found for this status'));
+                  return Center(child: Text(tr('no_applicants')));
                 }
 
                 return ListView.builder(
@@ -114,7 +118,6 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
                             }
                           });
                         }
-
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: AppDimensions.marginSmall),
@@ -144,7 +147,10 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerSmall, vertical: AppDimensions.verticalSpacerExtraSmall),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.horizontalSpacerSmall,
+                                vertical: AppDimensions.verticalSpacerExtraSmall,
+                              ),
                               decoration: BoxDecoration(
                                 color: getStatusColor(applicant.status).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
@@ -198,7 +204,9 @@ class _JobApplicantsScreenState extends State<JobApplicantsScreen> {
           });
         },
         selectedColor: Colorss.primaryColor,
-        labelStyle: TextStyle(color: isSelected ? Colorss.whiteColor : Colorss.primaryTextColor),
+        labelStyle: TextStyle(
+          color: isSelected ? Colorss.whiteColor : Colorss.primaryTextColor,
+        ),
       ),
     );
   }

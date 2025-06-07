@@ -5,9 +5,6 @@ import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
 import 'package:ojps_flutter/screens/main_screen.dart';
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
-import 'package:ojps_flutter/screens/Login_page.dart';
-import 'package:ojps_flutter/screens/Forgetpassword.dart';
-import 'package:ojps_flutter/screens/user_type.dart';
 
 void main() {
   runApp(

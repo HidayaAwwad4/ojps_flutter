@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
@@ -112,7 +114,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                   await JobService().updateJob(widget.job.id, data);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Job updated successfully')),
+                      SnackBar(content: Text(tr('job_updated_successfully'))),
                     );
                     Navigator.pop(context, widget.job.copyWith(
                       title: titleController.text,
@@ -124,12 +126,11 @@ class _EditJobScreenState extends State<EditJobScreen> {
                       employment: selectedEmployment,
                       category: selectedCategory,
                     ));
-
                   }
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Failed to update job: $e')),
+                      SnackBar(content: Text('${tr('failed_to_update_job')}: $e')),
                     );
                   }
                 }
@@ -137,52 +138,62 @@ class _EditJobScreenState extends State<EditJobScreen> {
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
-                foregroundColor: isFormValid ? Colorss. whiteColor : Colorss.buttonInactiveTextColor,
+                foregroundColor: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge)),
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerXLarge, vertical: AppDimensions.verticalSpacerMediumSmall),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.horizontalSpacerXLarge,
+                  vertical: AppDimensions.verticalSpacerMediumSmall,
+                ),
               ),
-              child: const Text('Save'),
+              child: Text(tr('save')),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all( AppDimensions.defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: ListView(
           children: [
             CustomTextField(
-              label: 'Job Title',
+              label: tr('job_title'),
               controller: titleController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Description',
+              label: tr('description'),
               maxLines: 4,
               controller: descriptionController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Languages',
-              hint: 'e.g. English - Advanced',
+              label: tr('languages'),
+              hint: tr('languages_hint'),
               controller: languageController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Schedule',
-              hint: 'e.g. Sunday to Thursday',
+              label: tr('schedule'),
+              hint: tr('schedule_hint'),
               controller: scheduleController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Salary',
-              hint: 'Hourly/ daily/ monthly',
+              label: tr('salary'),
+              hint: tr('salary_hint'),
               controller: salaryController,
               onChanged: (_) => updateFormValidity(),
             ),
             DropdownSelector(
-              label: 'Experience',
-              options: ['0-1 years', '1-3 years', '3+ years', 'Not required'],
+              label: tr('experience'),
+              options: [
+                tr('exp_0_1'),
+                tr('exp_1_3'),
+                tr('exp_3_plus'),
+                tr('exp_not_required'),
+              ],
               selectedValue: selectedExperience,
               onChanged: (value) {
                 selectedExperience = value;
@@ -190,8 +201,16 @@ class _EditJobScreenState extends State<EditJobScreen> {
               },
             ),
             DropdownSelector(
-              label: 'Employment',
-              options: ['Full-Time', 'Part-Time', 'Remote', 'Contract', 'Internship', 'Temporary', 'Volunteer'],
+              label: tr('employment'),
+              options: [
+                tr('full_time'),
+                tr('part_time'),
+                tr('remote'),
+                tr('contract'),
+                tr('internship'),
+                tr('temporary'),
+                tr('volunteer'),
+              ],
               selectedValue: selectedEmployment,
               onChanged: (value) {
                 selectedEmployment = value;
@@ -199,8 +218,15 @@ class _EditJobScreenState extends State<EditJobScreen> {
               },
             ),
             DropdownSelector(
-              label: 'Category',
-              options: ['Marketing', 'Technology', 'Design', 'Sales', 'Cooking', 'Other'],
+              label: tr('category'),
+              options: [
+                tr('marketing'),
+                tr('technology'),
+                tr('design'),
+                tr('sales'),
+                tr('cooking'),
+                tr('other'),
+              ],
               selectedValue: selectedCategory,
               onChanged: (value) {
                 selectedCategory = value;

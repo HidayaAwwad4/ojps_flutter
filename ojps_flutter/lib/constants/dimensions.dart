@@ -2,7 +2,7 @@ class AppDimensions {
   static const double iconSizeXSmall = 18.0;
   static const double iconSizeSmall = 20.0;
   static const double iconSize = 24.0;
-  static const double iconSizeLarge = 40.0;
+  static const double iconSizeLarge = 32.0;
   static const double height5 = 5.0;
   static const double height10 = 10.0;
   static const double height15 = 15.0;
@@ -31,7 +31,7 @@ class AppDimensions {
   static const double companyLogoRadius = 50.0;
   static const double companyLogoRadiusSmall = 24.0;
   static const double companyLogoRadiusInJobDetails =  36.0;
-  static const double jobCardImageSize = 40.0;
+  static const double jobCardImageSize = 32.0;
 
 
   // Font sizes
