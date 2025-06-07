@@ -5,6 +5,7 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
 
 import 'employer_home.dart';
+import 'main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -70,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(AppValues.splashScreenDuration, () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const EmployerHome()),
+        MaterialPageRoute(builder: (context) => const MainScreen()),
       );
     });
   }

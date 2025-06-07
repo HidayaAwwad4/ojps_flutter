@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
@@ -23,19 +24,43 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isFirstLoad) {
-      Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
+      _loadJobs();
       _isFirstLoad = false;
     }
   }
-  @override
-  void initState() {
-    super.initState();
+
+  Future<void> _loadJobs() async {
+    try {
+      await Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
+    } on SocketException {
+      _showError('No internet connection. Please check your network.');
+    } on HttpException {
+      _showError('Failed to communicate with the server.');
+    } on FormatException {
+      _showError('Unexpected response format from the server.');
+    } catch (e) {
+      _showError('Something went wrong. Please try again.');
+    }
   }
 
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message, style: const TextStyle(color: Colorss.whiteColor)),
+        backgroundColor: Colorss.errorColor,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final provider = Provider.of<EmployerJobsProvider>(context);
     final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
     final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();
@@ -65,7 +90,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
       body: provider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-        onRefresh: provider.fetchJobs,
+        onRefresh: _loadJobs,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge),
           child: ListView(
@@ -84,7 +109,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: 'Open jobs',
-                jobs: openJobs,
+                jobs: openJobs.take(5).toList(),
                 tabIndex: 0,
                 onStatusChange: provider.updateJobStatusByJob,
                 onJobDeleted: provider.deleteJobByJob,
@@ -92,7 +117,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: 'Closed jobs',
-                jobs: closedJobs,
+                jobs: closedJobs.take(5).toList(),
                 tabIndex: 1,
                 onStatusChange: provider.updateJobStatusByJob,
                 onJobDeleted: provider.deleteJobByJob,

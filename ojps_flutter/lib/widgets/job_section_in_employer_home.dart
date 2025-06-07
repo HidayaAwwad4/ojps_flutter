@@ -22,6 +22,27 @@ class JobSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (jobs.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
+          const Text(
+            'No jobs available.',
+            style: TextStyle(
+              color: Colorss.secondaryTextColor,
+              fontSize: AppDimensions.fontSizeSmall,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +55,10 @@ class JobSectionWidget extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   '/employer/job-posting',
-                  arguments: tabIndex,
+                  arguments: {
+                    'tabIndex': tabIndex,
+                    'fromSeeAll': true,
+                  },
                 );
               },
               child: const Text(
@@ -70,4 +94,5 @@ class JobSectionWidget extends StatelessWidget {
       ],
     );
   }
+
 }

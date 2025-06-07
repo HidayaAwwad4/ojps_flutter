@@ -36,7 +36,7 @@ class _ImageUploadButtonState extends State<ImageUploadButton> {
       onTap: _pickImage,
       child: CircleAvatar(
         radius: AppDimensions.jobCardImageSize,
-        backgroundColor: Colorss.lightGrey,
+        backgroundColor: Colorss.buttonInactiveBackgroundColor,
         backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
         child: _selectedImage == null
             ? const Icon(Icons.camera_alt, color: Colorss.greyColor, size: AppDimensions.iconSizeLarge)

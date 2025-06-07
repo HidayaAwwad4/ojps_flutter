@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _currentIndex,
         activeColor: Colorss.primaryColor,
-        inactiveColor: Colorss.primaryTextColor,
+        inactiveColor: Colorss.blackColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;

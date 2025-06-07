@@ -5,7 +5,6 @@ import 'package:ojps_flutter/screens/job_status_screen.dart';
 import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/job_list_screen.dart';
-
 import '../models/job_model.dart';
 import '../screens/applicant_details.dart';
 import '../screens/create_job_screen.dart';
