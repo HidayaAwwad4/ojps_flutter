@@ -7,8 +7,10 @@ import '../Services/resume_service.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 
 class ViewResumeScreen extends StatefulWidget {
+  const ViewResumeScreen ({super.key});
+
   @override
-  _ViewResumeScreenState createState() => _ViewResumeScreenState();
+  State<ViewResumeScreen> createState() => _ViewResumeScreenState();
 }
 
 class _ViewResumeScreenState extends State<ViewResumeScreen> {

@@ -10,6 +10,8 @@ class AppDimensions {
   static const double width10 = 10.0;
   static const double width15 = 15.0;
   static const double radius20 = 20.0;
+  static const double radius50 = 50.0;
+
 
   static const double spacingTiny = 4;
   static const double spacingXSmall = 8;
@@ -73,4 +75,3 @@ class AppDimensions {
 
 
 }
-
