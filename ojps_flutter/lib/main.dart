@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => EmployerJobsProvider(jobService: JobService()),
-      child: const MyApp(),
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: ChangeNotifierProvider(
+        create: (_) => EmployerJobsProvider(jobService: JobService()),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -50,7 +58,7 @@ class MyApp extends StatelessWidget {
           floatingLabelStyle: TextStyle(color: Colorss.secondaryTextColor),
           hintStyle: TextStyle(color: Colorss.secondaryTextColor),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: Colors.grey),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
           focusedBorder: OutlineInputBorder(
@@ -63,26 +71,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('ar', ''),
-      ],
-      locale: const Locale('en'),
-      localeResolutionCallback: (locale, supportedLocales) {
-        if (locale == null) return supportedLocales.first;
-
-        for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale.languageCode) {
-            return supportedLocale;
-          }
-        }
-        return supportedLocales.first;
-      },
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       initialRoute: '/',
       routes: appRoutes,
     );

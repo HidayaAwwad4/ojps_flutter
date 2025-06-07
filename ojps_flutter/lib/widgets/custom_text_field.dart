@@ -33,7 +33,7 @@ class CustomTextField extends StatelessWidget {
           focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
           ),
-          labelStyle: const TextStyle(color:Colorss.greyColor),
+          labelStyle: const TextStyle(color:Colorss.secondaryTextColor),
           floatingLabelStyle: const TextStyle(color: Colorss.primaryColor),
         ),
       ),

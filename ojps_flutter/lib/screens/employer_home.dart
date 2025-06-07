@@ -8,6 +8,7 @@ import '../providers/employer_jobs_provider.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';
 import '../widgets/search_for_employer.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class EmployerHome extends StatefulWidget {
   const EmployerHome({super.key});
@@ -33,24 +34,33 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
     try {
       await Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
     } on SocketException {
-      _showError('No internet connection. Please check your network.');
+      _showError('noInternetConnection');
     } on HttpException {
-      _showError('Failed to communicate with the server.');
+      _showError('failedServerCommunication');
     } on FormatException {
-      _showError('Unexpected response format from the server.');
+      _showError('unexpectedResponseFormat');
     } catch (e) {
-      _showError('Something went wrong. Please try again.');
+      _showError('somethingWentWrong');
     }
   }
 
-  void _showError(String message) {
+  void _showError(String key) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(color: Colorss.whiteColor)),
+        content: Text(tr(key), style: const TextStyle(color: Colorss.whiteColor)),
         backgroundColor: Colorss.errorColor,
       ),
     );
+  }
+
+  void _toggleLanguage() {
+    final currentLocale = context.locale;
+    if (currentLocale.languageCode == 'en') {
+      context.setLocale(const Locale('ar'));
+    } else {
+      context.setLocale(const Locale('en'));
+    }
   }
 
   @override
@@ -70,20 +80,26 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
         backgroundColor: Colorss.whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello, Hidaya', style: TextStyle(fontSize: AppDimensions.fontSizeMedium, color: Colorss.primaryTextColor)),
-            Text('AL-Adham Company', style: TextStyle(fontSize: AppDimensions.fontSizeSmall, color: Colorss.secondaryTextColor)),
+            Text(tr('hello'),
+                style: const TextStyle(
+                    fontSize: AppDimensions.fontSizeMedium,
+                    color: Colorss.primaryTextColor)),
+            Text(tr('welcome'),
+                style: const TextStyle(
+                    fontSize: AppDimensions.fontSizeSmall,
+                    color: Colorss.secondaryTextColor)),
           ],
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: AppDimensions.defaultPadding),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/adham.jpg'),
-              radius: 18,
-            ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.only(right: 20,left: 20),
+            onPressed: _toggleLanguage,
+            icon: const Icon(Icons.language, color: Colorss.primaryTextColor),
+            iconSize: 32,
+            tooltip: tr('changeLanguage'),
           ),
         ],
       ),
@@ -92,7 +108,8 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
           : RefreshIndicator(
         onRefresh: _loadJobs,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.horizontalSpacerLarge),
           child: ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
@@ -108,7 +125,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               ),
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
-                title: 'Open jobs',
+                title: tr('openJobs'),
                 jobs: openJobs.take(5).toList(),
                 tabIndex: 0,
                 onStatusChange: provider.updateJobStatusByJob,
@@ -116,7 +133,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
               ),
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
-                title: 'Closed jobs',
+                title: tr('closedJobs'),
                 jobs: closedJobs.take(5).toList(),
                 tabIndex: 1,
                 onStatusChange: provider.updateJobStatusByJob,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -45,7 +46,7 @@ class _DocumentUploadButtonState extends State<DocumentUploadButton> {
             Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
             Expanded(
               child: Text(
-                selectedFile != null ? selectedFile!.name : 'Click to upload a document',
+                selectedFile != null ? selectedFile!.name : tr('btn_upload_document'),
                 style: TextStyle(
                   color: selectedFile != null ? Colorss.primaryTextColor : Colorss.primaryColor,
                   fontSize: AppDimensions.fontSizeNormal,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
@@ -87,8 +88,8 @@ class _JobPostingScreenState extends State<JobPostingScreen>
           onPressed: () => Navigator.pop(context),
         )
             : null,
-        title: const Text(
-          'Job Postings',
+        title: Text(
+            tr('job_postings'),
           style: TextStyle(color: Colorss.primaryTextColor),
         ),
         bottom: TabBar(
@@ -96,9 +97,9 @@ class _JobPostingScreenState extends State<JobPostingScreen>
           indicatorColor: Colorss.primaryColor,
           labelColor: Colorss.primaryColor,
           unselectedLabelColor: Colorss.greyColor,
-          tabs: const [
-            Tab(text: 'Open Positions'),
-            Tab(text: 'Closed Positions'),
+          tabs: [
+            Tab(text: tr('open_positions')),
+            Tab(text: tr('closed_positions')),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../models/job_model.dart';
@@ -32,9 +33,9 @@ class JobSectionWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
-          const Text(
-            'No jobs available.',
-            style: TextStyle(
+          Text(
+            tr('noJobsAvailable'),
+            style: const TextStyle(
               color: Colorss.secondaryTextColor,
               fontSize: AppDimensions.fontSizeSmall,
             ),
@@ -61,9 +62,9 @@ class JobSectionWidget extends StatelessWidget {
                   },
                 );
               },
-              child: const Text(
-                'See All',
-                style: TextStyle(
+              child: Text(
+                tr('seeAll'),
+                style: const TextStyle(
                   fontSize: AppDimensions.fontSizeSmall,
                   color: Colorss.primaryColor,
                   fontWeight: FontWeight.w500,
@@ -94,5 +95,4 @@ class JobSectionWidget extends StatelessWidget {
       ],
     );
   }
-
 }

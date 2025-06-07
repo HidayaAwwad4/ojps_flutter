@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../constants/colors.dart';
 import 'create_job_screen.dart';
@@ -65,26 +66,25 @@ class _MainScreenState extends State<MainScreen> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
-            label: 'Home',
+            label: tr('home'),
           ),
           BottomNavigationBarItem(
             icon: Icon(_currentIndex == 1 ? Icons.work : Icons.work_outline),
-            label: 'Jobs',
+            label: tr('jobs'),
           ),
           BottomNavigationBarItem(
             icon: Icon(_currentIndex == 2 ? Icons.add_circle : Icons.add_circle_outline),
-            label: 'Post',
+            label: tr('post'),
           ),
           BottomNavigationBarItem(
             icon: Icon(_currentIndex == 3 ? Icons.notifications : Icons.notifications_none),
-            label: 'Notification',
+            label: tr('notification'),
           ),
           BottomNavigationBarItem(
             icon: Icon(_currentIndex == 4 ? Icons.person : Icons.person_outline),
-            label: 'Profile',
+            label: tr('profile'),
           ),
         ],
-
       ),
     );
   }

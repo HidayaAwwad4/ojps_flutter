@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
@@ -19,7 +20,7 @@ class SearchWidget extends StatelessWidget {
       controller: searchController,
       onChanged: onSearchChanged,
       decoration: InputDecoration(
-        hintText: 'Search jobs',
+        hintText: tr('Search_jobs'),
         prefixIcon: const Icon(Icons.search),
         contentPadding: const EdgeInsets.symmetric(vertical: 0),
         border: OutlineInputBorder(
