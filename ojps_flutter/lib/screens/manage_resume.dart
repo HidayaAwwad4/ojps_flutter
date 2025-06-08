@@ -3,11 +3,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ojps_flutter/models/resume_model.dart';
+import 'package:ojps_flutter/widgets/Resume/education_input_widget.dart';
+import '../Services/resume_service.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart' as dimensions;
 import '../constants/text_styles.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
-import '/widgets/Resume/resume_field_dropdown_widget.dart';
+import '/widgets/resume/resume_field_dropdown_widget.dart';
 
 class ManageResumeScreen extends StatefulWidget {
   const ManageResumeScreen({super.key});
@@ -155,34 +157,87 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   }
 
   void _addEducationEntry() {
+    final degree = 'Bachelor'; // default
+    final institution = TextEditingController();
+    final startDate = TextEditingController();
+    final endDate = TextEditingController();
+    final gpa = TextEditingController();
+    final honors = TextEditingController();
+    
     educationList.add({
-      'degree': null,
-      'institution': TextEditingController(),
-      'startDate': TextEditingController(),
-      'endDate': TextEditingController(),
-      'gpa': TextEditingController(),
-      'honors': TextEditingController(),
+      'degree': degree,
+      'institution': institution,
+      'startDate': startDate,
+      'endDate': endDate,
+      'gpa': gpa,
+      'honors': honors,
     });
 
     setState(() {
+      educationWidgets.add(
+        EducationInputWidget(
+            key: ValueKey(institution), // use a unique key
+            institutionController: institution,
+            startDateController: startDate,
+            endDateController: endDate,
+            gpaController: gpa,
+            honorsController: honors,
+            selectedDegree: degree,
+            onDegreeChanged: (newDegree) {
+              final index = educationWidgets.indexWhere((w) => w.key == ValueKey(institution));
+              if (index != -1) {
+                educationList[index]['degree'] = newDegree;
+              }
+            },
+          onRemove: () {
+            final index = educationWidgets.indexWhere((widget) =>
+            widget.key == ValueKey(institution));
+            if (index != -1) {
+              setState(() {
+                educationList.removeAt(index);
+                educationWidgets.removeAt(index);
+              });
+            }
+          },
+        )
+      );
     });
   }
 
   void _loadResumeData() async {
     await Future.delayed(const Duration(milliseconds: 500));
+    ResumeModel resume = await ResumeService.fetchResume();
     setState(() {
-      fullNameController.text = "";
-      emailController.text = "john.doe@example.com";
-      phoneController.text = "+1234567890";
-      locationController.text = "New York";
+      fullNameController.text = resume.fullName;
+      emailController.text = resume.email;
+      phoneController.text = resume.phone;
+      locationController.text = resume.location;
 
-      summaryController.text = "Passionate software developer...";
+      summaryController.text = resume.summary;
 
-      selectedDegree = "Bachelor";
-      institutionController.text = "ABC University";
-      gpaController.text = "3.9";
-      honorsController.text = "With Distinction";
+      workExperienceList.clear();
+      for (var exp in resume.experiences){
+        workExperienceList.add({
+          'jobTitle': TextEditingController(text: exp.jobTitle),
+          'company': TextEditingController(text: exp.company),
+          'startDate': TextEditingController(text: exp.startDate),
+          'endDate': TextEditingController(text: exp.endDate),
+          'bulletPoint': TextEditingController(text: exp.bulletPoint),
+        });
+      }
+      educationList.clear();
+      for (var edu in resume.educations) {
+        educationList.add({
+          'degree': edu.degree,
+          'institution': TextEditingController(text: edu.institution),
+          'startDate': TextEditingController(text: edu.startDate),
+          'endDate': TextEditingController(text: edu.endDate),
+          'gpa': TextEditingController(text: edu.gpa),
+          'honors': TextEditingController(text: edu.honors),
+        });
+      }
     });
+
   }
 
   Future<void> _selectDate(
@@ -211,8 +266,6 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   void initState() {
     super.initState();
     _loadResumeData();
-    _addWorkExperienceEntry();
-    _addEducationEntry(); // Initialize with one education entry
   }
 
   @override
@@ -378,7 +431,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
                     ),
                       iconEnabledColor: Colorss.greyColor,
                       dropdownColor: Colorss.whiteColor,
-                      style: const TextStyle(color: Colorss.blackColor)
+                      style: const TextStyle(color: Colorss.blackColor),
                   ),
                   ProfileFieldWidget(
                     label: "Institution",

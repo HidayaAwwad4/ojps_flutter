@@ -44,6 +44,7 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
     }
   }
 
+
   void _showError(String key) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
