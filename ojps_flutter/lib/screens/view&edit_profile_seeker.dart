@@ -89,11 +89,9 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
     );
 
     if (shouldLogout == true) {
-      // Clear stored user session data
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.clear();
 
-      // Navigate to login screen and remove all previous routes
       if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     }
