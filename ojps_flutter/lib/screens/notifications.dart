@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Services/notification_service.dart';
 import '../widgets/notification_item.dart';
 import '../constants/dimensions.dart';
 
@@ -13,28 +15,72 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  List<Map<String, dynamic>> newNotifications = [
-    {
-      'title': 'Asal Company',
-      'subtitle': 'Your application was accepted.',
-      'image': 'assets/images/company1.png',
-    },
-    {
-      'title': 'ADHAM',
-      'subtitle': 'Your application was rejected.',
-      'image': 'assets/images/company2.png',
-    },
-  ];
 
+
+  List<Map<String, dynamic>> newNotifications = [];
   List<Map<String, dynamic>> todayNotifications = [];
+  List<Map<String, dynamic>> thisWeekNotifications = [];
 
-  List<Map<String, dynamic>> thisWeekNotifications = [
-    {
-      'title': 'TECHNO',
-      'subtitle': 'Job saved by seeker.',
-      'image': 'assets/images/company3.png',
-    },
-  ];
+  void sendSystemNotification(String title, String body) {
+    NotificationService.showSystemNotification({
+      'id': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      'message': body,
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('authToken');
+
+      if (token != null) {
+        final notifications = await NotificationService.fetchNotifications(token);
+
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+
+        final List<Map<String, dynamic>> newNotifs = [];
+        final List<Map<String, dynamic>> todayNotifs = [];
+        final List<Map<String, dynamic>> weekNotifs = [];
+
+        for (var notif in notifications) {
+          final createdAt = DateTime.tryParse(notif['created_at'] ?? '');
+
+          if (createdAt == null) continue;
+
+          final diff = now.difference(createdAt);
+
+          if (!notif['is_read']) {
+            newNotifs.add(notif);
+            await NotificationService.showSystemNotification({
+              'id': notif['id'],
+              'message': notif['message'],
+            });
+          } else if (createdAt.isAfter(today)) {
+            todayNotifs.add(notif);
+          } else if (diff.inDays <= 7) {
+            weekNotifs.add(notif);
+          }
+        }
+
+        setState(() {
+          newNotifications = newNotifs;
+          todayNotifications = todayNotifs;
+          thisWeekNotifications = weekNotifs;
+        });
+      } else {
+        print('No token found');
+      }
+    } catch (e) {
+      print('Error loading notifications: $e');
+    }
+  }
 
   void moveToToday(int index) {
     setState(() {
@@ -59,9 +105,9 @@ class _NotificationsState extends State<Notifications> {
         ...List.generate(list.length, (index) {
           final item = list[index];
           return NotificationItem(
-            title: item['title'],
-            subtitle: item['subtitle'],
-            imageUrl: item['image'],
+            title: item['message'] ?? 'No Title',
+            subtitle: item['type'] ?? '',
+            imageUrl: item['avatar'] ?? 'assets/images/default.png',
             isNew: isNew,
             onTap: isNew ? () => moveToToday(index) : () {},
           );
@@ -69,7 +115,7 @@ class _NotificationsState extends State<Notifications> {
       ],
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

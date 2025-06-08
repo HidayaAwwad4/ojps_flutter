@@ -6,7 +6,11 @@ import 'package:ojps_flutter/screens/main_screen.dart';
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+import 'Services/notification_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
   runApp(
     ChangeNotifierProvider(
       create: (_) => EmployerJobsProvider(jobService: JobService()),
