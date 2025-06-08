@@ -2,19 +2,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../exceptions/api_exception.dart';
+
 class JobService {
   static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<String?> getToken() async {
-    //ارجع اكمله لما تسنيم تشبك صفحاتها
-    return '';
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
   }
 
   Future<int> getEmployerId() async {
     final token = await getToken();
     if (token == null) {
-      throw Exception('Token is null');
+      throw ApiException.authTokenNotFound();
     }
+
     final response = await http.get(
       Uri.parse('$baseUrl/employer'),
       headers: {
@@ -22,41 +26,51 @@ class JobService {
         'Authorization': 'Bearer $token',
       },
     );
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return data['id'];
     } else {
-      throw Exception('Failed to fetch employer ID: ${response.statusCode}');
+      throw ApiException.defaultError('Failed to fetch employer ID.');
     }
   }
 
-  Future<List<dynamic>> getJobsByEmployer(int employerId) async {
+  Future<List<dynamic>> getJobsByEmployer(int employerId, {int page = 1, int limit = 8}) async {
     final token = await getToken();
+    if (token == null) {
+      throw ApiException.authTokenNotFound();
+    }
+
     final response = await http.get(
-      Uri.parse('$baseUrl/employer/$employerId/jobs'),
+      Uri.parse('$baseUrl/employer/$employerId/jobs?page=$page&limit=$limit'),
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return jsonDecode(response.body)['data'];
     } else {
-      throw Exception('Failed to load jobs');
+      throw ApiException.defaultError('Failed to load jobs.');
     }
   }
 
   Future<Map<String, dynamic>> getJobById(int id) async {
     final response = await http.get(Uri.parse('$baseUrl/jobs/$id'));
+
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+    } else if (response.statusCode == 404) {
+      throw ApiException.jobNotFound();
     } else {
-      throw Exception('Job not found');
+      throw ApiException.defaultError('Failed to fetch job details.');
     }
   }
 
   Future<Map<String, dynamic>> createJob(Map<String, dynamic> data) async {
     final token = await getToken();
+    if (token == null) throw ApiException.authTokenNotFound();
 
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs'));
     request.headers['Accept'] = 'application/json';
@@ -96,12 +110,14 @@ class JobService {
     if (response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to create job: ${response.body}');
+      final error = jsonDecode(response.body);
+      throw ApiException.defaultError(error['message']);
     }
   }
 
   Future<Map<String, dynamic>> updateJob(int id, Map<String, dynamic> data) async {
     final token = await getToken();
+    if (token == null) throw ApiException.authTokenNotFound();
 
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs/$id?_method=PUT'));
     request.headers['Accept'] = 'application/json';
@@ -119,12 +135,15 @@ class JobService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to update job');
+      final error = jsonDecode(response.body);
+      throw ApiException.defaultError(error['message']);
     }
   }
 
   Future<void> deleteJob(int id) async {
     final token = await getToken();
+    if (token == null) throw ApiException.authTokenNotFound();
+
     final response = await http.delete(
       Uri.parse('$baseUrl/jobs/$id'),
       headers: {
@@ -134,7 +153,7 @@ class JobService {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to delete job');
+      throw ApiException.jobDeletionFailed();
     }
   }
 
@@ -144,7 +163,7 @@ class JobService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to fetch form options');
+      throw ApiException.defaultError('Failed to load job options.');
     }
   }
 }

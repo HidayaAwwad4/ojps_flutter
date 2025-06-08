@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../services/job_service.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
@@ -84,22 +84,21 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         'documents': null,
       };
 
-
       await JobService().createJob(data);
 
       if (context.mounted) {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Job posted successfully.'),
+            title: Text(tr('success')),
+            content: Text(tr('job_posted_successfully')),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-                child: const Text('OK'),
+                child: Text(tr('ok')),
               ),
             ],
           ),
@@ -108,7 +107,7 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          SnackBar(content: Text('${tr('error')}: ${e.toString()}')),
         );
       }
     }
@@ -129,15 +128,20 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
           TextButton(
             onPressed: isFormValid ? _submitForm : null,
             style: TextButton.styleFrom(
-              backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
+              backgroundColor: isFormValid
+                  ? Colorss.primaryColor
+                  : Colorss.buttonInactiveBackgroundColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSmall),
+                borderRadius:
+                BorderRadius.circular(AppDimensions.borderRadiusSmall),
               ),
             ),
             child: Text(
-              'Post',
+              tr('post'),
               style: TextStyle(
-                color: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
+                color: isFormValid
+                    ? Colorss.whiteColor
+                    : Colorss.buttonInactiveTextColor,
               ),
             ),
           ),
@@ -145,7 +149,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.horizontalSpacerLarge, vertical: AppDimensions.verticalSpacerLarge),
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.horizontalSpacerLarge,
+            vertical: AppDimensions.verticalSpacerLarge),
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,12 +164,12 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
                 },
               ),
               Spaces.horizontal(AppDimensions.spacingSmall),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Upload your company logo',
-                  style: TextStyle(
-                    color: Colorss.greyColor,
-                    fontSize:AppDimensions.fontSizeNormal,
+                  tr('upload_company_logo'),
+                  style: const TextStyle(
+                    color: Colorss.secondaryTextColor,
+                    fontSize: AppDimensions.fontSizeNormal,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -187,58 +193,58 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             child: Column(
               children: [
                 CustomTextField(
-                  label: 'Job Title',
-                  hint: 'Enter job title',
+                  label: tr('job_title'),
+                  hint: tr('enter_job_title'),
                   onChanged: (value) => setState(() => jobTitle = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
-                  label: 'Job Description',
-                  hint: 'Describe the job',
+                  label: tr('job_description'),
+                  hint: tr('describe_the_job'),
                   maxLines: AppDimensions.maxLinesJobDescription,
                   onChanged: (value) => setState(() => description = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
-                  label: 'Location',
-                  hint: 'Enter job location',
+                  label: tr('location'),
+                  hint: tr('enter_job_location'),
                   onChanged: (value) => setState(() => location = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
-                  label: 'Languages',
-                  hint: 'e.g. English - Advanced',
+                  label: tr('languages'),
+                  hint: tr('language_example'),
                   onChanged: (value) => setState(() => languages = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
-                  label: 'Schedule',
-                  hint: 'e.g. Sunday to Thursday',
+                  label: tr('schedule'),
+                  hint: tr('schedule_example'),
                   onChanged: (value) => setState(() => schedule = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 CustomTextField(
-                  label: 'Salary',
-                  hint: 'Hourly/ daily/ monthly',
+                  label: tr('salary'),
+                  hint: tr('salary_example'),
                   onChanged: (value) => setState(() => salary = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
-                  label: 'Experience',
+                  label: tr('experience'),
                   options: experienceList,
                   selectedValue: selectedExperience,
                   onChanged: (value) => setState(() => selectedExperience = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
-                  label: 'Employment',
+                  label: tr('employment'),
                   options: employmentList,
                   selectedValue: selectedEmployment,
                   onChanged: (value) => setState(() => selectedEmployment = value),
                 ),
                 Spaces.vertical(AppDimensions.verticalSpacerMedium),
                 DropdownSelector(
-                  label: 'Category',
+                  label: tr('category'),
                   options: categoryList,
                   selectedValue: selectedCategory,
                   onChanged: (value) => setState(() => selectedCategory = value),

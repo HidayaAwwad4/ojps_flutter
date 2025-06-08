@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constants/spaces.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 
@@ -34,7 +35,7 @@ class ProfileInfoTile extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: Colorss.primaryColor),
-          SizedBox(width: AppDimensions.defaultPadding),
+          Spaces.horizontal( AppDimensions.defaultPadding),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +46,7 @@ class ProfileInfoTile extends StatelessWidget {
                       fontSize: 14,
                       color: Colors.black54,
                     )),
-                SizedBox(height: 4),
+                Spaces.vertical(10),
                 Text(value, style: TextStyle(fontSize: 16)),
               ],
             ),

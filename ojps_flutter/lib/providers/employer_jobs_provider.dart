@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
-
 class EmployerJobsProvider extends ChangeNotifier {
   final JobService jobService;
 
   List<Job> _jobs = [];
   bool _isLoading = false;
+  bool _isFetchingMore = false;
+  bool _hasMore = true;
+  int _currentPage = 1;
+  final int _limit = 8;
   String? _error;
   String _searchQuery = '';
 
@@ -14,29 +17,60 @@ class EmployerJobsProvider extends ChangeNotifier {
 
   List<Job> get jobs => _jobs;
   bool get isLoading => _isLoading;
+  bool get isFetchingMore => _isFetchingMore;
+  bool get hasMore => _hasMore;
   String? get error => _error;
+
   List<Job> get filteredJobs {
     if (_searchQuery.isEmpty) return _jobs;
     return _jobs.where((job) => job.title.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
   }
+  Future<void> fetchJobs({bool reset = false, bool loadMore = false}) async {
+    if (_isLoading || _isFetchingMore || (!_hasMore && loadMore)) return;
 
-  Future<void> fetchJobs() async {
-    _isLoading = true;
+    if (reset) {
+      _currentPage = 1;
+      _jobs = [];
+      _hasMore = true;
+    }
+
+    if (_currentPage == 1 && !loadMore) {
+      _isLoading = true;
+    } else {
+      _isFetchingMore = true;
+    }
+
     notifyListeners();
 
     try {
       final employerId = await jobService.getEmployerId();
-      final jobsData = await jobService.getJobsByEmployer(employerId);
-      _jobs = jobsData.map<Job>((json) => Job.fromJson(json)).toList();
+      final jobsData = await jobService.getJobsByEmployer(
+        employerId,
+        page: _currentPage,
+        limit: _limit,
+      );
+
+      final newJobs = jobsData.map<Job>((json) => Job.fromJson(json)).toList();
+
+      if (newJobs.length < _limit) {
+        _hasMore = false;
+      }
+
+      _jobs.addAll(newJobs);
       _error = null;
+      _currentPage++;
     } catch (e) {
       _error = e.toString();
-      _jobs = [];
+      if (_currentPage == 1) {
+        _jobs = [];
+      }
     } finally {
       _isLoading = false;
+      _isFetchingMore = false;
       notifyListeners();
     }
   }
+
 
   Future<void> deleteJob(int id) async {
     try {
