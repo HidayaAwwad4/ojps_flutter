@@ -24,6 +24,7 @@
   "cancel": "إلغاء",
   "confirm": "تأكيد",
   "applicants": "المتقدمون",
+  "delete": "حذف",
   "confirm_deletion": "تأكيد الحذف",
   "confirm_delete_job": "هل أنت متأكد أنك تريد حذف هذه الوظيفة؟",
   "job_deleted_success": "تم حذف الوظيفة بنجاح",
@@ -108,6 +109,10 @@
   "post": "نشر",
   "notification": "الإشعارات",
   "profile": "الملف الشخصي",
-  "btn_upload_document": "اضغط لتحميل المستند"
-
+  "admin_dashboard": "لوحة تحكم الأدمن",
+  "manage_employers": "إدارة أصحاب العمل",
+  "view_all_users": "عرض جميع المستخدمين",
+  "view_all_jobs": "عرض جميع الوظائف",
+  "logout": "تسجيل الخروج",
+  "welcome_admin": "مرحباً، مدير النظام"
 }

@@ -22,6 +22,10 @@ import '../screens/view&edit_profile_seeker.dart';
 import '../screens/view_edit_employer_profile.dart';
 import '../screens/view_profile.dart';
 import '../screens/view_resume.dart';
+import '../services/admin_service.dart';
+import '../widgets/all_users_in_app.dart';
+import '../widgets/job_listings_admin_screen.dart';
+import '../widgets/pending_employers.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
@@ -64,6 +68,20 @@ final Map<String, WidgetBuilder> appRoutes = {
     final tabIndex = ModalRoute.of(context)!.settings.arguments as int;
     return JobPostingScreen(tabIndex: tabIndex);
   },
+  '/admin/pending-employers': (context) {
+    final adminService = ModalRoute.of(context)!.settings.arguments as AdminService;
+    return PendingEmployersScreen(adminService: adminService);
+  },
+  '/admin/all-users': (context) {
+    final adminService = ModalRoute.of(context)!.settings.arguments as AdminService;
+    return AllUsersScreen(adminService: adminService);
+  },
+  '/admin/job-listings': (context) {
+    final adminService = ModalRoute.of(context)!.settings.arguments as AdminService;
+    return JobListingsScreen(adminService: adminService);
+  },
+
+
 
 };
 

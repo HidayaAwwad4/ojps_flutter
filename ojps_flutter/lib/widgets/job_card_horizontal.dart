@@ -5,14 +5,10 @@ import 'job_card_content.dart';
 
 class JobCardHorizontal extends StatelessWidget {
   final Job job;
-  final Function(Job) onStatusChange;
-  final Function(Job)? onJobDeleted;
 
   const JobCardHorizontal({
     super.key,
     required this.job,
-    required this.onStatusChange,
-    this.onJobDeleted,
   });
 
   @override
@@ -22,8 +18,6 @@ class JobCardHorizontal extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: AppDimensions.verticalSpacerSmall),
       child: JobCardContent(
         job: job,
-        onStatusChange: onStatusChange,
-        onJobDeleted: onJobDeleted,
         padding: const EdgeInsets.all(AppDimensions.paddingSmall),
         showVerticalLayout: false,
       ),

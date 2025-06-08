@@ -5,6 +5,7 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/screens/view&edit_profile_seeker.dart';
 import 'Login_page.dart';
+import 'admin_dashboard_screen.dart';
 import 'employer_home.dart';
 import 'main_screen.dart';
 
@@ -72,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(AppValues.splashScreenDuration, () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  LoginPage()),
+        MaterialPageRoute(builder: (context) =>  MainScreen()),
       );
     });
   }

@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';  // استدعاء easy_localization
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
-import 'package:ojps_flutter/screens/main_screen.dart';
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => EmployerJobsProvider(jobService: JobService()),
-      child: const MyApp(),
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: ChangeNotifierProvider(
+        create: (_) => EmployerJobsProvider(jobService: JobService()),
+        child: const MyApp(),
+      ),
     ),
   );
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,18 +59,21 @@ class MyApp extends StatelessWidget {
           hintStyle: TextStyle(color: Colorss.secondaryTextColor),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colorss.primaryColor),
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
         ),
       ),
+      localizationsDelegates: context.localizationDelegates, // ضروري لـ easy_localization
+      supportedLocales: context.supportedLocales, // ضروري
+      locale: context.locale, // ضروري
       initialRoute: '/',
       routes: appRoutes,
     );

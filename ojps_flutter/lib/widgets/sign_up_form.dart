@@ -138,7 +138,7 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() => isLoading = true);
 
       final String type = widget.selectedType;
-      final int roleId = type == 'jobseeker' ? 1 : 2;
+      final int roleId = type == 'job-seeker' ? 1 : 2;
 
       Map<String, dynamic> data = {
         'type': type,
@@ -159,7 +159,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           final responseData = jsonDecode(response.body);
-          final token = responseData['token'];
+          final token = responseData['access_token'];
+
 
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
@@ -169,7 +170,7 @@ class _SignUpFormState extends State<SignUpForm> {
             const SnackBar(content: Text('Registration successful!')),
           );
 
-          if (type == 'jobseeker') {
+          if (type == 'job-seeker') {
             Navigator.pushReplacementNamed(context, '/home');
           } else {
             Navigator.pushReplacementNamed(context, '/employer/main-screen');
