@@ -6,32 +6,34 @@ import '/constants/dimensions.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 
 class EducationInputWidget extends StatefulWidget {
+  final TextEditingController institutionController;
+  final TextEditingController startDateController;
+  final TextEditingController endDateController;
+  final TextEditingController gpaController;
+  final TextEditingController honorsController;
+  final String selectedDegree;
+  final Function(String)? onDegreeChanged;
   final VoidCallback? onRemove;
 
-  const EducationInputWidget({super.key, this.onRemove});
+  const EducationInputWidget({
+    super.key,
+    required this.institutionController,
+    required this.startDateController,
+    required this.endDateController,
+    required this.gpaController,
+    required this.honorsController,
+    required this.selectedDegree,
+    this.onDegreeChanged,
+    this.onRemove,
+  });
 
   @override
   State<EducationInputWidget> createState() => _EducationInputWidgetState();
 }
 
 class _EducationInputWidgetState extends State<EducationInputWidget> {
-  final TextEditingController institutionController = TextEditingController();
-  final TextEditingController gpaController = TextEditingController();
-  final TextEditingController honorsController = TextEditingController();
-  final TextEditingController startDateController = TextEditingController();
-  final TextEditingController endDateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String selectedDegree = 'Bachelor';
-
-  final List<String> degreeOptions = [
-    'In progress',
-    'Diploma',
-    'Bachelor',
-    'Master',
-    'Doctor of philosophy',
-    'Professional Doctorate',
-  ];
 
   Future<void> _pickDate(TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
@@ -47,11 +49,6 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
 
   @override
   void dispose() {
-    institutionController.dispose();
-    gpaController.dispose();
-    honorsController.dispose();
-    startDateController.dispose();
-    endDateController.dispose();
     super.dispose();
   }
 
@@ -64,9 +61,15 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
         children: [
           DropdownButtonFormField<String>(
             decoration: const InputDecoration(labelText: 'Degree'),
-            value: selectedDegree,
-            items:
-                degreeOptions.map((degree) {
+            value: widget.selectedDegree,
+            items: [
+            'In progress',
+            'Diploma',
+            'Bachelor',
+            'Master',
+            'Doctor of philosophy',
+            'Professional Doctorate',
+                ].map((degree) {
                   return DropdownMenuItem<String>(
                     value: degree,
                     child: Text(degree),
@@ -74,25 +77,23 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
                 }).toList(),
             onChanged: (value) {
               if (value != null) {
-                setState(() {
-                  selectedDegree = value;
-                });
+                widget.onDegreeChanged!(value);
               }
             },
           ),
           ProfileFieldWidget(
             label: "Institution",
-            controller: institutionController,
+            controller: widget.institutionController,
           ),
           Row(
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _pickDate(startDateController),
+                  onTap: () => _pickDate(widget.startDateController),
                   child: AbsorbPointer(
                     child: ProfileFieldWidget(
                       label: "Start Date",
-                      controller: startDateController,
+                      controller: widget.startDateController,
                     ),
                   ),
                 ),
@@ -100,21 +101,21 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
               Spaces.horizontal(10),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _pickDate(endDateController),
+                  onTap: () => _pickDate(widget.endDateController),
                   child: AbsorbPointer(
                     child: ProfileFieldWidget(
                       label: "End Date",
-                      controller: endDateController,
+                      controller: widget.endDateController,
                     ),
                   ),
                 ),
               ),
             ],
           ),
-          ProfileFieldWidget(label: "GPA", controller: gpaController),
+          ProfileFieldWidget(label: "GPA", controller: widget.gpaController),
           ProfileFieldWidget(
             label: "Honors (if included)",
-            controller: honorsController,
+            controller: widget.honorsController,
           ),
           if (widget.onRemove != null)
             Align(

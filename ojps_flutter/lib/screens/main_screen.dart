@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ojps_flutter/screens/view_edit_employer_profile.dart';
 
 import '../constants/colors.dart';
 import 'create_job_screen.dart';
@@ -23,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
     JobPostingScreen(tabIndex: 0),
     Scaffold(body: Center(child: Text(''))),
     Scaffold(body: Center(child: Text('Notifications'))),
-    Scaffold(body: Center(child: Text('Profile'))),
+    ViewEditEmployerProfile(),
   ];
 
   @override

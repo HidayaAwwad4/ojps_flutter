@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/spaces.dart';
+import '../constants/text_styles.dart';
 import '/widgets/view&edit_profile/profile_image_widget.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 
 class ViewEditEmployerProfile extends StatefulWidget {
+
   const ViewEditEmployerProfile({super.key});
 
   @override
@@ -20,7 +23,6 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
   final TextEditingController locationController = TextEditingController(text: "palestine-Nablus");
   final TextEditingController bioController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
 
   @override
   void initState() {
@@ -40,6 +42,39 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
     bioController.dispose();
     super.dispose();
   }
+
+
+    void _handleLogout() async {
+      final shouldLogout = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Confirm Logout"),
+            content: const Text("Are you sure you want to logout?"),
+            actions: [
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              TextButton(
+                child: const Text("Logout"),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (shouldLogout == true) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
+    }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +87,13 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: _handleLogout,
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
