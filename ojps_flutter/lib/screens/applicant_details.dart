@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
@@ -29,7 +30,6 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
 
   Future<void> _fetchApplicantDetails() async {
     try {
-      print('Fetching applicant with id: ${widget.applicantId}');
       final applicant = await _applicationService.getApplicantById(widget.applicantId);
       setState(() {
         _applicant = applicant;
@@ -42,6 +42,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
       });
     }
   }
+
   Future<void> _updateStatus(String newStatus) async {
     setState(() {
       _isLoading = true;
@@ -64,7 +65,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update status: $e')),
+        SnackBar(content: Text(tr('failed_update_status', args: [e.toString()]))),
       );
     }
   }
@@ -79,7 +80,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
 
     if (_applicant == null) {
       return Scaffold(
-        body: Center(child: Text('Failed to load applicant details')),
+        body: Center(child: Text(tr('failed_load_applicant_details'))),
       );
     }
 
@@ -91,7 +92,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Applicant Details'),
+        title: Text(tr('applicant_details')),
         backgroundColor: Theme.of(context).colorScheme.onPrimary,
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
         elevation: 0,
@@ -103,16 +104,15 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
           children: [
             _buildProfileImage(),
             Spaces.vertical(AppDimensions.verticalSpacerLarge),
-            //const SizedBox(height: AppDimensions.verticalSpacerLarge),
             Text(
               _applicant!.name,
               style: const TextStyle(fontSize: AppDimensions.fontSizeLarge, fontWeight: FontWeight.bold),
             ),
-            Text(_applicant!.email, style:Theme.of(context).textTheme.bodyMedium),
+            Text(_applicant!.email, style: Theme.of(context).textTheme.bodyMedium),
             Spaces.vertical(AppDimensions.height5),
             _buildStatusBadge(),
             Spaces.vertical(AppDimensions.sectionSpacingLarge),
-            buildSectionTitle('Resume:'),
+            buildSectionTitle(tr('resume')),
             Align(
               alignment: Alignment.centerLeft,
               child: FilledButton(
@@ -121,29 +121,29 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                   foregroundColor: Colorss.whiteColor,
                 ),
                 onPressed: () {
-                  // open resume
+                  // open resume logic here
                 },
-                child: const Text('View Resume'),
+                child: Text(tr('view_resume')),
               ),
             ),
             Spaces.vertical(AppDimensions.height20),
-            buildSectionTitle('Cover Letter:'),
+            buildSectionTitle(tr('cover_letter')),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                _applicant!.coverLetter ?? 'No cover letter provided.',
+                _applicant!.coverLetter ?? tr('no_cover_letter'),
                 style: const TextStyle(fontSize: AppDimensions.fontSizeNormal),
               ),
             ),
             Spaces.vertical(AppDimensions.sectionSpacingLarge),
-            buildSectionTitle('Actions:'),
+            buildSectionTitle(tr('actions')),
             Spaces.vertical(AppDimensions.height10),
             Row(
               children: [
                 if (isPending) ...[
                   Spaces.horizontal(AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
-                    label: 'Shortlist',
+                    label: tr('shortlist'),
                     onPressed: () => _updateStatus('shortlisted'),
                     backgroundColor: Colorss.cardBackgroundColor,
                     foregroundColor: Colorss.primaryColor,
@@ -151,23 +151,22 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 ],
                 if (isPending || isShortlisted) ...[
                   _buildActionButton(
-                    label: 'Accept',
+                    label: tr('accept'),
                     onPressed: () => _updateStatus('accepted'),
                     backgroundColor: Colorss.openColor,
                     foregroundColor: Colorss.whiteColor,
                   ),
                   Spaces.horizontal(AppDimensions.horizontalSpacerMedium),
                   _buildActionButton(
-                    label: 'Reject',
+                    label: tr('reject'),
                     onPressed: () => _updateStatus('rejected'),
                     backgroundColor: Colors.black12,
                     foregroundColor: Colorss.primaryTextColor,
                   ),
                 ],
-
                 if (isAccepted) ...[
                   _buildActionButton(
-                    label: 'Accepted',
+                    label: tr('accepted'),
                     onPressed: null,
                     backgroundColor: Colorss.lightBlueBackgroundColor,
                     foregroundColor: Colorss.primaryColor,
@@ -176,7 +175,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 ],
                 if (isRejected) ...[
                   _buildActionButton(
-                    label: 'Rejected',
+                    label: tr('rejected'),
                     onPressed: null,
                     backgroundColor: Colorss.cardBackgroundColor,
                     foregroundColor: Colorss.secondaryTextColor,
@@ -185,7 +184,7 @@ class _ApplicantDetailsScreenState extends State<ApplicantDetailsScreen> {
                 ],
               ],
             ),
-            Spaces.vertical( AppDimensions.height20),
+            Spaces.vertical(AppDimensions.height20),
           ],
         ),
       ),

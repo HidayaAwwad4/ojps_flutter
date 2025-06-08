@@ -17,20 +17,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   void _onTap(int index) {
-    if (index == 0) {
-
-    } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/saved_jobs');
-    } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/notifications');
+    if (index == 1) {
+      Navigator.pushNamed(context, '/saved_jobs');
     } else if (index == 3) {
-      Navigator.pushReplacementNamed(context, '/status');
-    } else if (index == 4) {
-      Navigator.pushReplacementNamed(context, '/view_profile_seeker');
-    }
+      Navigator.pushNamed(context, '/job_status');
+    } else {
       setState(() {
         _currentIndex = index;
       });
+    }
   }
 
   @override

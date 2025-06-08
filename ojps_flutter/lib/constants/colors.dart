@@ -7,6 +7,7 @@ class Colorss {
   static const Color lightBlueBackgroundColor = Color(0xFFDDEAF3);
   static const Color customLightPurple = Color(0xFFE1BEE7);
   static const Color closedColor = Colors.red;
+  static const Color errorColor = Colors.red;
   static const Color openColor = Colors.green;
   static const Color pendingColor = Colors.orange;
   static const Color primaryTextColor = Colors.black;

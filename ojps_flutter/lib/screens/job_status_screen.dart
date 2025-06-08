@@ -17,21 +17,18 @@ class _JobStatusScreenState extends State<JobStatusScreen> {
 
   void _onTap(int index) {
     if (index == _currentIndex) return;
+
     if (index == 0) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (index == 1) {
       Navigator.pushReplacementNamed(context, '/saved_jobs');
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/notifications');
+      // add if needed
     } else if (index == 3) {
-
+      // add if needed
     } else if (index == 4) {
-      Navigator.pushReplacementNamed(context, '/view_profile_seeker');
-
+      // add if needed
     }
-    setState(() {
-      _currentIndex = index;
-    });
   }
 
   @override

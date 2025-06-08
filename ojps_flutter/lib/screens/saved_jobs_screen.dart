@@ -21,16 +21,17 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
     } else if (index == 1) {
       // no action needed (current screen)
     } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/notifications');
+      // إضافة الأكشن المناسب هنا عند الحاجة
     } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/status');
     } else if (index == 4) {
-      Navigator.pushReplacementNamed(context, '/view_profile_seeker');
+      // إضافة الأكشن المناسب هنا عند الحاجة
     }
     setState(() {
       _currentIndex = index;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

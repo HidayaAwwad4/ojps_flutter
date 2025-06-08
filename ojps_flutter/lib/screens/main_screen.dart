@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:ojps_flutter/screens/view_edit_employer_profile.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../constants/colors.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
-import 'notifications.dart';
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;
@@ -23,8 +22,8 @@ class _MainScreenState extends State<MainScreen> {
     EmployerHome(),
     JobPostingScreen(tabIndex: 0),
     Scaffold(body: Center(child: Text(''))),
-    Notifications(),
-    ViewEditEmployerProfile(),
+    Scaffold(body: Center(child: Text('Notifications'))),
+    Scaffold(body: Center(child: Text('Profile'))),
   ];
 
   @override
@@ -54,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: CupertinoTabBar(
         currentIndex: _currentIndex,
         activeColor: Colorss.primaryColor,
-        inactiveColor: Colorss.primaryTextColor,
+        inactiveColor: Colorss.blackColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -66,24 +65,24 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 0 ? CupertinoIcons.house_fill : CupertinoIcons.house),
-            label: 'Home',
+            icon: Icon(_currentIndex == 0 ? Icons.home : Icons.home_outlined),
+            label: tr('home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 1 ? CupertinoIcons.briefcase_fill : CupertinoIcons.briefcase),
-            label: 'Jobs',
+            icon: Icon(_currentIndex == 1 ? Icons.work : Icons.work_outline),
+            label: tr('jobs'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 2 ? CupertinoIcons.add_circled_solid : CupertinoIcons.add_circled),
-            label: 'Post',
+            icon: Icon(_currentIndex == 2 ? Icons.add_circle : Icons.add_circle_outline),
+            label: tr('post'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 3 ? CupertinoIcons.bell_fill : CupertinoIcons.bell),
-            label: 'Notification',
+            icon: Icon(_currentIndex == 3 ? Icons.notifications : Icons.notifications_none),
+            label: tr('notification'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(_currentIndex == 4 ? CupertinoIcons.person_fill : CupertinoIcons.person),
-            label: 'Profile',
+            icon: Icon(_currentIndex == 4 ? Icons.person : Icons.person_outline),
+            label: tr('profile'),
           ),
         ],
       ),
