@@ -26,6 +26,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final String type = widget.selectedType.toLowerCase();
     return Form(
       key: _formKey,
       child: Column(
@@ -42,7 +43,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: AppDimensions.verticalSpacerSmall),
           Text(
-            'Welcome! You are signing up as a ${widget.selectedType == 'employer' ? 'Employer' : 'Job Seeker'}.',
+            'Welcome! You are signing up as a ${type == 'employer' ? 'Employer' : 'Job Seeker'}.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: AppDimensions.fontSizeNormal,
@@ -51,23 +52,25 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: AppDimensions.verticalSpacerLarge),
 
-          if (widget.selectedType == 'employer')
+          if (type == 'employer')
             _buildTextField(
               label: 'Company Name',
               icon: Icons.business,
               controller: companyController,
-            ),
-          if (widget.selectedType != 'employer')
+            )
+          else
             _buildTextField(
               label: 'Name',
               icon: Icons.person,
               controller: nameController,
             ),
+
           _buildTextField(
             label: 'Email',
             icon: Icons.email,
             controller: emailController,
           ),
+
           _buildTextField(
             label: 'Password',
             icon: Icons.lock,
@@ -137,8 +140,8 @@ class _SignUpFormState extends State<SignUpForm> {
     if (_formKey.currentState!.validate()) {
       setState(() => isLoading = true);
 
-      final String type = widget.selectedType;
-      final int roleId = type == 'jobseeker' ? 1 : 2;
+      final String type = widget.selectedType.toLowerCase();
+      final int roleId = type == 'job-seeker' ? 2 : 1;
 
       Map<String, dynamic> data = {
         'type': type,
@@ -169,7 +172,7 @@ class _SignUpFormState extends State<SignUpForm> {
             const SnackBar(content: Text('Registration successful!')),
           );
 
-          if (type == 'jobseeker') {
+          if (type == 'job-seeker') {
             Navigator.pushReplacementNamed(context, '/home');
           } else {
             Navigator.pushReplacementNamed(context, '/employer/main-screen');

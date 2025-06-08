@@ -3,15 +3,16 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/dimensions.dart';
 import '../widgets/sign_up_form.dart';
 import '../widgets/Login/SocialIconsWidget.dart';
-import 'package:ojps_flutter/constants/routes.dart';
 
 class SignUpPage extends StatelessWidget {
   final String selectedType;
+
   const SignUpPage({required this.selectedType, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String topImage = selectedType == 'employer'
+    String type = selectedType.toLowerCase();
+    String topImage = type == 'employer'
         ? 'assets/employer_top.png'
         : 'assets/job_seeker_top.png';
 
@@ -45,7 +46,7 @@ class SignUpPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    SignUpForm(selectedType: selectedType),
+                    SignUpForm( selectedType: selectedType),
                     SizedBox(height: AppDimensions.verticalSpacerLarge),
                     const Text(
                       'Or sign up with',
@@ -58,7 +59,7 @@ class SignUpPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "have an account?",
+                          "Have an account?",
                           style: TextStyle(color: Colorss.secondaryTextColor),
                         ),
                         TextButton(
