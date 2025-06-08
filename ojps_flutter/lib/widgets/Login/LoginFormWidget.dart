@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../Services/auth_service.dart';
 import '../../screens/Forgetpassword.dart';
@@ -6,6 +7,9 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/dimensions.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'dart:io';
+
+import '../../screens/home_screen.dart';
+import '../../screens/main_screen.dart';
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({Key? key}) : super(key: key);
 
@@ -116,19 +120,23 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         'email': emailController.text,
                         'password': passwordController.text,
                       });
-
+                      print('statusCode: ${response.statusCode}');
+                      print('body: ${response.body}');
                       if (response.statusCode == 200) {
                         final data = jsonDecode(response.body);
-                        final token = data['token'];
+                        final token = data['access_token'];
+
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setString('token', token);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Login successful')),
                         );
-                        Navigator.pushReplacementNamed(
-                          context,
-                          '/home',
+                        if (!mounted) return;
+                        Navigator.pushReplacementNamed(context, '/employer/main-screen');
 
-                        );
+
+
 
 
                       } else {

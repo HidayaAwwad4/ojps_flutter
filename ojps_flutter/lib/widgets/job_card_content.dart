@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
+
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../utils/network_utils.dart';
+import '../providers/employer_jobs_provider.dart';
 
 class JobCardContent extends StatefulWidget {
   final Job job;
-  final Function(Job) onStatusChange;
-  final Function(Job)? onJobDeleted;
   final EdgeInsetsGeometry? padding;
   final bool showVerticalLayout;
 
   const JobCardContent({
     super.key,
     required this.job,
-    required this.onStatusChange,
-    this.onJobDeleted,
     this.padding,
     this.showVerticalLayout = true,
   });
@@ -32,12 +31,12 @@ class _JobCardContentState extends State<JobCardContent> {
     bool newStatus = !widget.job.isOpened;
     final updatedData = {'isOpened': newStatus ? 1 : 0};
 
+    final provider = Provider.of<EmployerJobsProvider>(context, listen: false);
+
     try {
       await JobService().updateJob(widget.job.id, updatedData);
 
-      final updatedJob = widget.job.copyWith(isOpened: newStatus);
-
-      widget.onStatusChange(updatedJob);
+      provider.updateJobStatus(widget.job.id, newStatus);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -55,22 +54,31 @@ class _JobCardContentState extends State<JobCardContent> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<EmployerJobsProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () async {
         try {
           final data = await JobService().getJobById(widget.job.id);
           final jobDetails = Job.fromJson(data);
-          if (context.mounted) {
-            Navigator.pushNamed(
-              context,
-              '/employer/job-details',
-              arguments: jobDetails,
-            );
+
+          if (!context.mounted) return;
+
+          final result = await Navigator.pushNamed(
+            context,
+            '/employer/job-details',
+            arguments: jobDetails,
+          );
+
+          if (result is Job) {
+            provider.updateJob(result);
           }
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(tr('job_details_failed'))),
-          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(tr('job_details_failed'))),
+            );
+          }
         }
       },
       child: Container(
@@ -127,7 +135,6 @@ class _JobCardContentState extends State<JobCardContent> {
                     ),
                   ),
                 ),
-
                 Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
                 Expanded(
                   child: Column(
@@ -255,14 +262,12 @@ class _JobCardContentState extends State<JobCardContent> {
 
                       if (confirm == true) {
                         try {
-                          await JobService().deleteJob(widget.job.id);
+                          await provider.deleteJob(widget.job.id);
+
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(tr('job_deleted_success'))),
                             );
-                            if (widget.onJobDeleted != null) {
-                              widget.onJobDeleted!(widget.job);
-                            }
                           }
                         } catch (e) {
                           if (context.mounted) {
@@ -277,7 +282,7 @@ class _JobCardContentState extends State<JobCardContent> {
                       side: const BorderSide(color: Colorss.primaryColor),
                       foregroundColor: Colorss.primaryColor,
                     ),
-                    child: Text(tr('cancel')),
+                    child: Text(tr('delete')),
                   ),
                 ),
               ],

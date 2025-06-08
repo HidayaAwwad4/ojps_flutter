@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ojps_flutter/models/resume_model.dart';
 import 'package:ojps_flutter/widgets/Resume/education_input_widget.dart';
-import '../Services/resume_service.dart';
+import '../services/resume_service.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart' as dimensions;
 import '../constants/text_styles.dart';
@@ -163,7 +163,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
     final endDate = TextEditingController();
     final gpa = TextEditingController();
     final honors = TextEditingController();
-    
+
     educationList.add({
       'degree': degree,
       'institution': institution,

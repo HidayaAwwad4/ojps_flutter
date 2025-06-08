@@ -27,7 +27,6 @@ dependencies:
   flutter_pdfview: ^1.4.0+1
   cupertino_icons: ^1.0.8
   provider: ^6.1.5
-  shared_preferences: ^2.2.2
   easy_localization: ^3.0.3
 
 

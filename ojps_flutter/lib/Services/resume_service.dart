@@ -1,14 +1,6 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/resume_model.dart';
 
 class ResumeService {
-  final String baseUrl = 'http://10.0.2.2:8000/api';
-  static Future<ResumeModel> fetchResumeData() async {
-
   static Future<ResumeModel> fetchResume() async {
     return ResumeModel(
       fullName: "Lorem ipsum",
@@ -54,38 +46,5 @@ class ResumeService {
   static void downloadResumeFile() {
     // Trigger file download
     print("Downloading file...");
-  }
-
-  Future<bool> updateResumeInfo({
-    List<Map<String, dynamic>>? experience,
-    List<Map<String, dynamic>>? education,
-    List<String>? skills,
-  }) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('authToken');
-
-      final uri = Uri.parse('${baseUrl}/seeker/profile/resume');
-
-      final response = await http.put(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          if (experience != null) 'experience': experience,
-          if (education != null) 'education': education,
-          if (skills != null) 'skills': skills,
-        }),
-      );
-
-      final json = jsonDecode(response.body);
-      return json['status'] == true;
-    } catch (e) {
-      print('Error updating resume info: $e');
-      return false;
-    }
   }
 }

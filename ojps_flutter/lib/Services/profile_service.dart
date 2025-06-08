@@ -62,6 +62,38 @@ class ProfileService {
     }
   }
 
+  Future<bool> updateResumeInfo({
+    List<Map<String, dynamic>>? experience,
+    List<Map<String, dynamic>>? education,
+    List<String>? skills,
+  }) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('authToken');
+
+      final uri = Uri.parse('${baseUrl}/seeker/profile/resume');
+
+      final response = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          if (experience != null) 'experience': experience,
+          if (education != null) 'education': education,
+          if (skills != null) 'skills': skills,
+        }),
+      );
+
+      final json = jsonDecode(response.body);
+      return json['status'] == true;
+    } catch (e) {
+      print('Error updating resume info: $e');
+      return false;
+    }
+  }
 
   Future<bool> uploadProfilePicture(String filePath) async {
     final url = Uri.parse('$baseUrl/user/profile/picture');
