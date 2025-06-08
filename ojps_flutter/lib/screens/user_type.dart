@@ -116,25 +116,25 @@ class _ChooseTypeState extends State<ChooseType> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
             Icon(icon, size: 40, color: selected ? Color(0xFF0273B1) : Colors.grey),
-            SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize:15,
-                color: selected ? Color(0xFF0273B1) : Colors.black,
-              ),
+        SizedBox(height: 10),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize:15,
+              color: selected ? Color(0xFF0273B1) : Colors.black,
             ),
-            SizedBox(height: 8, width: 10),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize:15, color: Colors.black54),
-            ),
+          ),
+          SizedBox(height: 8, width: 10),
+          Text(
+            subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize:15, color: Colors.black54),
+          ),
           ],
         ),
       ),

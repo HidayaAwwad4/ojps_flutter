@@ -73,5 +73,6 @@ class AppDimensions {
   static const double badgePaddingHorizontal = 12.0;
   static const double badgePaddingVertical = 6.0;
 
+  static const double socialIconSize = 30.0;
 
 }
