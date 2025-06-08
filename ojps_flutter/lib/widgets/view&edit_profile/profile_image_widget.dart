@@ -1,47 +1,72 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ojps_flutter/models/user_data.dart';
 import '/constants/colors.dart';
 
 class ProfileImageWidget extends StatefulWidget {
-  final String? imagePath;
+ final Object? imagePath;
   final bool isEditable;
 
-  const ProfileImageWidget({super.key, this.imagePath , this.isEditable = false,});
+  const ProfileImageWidget({
+    super.key,
+    this.imagePath ,
+    this.isEditable = false,});
 
   @override
   State<ProfileImageWidget> createState() => _ProfileImageWidgetState();
 }
 
 class _ProfileImageWidgetState extends State<ProfileImageWidget> {
-  String? imagePath;
+  Object? image;
 
   @override
   void initState() {
     super.initState();
-    imagePath = widget.imagePath;
+   image = widget.imagePath;
+  }
+
+  Future<void> _uploadImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null){
+      final file = File(pickedFile.path);
+      setState(() {
+        image = file;
+        UserData().imageFile = file;
+        UserData().imageUrl = null;
+      });
+    }
   }
 
   void _removeImage() {
     setState(() {
-      imagePath = null;
+      image = null;
+      UserData().imageFile = null;
+      UserData().imageUrl = null;
     });
   }
 
-  void _uploadImage() async {
-    setState(() {
-      imagePath = 'assets/Profile_avatar.png';
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider? provider;
+
+    if (image is File) {
+      provider = FileImage(image as File);
+    } else if (image is String && (image as String).isNotEmpty){
+      provider = NetworkImage(image as String);
+    }
+
     return Stack(
       children: [
         CircleAvatar(
           radius: 50,
           backgroundColor: Colorss.profileColor,
           backgroundImage:
-          imagePath != null ? AssetImage(imagePath!) : null,
-          child: imagePath == null
+          provider,
+          child: provider == null
               ? Icon(Icons.person, size: 50, color: Colorss.primaryColor)
               : null,
         ),

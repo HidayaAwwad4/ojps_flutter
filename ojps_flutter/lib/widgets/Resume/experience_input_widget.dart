@@ -18,7 +18,9 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
   final TextEditingController companyController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
-  final List<TextEditingController> responsibilityControllers = [TextEditingController()];
+  final List<TextEditingController> responsibilityControllers = [
+    TextEditingController(),
+  ];
 
   Future<void> _pickDate(TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
@@ -55,14 +57,20 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
     return Column(
       children: [
         ProfileFieldWidget(label: "Job Title", controller: jobTitleController),
-        ProfileFieldWidget(label: "Company Name", controller: companyController),
+        ProfileFieldWidget(
+          label: "Company Name",
+          controller: companyController,
+        ),
         Row(
           children: [
             Expanded(
               child: GestureDetector(
                 onTap: () => _pickDate(startDateController),
                 child: AbsorbPointer(
-                  child: ProfileFieldWidget(label: "Start Date", controller: startDateController),
+                  child: ProfileFieldWidget(
+                    label: "Start Date",
+                    controller: startDateController,
+                  ),
                 ),
               ),
             ),
@@ -71,7 +79,10 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
               child: GestureDetector(
                 onTap: () => _pickDate(endDateController),
                 child: AbsorbPointer(
-                  child: ProfileFieldWidget(label: "End Date", controller: endDateController),
+                  child: ProfileFieldWidget(
+                    label: "End Date",
+                    controller: endDateController,
+                  ),
                 ),
               ),
             ),
@@ -80,26 +91,39 @@ class _ExperienceInputWidgetState extends State<ExperienceInputWidget> {
         Spaces.vertical(10),
         const Align(
           alignment: Alignment.centerLeft,
-          child: Text("Responsibilities / Achievements", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-        ...responsibilityControllers.map((controller) => ProfileFieldWidget(label: "Bullet Point", controller: controller)),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            onPressed: _addResponsibilityField,
-            icon: const Icon(Icons.add, color: Colorss.primaryColor),
-            label: const Text("Add More", style: TextStyle(color: Colorss.primaryColor)),
+          child: Text(
+            "Responsibilities / Achievements",
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        if (widget.onRemove != null)
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: widget.onRemove,
-              icon: const Icon(Icons.delete, color: Colors.red),
-              label: const Text("Remove", style: TextStyle(color: Colors.red)),
+        ...responsibilityControllers.map(
+          (controller) =>
+              ProfileFieldWidget(label: "Bullet Point", controller: controller),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton.icon(
+              onPressed: _addResponsibilityField,
+              icon: const Icon(Icons.add, color: Colorss.primaryColor),
+              label: const Text(
+                "Add More",
+                style: TextStyle(color: Colorss.primaryColor),
+              ),
             ),
-          ),
+
+            if (widget.onRemove != null)
+              TextButton.icon(
+                onPressed: widget.onRemove,
+                icon: const Icon(Icons.delete, color: Colors.red),
+                label: const Text(
+                  "Remove",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }

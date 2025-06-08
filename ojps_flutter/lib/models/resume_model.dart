@@ -1,6 +1,6 @@
 class ResumeModel {
   final String fullName, email, location, phone, summary, imageUrl;
-  final List<Experience> workExperiences;
+  final List<Experience> experiences;
   final List<Education> educations;
 
   ResumeModel({
@@ -9,18 +9,19 @@ class ResumeModel {
     required this.location,
     required this.phone,
     required this.summary,
-    required this.imageUrl,
-    required this.workExperiences,
+    required this.experiences,
     required this.educations,
+    this.imageUrl =""
   });
+
 }
 
 class Experience {
-  final String position, company, duration, description;
-  Experience(this.position, this.company, this.duration, this.description);
+  final String jobTitle, company, startDate, endDate,bulletPoint;
+  Experience({required this.jobTitle, required this.company, required this.startDate, required this.endDate , required this.bulletPoint});
 }
 
 class Education {
-  final String degree, university, duration, details;
-  Education(this.degree, this.university, this.duration, this.details);
+  final String degree, institution, startDate, endDate, gpa, honors;
+  Education({required this.degree, required this.institution, required this.startDate, required this.endDate, required this.gpa , required this.honors});
 }

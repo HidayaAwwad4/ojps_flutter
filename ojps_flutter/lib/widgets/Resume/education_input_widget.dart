@@ -20,6 +20,7 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
   final TextEditingController honorsController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String selectedDegree = 'Bachelor';
 
@@ -44,7 +45,6 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
     }
   }
 
-
   @override
   void dispose() {
     institutionController.dispose();
@@ -57,59 +57,79 @@ class _EducationInputWidgetState extends State<EducationInputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Degree'),
-          value: selectedDegree,
-          items: degreeOptions.map((degree) {
-            return DropdownMenuItem<String>(
-              value: degree,
-              child: Text(degree),
-            );
-          }).toList(),
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                selectedDegree = value;
-              });
-            }
-          },
-        ),
-        ProfileFieldWidget(label: "Institution", controller: institutionController),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => _pickDate(startDateController),
-                child: AbsorbPointer(
-                  child: ProfileFieldWidget(label: "Start Date", controller: startDateController),
-                ),
-              ),
-            ),
-            Spaces.horizontal(10),
-            Expanded(
-              child: GestureDetector(
-                onTap: () => _pickDate(endDateController),
-                child: AbsorbPointer(
-                  child: ProfileFieldWidget(label: "End Date", controller: endDateController),
-                ),
-              ),
-            ),
-          ],
-        ),
-        ProfileFieldWidget(label: "GPA", controller: gpaController),
-        ProfileFieldWidget(label: "Honors (if included)", controller: honorsController),
-        if (widget.onRemove != null)
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: widget.onRemove,
-              icon: const Icon(Icons.delete, color: Colors.red),
-              label: const Text("Remove", style: TextStyle(color: Colors.red)),
-            ),
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DropdownButtonFormField<String>(
+            decoration: const InputDecoration(labelText: 'Degree'),
+            value: selectedDegree,
+            items:
+                degreeOptions.map((degree) {
+                  return DropdownMenuItem<String>(
+                    value: degree,
+                    child: Text(degree),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  selectedDegree = value;
+                });
+              }
+            },
           ),
-      ],
+          ProfileFieldWidget(
+            label: "Institution",
+            controller: institutionController,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _pickDate(startDateController),
+                  child: AbsorbPointer(
+                    child: ProfileFieldWidget(
+                      label: "Start Date",
+                      controller: startDateController,
+                    ),
+                  ),
+                ),
+              ),
+              Spaces.horizontal(10),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _pickDate(endDateController),
+                  child: AbsorbPointer(
+                    child: ProfileFieldWidget(
+                      label: "End Date",
+                      controller: endDateController,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          ProfileFieldWidget(label: "GPA", controller: gpaController),
+          ProfileFieldWidget(
+            label: "Honors (if included)",
+            controller: honorsController,
+          ),
+          if (widget.onRemove != null)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: widget.onRemove,
+                icon: const Icon(Icons.delete, color: Colors.red),
+                label: const Text(
+                  "Remove",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

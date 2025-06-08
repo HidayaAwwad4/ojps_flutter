@@ -69,13 +69,13 @@ class _ProfileFieldWidgetState extends State<ProfileFieldWidget> {
           )
               : Text(widget.label),
           labelStyle: TextStyle(
-            color: _focusNode.hasFocus ? Colorss.primaryColor : Colors.grey,
+            color: _focusNode.hasFocus ? Colorss.primaryColor : Colorss.lightGrey,
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colorss.primaryColor, width: 2.0),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+            borderSide: BorderSide(color: Colorss.lightGrey, width: 1.5),
           ),
         ),
         validator: widget.validator

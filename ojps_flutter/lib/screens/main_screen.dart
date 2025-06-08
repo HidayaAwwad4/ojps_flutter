@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ojps_flutter/screens/view_edit_employer_profile.dart';
 
 import '../constants/colors.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
+import 'notifications.dart';
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;
@@ -21,8 +23,8 @@ class _MainScreenState extends State<MainScreen> {
     EmployerHome(),
     JobPostingScreen(tabIndex: 0),
     Scaffold(body: Center(child: Text(''))),
-    Scaffold(body: Center(child: Text('Notifications'))),
-    Scaffold(body: Center(child: Text('Profile'))),
+    Notifications(),
+    ViewEditEmployerProfile(),
   ];
 
   @override

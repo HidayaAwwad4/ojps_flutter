@@ -13,13 +13,15 @@ class ViewEditEmployerProfile extends StatefulWidget {
 }
 
 class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
-  final TextEditingController nameController = TextEditingController(text: "Rami Fayed");
-  final TextEditingController emailController = TextEditingController(text: "Fayed.rami@example.com");
+    final TextEditingController nameController = TextEditingController(text: "Wafa Al-Adham");
+  final TextEditingController emailController = TextEditingController(text: "Al-Adham2020@example.com");
   final TextEditingController phoneController = TextEditingController(text: "+970599999999");
-  final TextEditingController companyController = TextEditingController(text: "Rami Tech");
-  final TextEditingController locationController = TextEditingController(text: "Ramallah");
+  final TextEditingController companyController = TextEditingController(text: "Al-adham");
+  final TextEditingController locationController = TextEditingController(text: "palestine-Nablus");
   final TextEditingController bioController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,11 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
       appBar: AppBar(
         title: const Text("Profile"),
         centerTitle: true,
-        leading: const BackButton(),
+        leading: BackButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
 
       body: SingleChildScrollView(
@@ -127,7 +133,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
 
 
 
-            const SizedBox(height: 20),
+            Spaces.vertical(20),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()){
