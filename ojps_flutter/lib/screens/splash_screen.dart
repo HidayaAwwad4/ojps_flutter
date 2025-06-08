@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/screens/home_screen.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
+import 'package:ojps_flutter/screens/view&edit_profile_seeker.dart';
 import 'Login_page.dart';
 import 'employer_home.dart';
 import 'main_screen.dart';
