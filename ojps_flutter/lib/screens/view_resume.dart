@@ -26,7 +26,7 @@ class _ViewResumeScreenState extends State<ViewResumeScreen> {
   }
 
   Future<void> loadResumeData() async {
-    final data = await ResumeService.fetchResumeData();
+    final data = await ResumeService.fetchResume();
     final hasFile = await ResumeService.checkUploadedResumeFile();
 
     setState(() {

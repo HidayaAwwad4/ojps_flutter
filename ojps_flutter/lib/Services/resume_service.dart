@@ -8,6 +8,8 @@ import '../models/resume_model.dart';
 class ResumeService {
   final String baseUrl = 'http://10.0.2.2:8000/api';
   static Future<ResumeModel> fetchResumeData() async {
+
+  static Future<ResumeModel> fetchResume() async {
     return ResumeModel(
       fullName: "Lorem ipsum",
       email: "Lorem.ipsum112@example.com",
@@ -33,7 +35,7 @@ class ResumeService {
       ],
       educations: [
         Education(
-          degree: "B.Sc. in Computer Science",
+          degree: "Bachelor",
           institution: "NNU University",
           startDate: "Sep 2019 ",
           endDate: "to Jun 2023",
