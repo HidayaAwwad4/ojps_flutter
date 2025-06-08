@@ -115,13 +115,18 @@ class _NotificationsState extends State<Notifications> {
       ],
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Notifications", style: AppValues.textStyleAppBar ),
         centerTitle: true,
+        leading: BackButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
         elevation: 0,
       ),
       body: SingleChildScrollView(

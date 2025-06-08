@@ -3,6 +3,7 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
 import 'package:ojps_flutter/screens/main_screen.dart';
+import 'package:ojps_flutter/screens/notifications.dart';
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
 
@@ -68,8 +69,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/',
-      routes: appRoutes,
+      home : const Notifications(),
     );
   }
 }
