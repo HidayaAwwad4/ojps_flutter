@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/spaces.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 import '/widgets/view&edit_profile/profile_image_widget.dart';
@@ -25,7 +26,7 @@ class ViewProfile extends StatelessWidget {
                 isEditable: false,
               ),
             ),
-            SizedBox(height: AppDimensions.defaultPadding),
+            Spaces.vertical(AppDimensions.defaultPadding),
 
 
             ProfileInfoTile(

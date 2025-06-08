@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 class AppValues {
+  static const int notificationsInitialIndex = 2;
+  static const int profileInitialIndex = 4;
   static const int jobStatusInitialIndex = 3;
   static const int jobStatusTabCount = 3;
   static const String jobStatusScreenTitle = 'Job Status';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/spaces.dart';
 import '/widgets/view&edit_profile/profile_image_widget.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '../constants/colors.dart';
@@ -12,13 +13,15 @@ class ViewEditEmployerProfile extends StatefulWidget {
 }
 
 class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
-  final TextEditingController nameController = TextEditingController(text: "Rami Fayed");
-  final TextEditingController emailController = TextEditingController(text: "Fayed.rami@example.com");
+    final TextEditingController nameController = TextEditingController(text: "Wafa Al-Adham");
+  final TextEditingController emailController = TextEditingController(text: "Al-Adham2020@example.com");
   final TextEditingController phoneController = TextEditingController(text: "+970599999999");
-  final TextEditingController companyController = TextEditingController(text: "Rami Tech");
-  final TextEditingController locationController = TextEditingController(text: "Ramallah");
+  final TextEditingController companyController = TextEditingController(text: "Al-adham");
+  final TextEditingController locationController = TextEditingController(text: "palestine-Nablus");
   final TextEditingController bioController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +47,11 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
       appBar: AppBar(
         title: const Text("Profile"),
         centerTitle: true,
-        leading: const BackButton(),
+        leading: BackButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
 
       body: SingleChildScrollView(
@@ -55,18 +62,18 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ProfileImageWidget(),
-            const SizedBox(height: 10),
+             Spaces.vertical(10),
             Text(
               nameController.text.isEmpty ? "Your Name" : nameController.text,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            const SizedBox(height: 4),
+            Spaces.vertical(4),
             Text(
               emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
               style: const TextStyle(color: Colorss.secondaryTextColor),
             ),
 
-            const SizedBox(height: 20),
+            Spaces.vertical(20),
             ProfileFieldWidget(
               label: "Full Name",
               controller: nameController,
@@ -126,7 +133,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
 
 
 
-            const SizedBox(height: 20),
+            Spaces.vertical(20),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()){

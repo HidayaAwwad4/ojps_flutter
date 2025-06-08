@@ -22,4 +22,9 @@ class Colorss {
   static const Color buttonInactiveTextColor = Color(0xFFADADAD);
   static const Color successValidation = Colors.green;
   static const Color failValidation = Colors.red;
+  static const Color remove = Colors.red;
+  static const Color orange = Color(0xFFFFA500);
+  static const Color secondaryOrange = Color(0xFFF5CF80);
+  static const Color secondaryBlue = Color(0xFF549CC6);
+
 }

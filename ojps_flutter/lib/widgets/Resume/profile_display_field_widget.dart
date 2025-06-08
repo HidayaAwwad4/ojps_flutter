@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
+
+import '../../constants/spaces.dart';
 class ProfileDisplayFieldWidget extends StatelessWidget {
   final IconData icon;
   final String value;
@@ -18,7 +20,7 @@ class ProfileDisplayFieldWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: Colorss.primaryColor, size: 20),
-          const SizedBox(width: 12),
+          Spaces.horizontal(12),
           Expanded(
             child: Text(
               value,
