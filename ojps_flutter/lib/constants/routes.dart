@@ -5,7 +5,7 @@ import 'package:ojps_flutter/screens/job_status_screen.dart';
 import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/job_list_screen.dart';
-
+import '../screens/user_type.dart';
 import '../models/job_model.dart';
 import '../screens/applicant_details.dart';
 import '../screens/create_job_screen.dart';
@@ -15,6 +15,7 @@ import '../screens/job_applicants_employer.dart';
 import '../screens/job_details_for_employer.dart';
 import '../screens/job_posting_screen.dart';
 import '../screens/main_screen.dart';
+import '../screens/Login_page.dart';
 import '../screens/manage_resume.dart';
 import '../screens/notifications.dart';
 import '../screens/view&edit_profile_seeker.dart';
@@ -24,6 +25,8 @@ import '../screens/view_resume.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/': (context) => const SplashScreen(),
+  '/usertype':(context) => ChooseType(),
+  '/Login':(context) => LoginPage(),
   '/home': (context) => const HomeScreen(),
   '/job_list': (context) => JobListScreen(categoryLabel: 'Your Category'),
   '/job_details': (context) => const JobDetailsJobSeekerScreen(),
@@ -61,4 +64,7 @@ final Map<String, WidgetBuilder> appRoutes = {
     final tabIndex = ModalRoute.of(context)!.settings.arguments as int;
     return JobPostingScreen(tabIndex: tabIndex);
   },
+
 };
+
+

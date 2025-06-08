@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
-import 'user_type.dart';
-import 'Forgetpassword.dart';
+import 'package:ojps_flutter/constants/dimensions.dart';
+import '../widgets/Login/LoginFormWidget.dart';
+import '../widgets/Login/SocialIconsWidget.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     height: screenHeight * 0.4,
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/img1.png'),
                         fit: BoxFit.cover,
@@ -50,186 +44,33 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 1),
-                    Text(
-                      'Log In',
-                      style: TextStyle(
-                        fontFamily: 'Carlito',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        letterSpacing: 1,
-                        color: Colorss.primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 3),
-                    Text(
-                      'Welcome back! Please login to your account.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                    SizedBox(height: 2),
+            const LoginFormWidget(),
+            const SizedBox(height: AppDimensions.verticalSpacerMedium),
+            const SocialIconsWidget(),
+            const SizedBox(height: AppDimensions.verticalSpacerMedium),
 
-                    _buildTextFormField(
-                      label: 'Email',
-                      icon: Icons.email,
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        } else if (!value.contains('@')) {
-                          return 'Email must contain @';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildTextFormField(
-                          label: 'Password',
-                          icon: Icons.lock,
-                          controller: passwordController,
-                          obscureText: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            } else if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/forgetPassword');
-                            },
-                            child: Text(
-                              'Forget Password?',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 45,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colorss.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            print('Email: ${emailController.text}');
-                            print('Password: ${passwordController.text}');
-                          } else {
-                            print("Validation failed");
-                          }
-                        },
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 20),
-                    Text("Or sign in with", style: TextStyle(color: Colors.black54)),
-                    SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildSocialIcon('assets/Fasebook.png'),
-                        SizedBox(width: 30),
-                        _buildSocialIcon('assets/linkedin.png'),
-                        SizedBox(width: 30),
-                        _buildSocialIcon('assets/google1.png'),
-                      ],
-                    ),
-
-                    SizedBox(height: 2),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/chooseType');
-                          },
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(color: Colorss.primaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account?",
+                  style: TextStyle(color: Colorss.secondaryTextColor),
                 ),
-              ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/usertype');
+                  },
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colorss.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextFormField({
-    required String label,
-    required IconData icon,
-    required TextEditingController controller,
-    required String? Function(String?) validator,
-    bool obscureText = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        validator: validator,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Colorss.primaryColor),
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colorss.primaryColor, width: 2.0),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialIcon(String assetPath) {
-    return GestureDetector(
-      onTap: () {
-        print("Tapped on $assetPath");
-      },
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        radius: 22,
-        child: Image.asset(
-          assetPath,
-          height: 24,
-          width: 24,
         ),
       ),
     );
