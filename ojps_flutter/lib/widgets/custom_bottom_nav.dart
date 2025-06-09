@@ -17,8 +17,12 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
-        if (index == 3) {
+        if (index == 2) {
+          Navigator.pushNamed(context, '/notifications');
+        } else if (index == 3) {
           Navigator.pushNamed(context, '/job_status');
+        } else if (index == 4) {
+          Navigator.pushNamed(context, '/view_profile_seeker');
         } else {
           onTap(index);
         }

@@ -126,11 +126,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                       if (response.statusCode == 200 || response.statusCode == 201) {
                         final data = jsonDecode(response.body);
                         final token = data['access_token'] ?? data['token'];
-                        final userRoleId = data['user']['role_id'];
+                        final user = data['user'];
+                        final userRoleId = user['role_id'];
 
                         if (token != null) {
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.setString('token', token);
+
+                          if (user != null) {
+                            await prefs.setString('user', jsonEncode(user));
+                          }
+
                           print('Token saved: $token');
 
                           if (!mounted) return;
@@ -141,8 +147,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                             Navigator.pushReplacementNamed(context, '/employer/main-screen');
                           } else if (userRoleId == 3) {
                             Navigator.pushReplacementNamed(context, '/admin-dashboard');
-                          }
-                          else {
+                          } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Unknown user role')),
                             );
