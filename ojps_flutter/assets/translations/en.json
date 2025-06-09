@@ -17,8 +17,8 @@
   "closed": "Closed",
   "open_job": "Open Job?",
   "close_job": "Close Job?",
-  "num_open_job": "job open",
-  "num_close_job": "job closed",
+  "num_open_job": "job closed",
+  "num_close_job": "job open",
   "confirm_open": "Are you sure you want to open this job?",
   "confirm_close": "Are you sure you want to close this job?",
   "cancel": "Cancel",
@@ -115,7 +115,7 @@
   "view_all_jobs": "View All Jobs",
   "logout": "Log out",
   "welcome_admin": "Welcome, Administrator",
-  "jobLoadError": "Failed to load jobs. Please check your connection.",
-  "requestTimeout": "Request timed out. Please check your internet connection."
+  "categories": "Categories",
+  "recommended_jobs": "Recommended Jobs",
+  "search_placeholder": "Search for jobs..."
 }
-

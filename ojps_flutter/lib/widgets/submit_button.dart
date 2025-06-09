@@ -42,7 +42,9 @@ class _SubmitButtonState extends State<SubmitButton> {
       child: ElevatedButton(
         onPressed: _isLoading || _isSubmitted ? null : _handleSubmit,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _isSubmitted ? Colorss.successColor : Colorss.primaryColor,
+          backgroundColor: _isSubmitted
+              ? Colorss.successColor
+              : Colorss.primaryColor,
           foregroundColor: Colorss.whiteColor,
           elevation: 4,
           shadowColor: Colorss.primaryColor.withOpacity(0.3),
@@ -67,7 +69,8 @@ class _SubmitButtonState extends State<SubmitButton> {
           )
               : _isSubmitted
               ? const Icon(Icons.check,
-              size: AppValues.submitIconSize, color: Colorss.whiteColor)
+              size: AppValues.submitIconSize,
+              color: Colorss.whiteColor)
               : const Text(
             "Submit",
             style: TextStyle(

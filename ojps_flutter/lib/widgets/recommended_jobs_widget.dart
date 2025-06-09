@@ -3,82 +3,71 @@ import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
+import 'package:ojps_flutter/services/job_service.dart';
 
 class RecommendedJobsWidget extends StatefulWidget {
-  const RecommendedJobsWidget({super.key});
+  const RecommendedJobsWidget({Key? key}) : super(key: key);
 
   @override
   State<RecommendedJobsWidget> createState() => _RecommendedJobsWidgetState();
 }
 
 class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
-  List<bool> savedJobs = [false, false, false];
+  late Future<List<dynamic>> _futureJobs;
+  List<bool> savedJobs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _futureJobs = JobService().fetchRecommendedJobs();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'UI/UX Designer',
-            location: 'Ramallah',
-            type: 'Part-Time',
-            description: 'Design user interfaces with a focus on usability and beauty.',
-            salary: '\$500 - \$800 Salary/Month',
-            isSaved: savedJobs[0],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[0] = !savedJobs[0];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
-        ),
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'Frontend Developer',
-            location: 'Nablus',
-            type: 'Full-Time',
-            description: 'Develop beautiful and performant web applications.',
-            salary: '\$1000 - \$1500 Salary/Month',
-            isSaved: savedJobs[1],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[1] = !savedJobs[1];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
-        ),
-        JobCardWrapper(
-          child: JobCard(
-            image: 'assets/adham.jpg',
-            title: 'Backend Developer',
-            location: 'Hebron',
-            type: 'Contract',
-            description: 'Build scalable and secure backend services.',
-            salary: '\$1200 - \$1700 Salary/Month',
-            isSaved: savedJobs[2],
-            onSaveToggle: () {
-              setState(() {
-                savedJobs[2] = !savedJobs[2];
-              });
-            },
-            onTap: () {
-              Navigator.pushNamed(context, '/job_details');
-            },
-
-          ),
-        ),
-      ],
+    return FutureBuilder<List<dynamic>>(
+      future: _futureJobs,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No recommended jobs found.'));
+        } else {
+          final jobs = snapshot.data!;
+          if (savedJobs.length != jobs.length) {
+            savedJobs = List<bool>.filled(jobs.length, false);
+          }
+          return Column(
+            children: List.generate(jobs.length, (index) {
+              final job = jobs[index];
+              return JobCardWrapper(
+                child: JobCard(
+                  image: job['image'] ?? 'assets/default-logo.png',
+                  title: job['title'] ?? 'No Title',
+                  location: job['location'] ?? 'Unknown',
+                  type: job['type'] ?? '',
+                  description: job['description'] ?? '',
+                  salary: job['salary'] ?? '',
+                  isSaved: savedJobs[index],
+                  onSaveToggle: () {
+                    setState(() {
+                      savedJobs[index] = !savedJobs[index];
+                    });
+                  },
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/job_details',
+                      arguments: job,
+                    );
+                  },
+                ),
+              );
+            }),
+          );
+        }
+      },
     );
   }
 }
@@ -86,15 +75,12 @@ class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
 class JobCardWrapper extends StatelessWidget {
   final Widget child;
 
-  const JobCardWrapper({super.key, required this.child});
+  const JobCardWrapper({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppValues.jobCardMarginHorizontal,
-        vertical: AppValues.jobCardMarginVertical,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       width: double.infinity,
       child: child,
     );

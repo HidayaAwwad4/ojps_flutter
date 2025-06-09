@@ -29,6 +29,7 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
   @override
   void dispose() {
     _focusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -65,7 +66,9 @@ class _CoverLetterFieldState extends State<CoverLetterField> {
             focusNode: _focusNode,
             decoration: InputDecoration(
               hintText: "Write your Cover Letter...",
-              hintStyle: TextStyle(color: Colorss.secondaryTextColor.withOpacity(0.6)),
+              hintStyle: TextStyle(
+                color: Colorss.secondaryTextColor.withOpacity(0.6),
+              ),
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               fillColor: _isFocused
