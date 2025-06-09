@@ -26,7 +26,7 @@ class _SubmitButtonState extends State<SubmitButton> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text("Submitted successfully!"),
-        backgroundColor: successColor,
+        backgroundColor: Colorss.successColor,
       ),
     );
 
@@ -42,10 +42,12 @@ class _SubmitButtonState extends State<SubmitButton> {
       child: ElevatedButton(
         onPressed: _isLoading || _isSubmitted ? null : _handleSubmit,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _isSubmitted ? successColor : primaryColor,
-          foregroundColor: whiteColor,
+          backgroundColor: _isSubmitted
+              ? Colorss.successColor
+              : Colorss.primaryColor,
+          foregroundColor: Colorss.whiteColor,
           elevation: 4,
-          shadowColor: primaryColor.withOpacity(0.3),
+          shadowColor: Colorss.primaryColor.withOpacity(0.3),
           padding: const EdgeInsets.symmetric(
               vertical: AppValues.verticalButtonPadding),
           shape: RoundedRectangleBorder(
@@ -61,13 +63,14 @@ class _SubmitButtonState extends State<SubmitButton> {
             height: 24,
             width: 24,
             child: CircularProgressIndicator(
-              color: whiteColor,
+              color: Colorss.whiteColor,
               strokeWidth: 2.5,
             ),
           )
               : _isSubmitted
               ? const Icon(Icons.check,
-              size: AppValues.submitIconSize, color: whiteColor)
+              size: AppValues.submitIconSize,
+              color: Colorss.whiteColor)
               : const Text(
             "Submit",
             style: TextStyle(

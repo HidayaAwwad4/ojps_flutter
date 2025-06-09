@@ -69,7 +69,6 @@ class _JobListState extends State<JobList> {
             type: job['type'],
             salary: job['salary'],
             onTap: () {
-              //  Navigator.pushNamed(context, '/job_details');
             },
 
             isSaved: savedJobs[index],
@@ -102,13 +101,13 @@ class _JobListState extends State<JobList> {
   Color getStatusColor(String status) {
     switch (status) {
       case AppValues.statusUnderReview:
-        return primaryColor;
+        return Colorss.primaryColor;
       case AppValues.statusAccepted:
-        return successColor;
+        return Colorss.successColor;
       case AppValues.statusRejected:
-        return closedColor;
+        return Colorss.closedColor;
       default:
-        return secondaryTextColor;
+        return Colorss.secondaryTextColor;
     }
   }
 }

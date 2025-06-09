@@ -19,13 +19,10 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
     if (index == 0) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (index == 1) {
-      // no action needed (current screen)
     } else if (index == 2) {
-      // إضافة الأكشن المناسب هنا عند الحاجة
     } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/status');
     } else if (index == 4) {
-      // إضافة الأكشن المناسب هنا عند الحاجة
     }
     setState(() {
       _currentIndex = index;
@@ -35,13 +32,13 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       appBar: AppBar(
         title: const Text(AppValues.savedJobsScreenTitle),
         centerTitle: AppValues.appBarCenterTitle,
-        backgroundColor: primaryColor,
+        backgroundColor: Colorss.primaryColor,
       ),
-      body: const Padding(
+      body: Padding(
         padding: EdgeInsets.all(AppValues.savedJobsPadding),
         child: SavedJobsWidget(),
       ),

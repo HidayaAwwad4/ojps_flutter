@@ -30,11 +30,11 @@ class CustomTextField extends StatelessWidget {
           labelText: label,
           hintText: hint,
           border: const OutlineInputBorder(),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
           ),
-          labelStyle: const TextStyle(color:lightBlueBackgroundColor),
-          floatingLabelStyle: const TextStyle(color: primaryColor),
+          labelStyle: TextStyle(color: Colorss.lightBlueBackgroundColor),
+          floatingLabelStyle: TextStyle(color: Colorss.primaryColor),
         ),
       ),
     );

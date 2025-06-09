@@ -24,7 +24,7 @@ class JobInfoBoxWidget extends StatelessWidget {
         horizontal: AppValues.allPadding,
       ),
       decoration: BoxDecoration(
-        color: cardBackgroundColor,
+        color: Colorss.cardBackgroundColor,
         borderRadius: BorderRadius.circular(AppValues.borderRadiusContainer),
       ),
       child: Column(
@@ -51,14 +51,14 @@ class JobInfoBoxWidget extends StatelessWidget {
             style: const TextStyle(
               fontSize: AppValues.jobDescTitleFontSize,
               fontWeight: FontWeight.bold,
-              color: primaryTextColor,
+              color: Colorss.primaryTextColor,
             ),
           ),
           Text(
             value,
             style: const TextStyle(
               fontSize: AppValues.jobDescContentFontSize,
-              color: secondaryTextColor,
+              color: Colorss.secondaryTextColor,
             ),
           ),
         ],
@@ -68,10 +68,8 @@ class JobInfoBoxWidget extends StatelessWidget {
 
   Widget _divider() {
     return const Divider(
-      color: primaryTextColor,
+      color: Colorss.primaryTextColor,
       thickness: 1,
     );
   }
 }
-
-

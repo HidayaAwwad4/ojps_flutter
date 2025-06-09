@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
-import 'package:ojps_flutter/widgets/uploaded_cv_widget.dart';
-import 'package:ojps_flutter/widgets/cover_letter_field.dart';
+ import 'package:ojps_flutter/widgets/cover_letter_field.dart';
 import 'package:ojps_flutter/widgets/submit_button.dart';
+import 'package:ojps_flutter/widgets/uploaded_cv_widget.dart';
 
 class ApplyNow extends StatelessWidget {
   const ApplyNow({super.key});
@@ -11,21 +11,21 @@ class ApplyNow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: Colorss.primaryColor,
         elevation: 4,
         centerTitle: true,
         title: const Text(
           "Apply Now",
           style: TextStyle(
-            color: whiteColor,
+            color: Colorss.whiteColor,
             fontWeight: FontWeight.bold,
-            fontSize: 18,  // ممكن تفصل برضو اذا حبيت
+            fontSize: 18,
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: whiteColor),
+          icon: const Icon(Icons.arrow_back, color: Colorss.whiteColor),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -45,7 +45,7 @@ class ApplyNow extends StatelessWidget {
                   style: TextStyle(
                     fontSize: AppValues.titleFontSize,
                     fontWeight: FontWeight.bold,
-                    color: primaryColor,
+                    color: Colorss.primaryColor,
                   ),
                 ),
                 builder: (context, value, child) => Opacity(
@@ -62,7 +62,7 @@ class ApplyNow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AppValues.bodyFontSize,
                   height: 1.5,
-                  color: secondaryTextColor,
+                  color: Colorss.secondaryTextColor,
                 ),
               ),
               const SizedBox(height: AppValues.verticalSpaceAfterText),
@@ -73,7 +73,7 @@ class ApplyNow extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AppValues.bodyFontSize,
                   height: 1.5,
-                  color: secondaryTextColor,
+                  color: Colorss.secondaryTextColor,
                 ),
               ),
               const SizedBox(height: AppValues.verticalSpaceAfterText),
@@ -87,4 +87,3 @@ class ApplyNow extends StatelessWidget {
     );
   }
 }
-

@@ -16,16 +16,16 @@ class JobActionButtonsWidget extends StatelessWidget {
             message: 'View required job documents',
             child: ElevatedButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.description, color: primaryTextColor),
+              icon: Icon(Icons.description, color: Colorss.primaryTextColor),
               label: const Text("Documents"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: cardBackgroundColor,
-                foregroundColor: primaryTextColor,
+                backgroundColor: Colorss.cardBackgroundColor,
+                foregroundColor: Colorss.primaryTextColor,
                 minimumSize: const Size(double.infinity, AppValues.buttonHeight),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppValues.borderRadiusButton),
-                  side: const BorderSide(color: primaryColor),
+                  side: const BorderSide(color: Colorss.primaryColor),
                 ),
               ),
             ),
@@ -42,8 +42,8 @@ class JobActionButtonsWidget extends StatelessWidget {
             },
             child: const Text("Apply Now"),
             style: ElevatedButton.styleFrom(
-              backgroundColor: primaryColor,
-              foregroundColor: whiteColor,
+              backgroundColor: Colorss.primaryColor,
+              foregroundColor: Colorss.whiteColor,
               minimumSize: const Size(double.infinity, AppValues.buttonHeight),
               elevation: 0,
               shape: RoundedRectangleBorder(

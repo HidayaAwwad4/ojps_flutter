@@ -32,8 +32,8 @@ class CategoryDotsIndicator extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: currentPage == index
-                    ? primaryColor
-                    : secondaryTextColor.withOpacity(0.3),
+                    ? Colorss.primaryColor
+                    : Colorss.secondaryTextColor.withOpacity(0.3),
               ),
             ),
           ),
@@ -42,3 +42,4 @@ class CategoryDotsIndicator extends StatelessWidget {
     );
   }
 }
+

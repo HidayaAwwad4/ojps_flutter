@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
+import 'package:ojps_flutter/services/job_service.dart';
 
 class JobListScreen extends StatefulWidget {
   final String categoryLabel;
@@ -13,89 +14,63 @@ class JobListScreen extends StatefulWidget {
 }
 
 class _JobListScreenState extends State<JobListScreen> {
-  List<bool> savedJobs = List<bool>.filled(10, false);
+  final JobService _jobService = JobService();
+  late Future<List<dynamic>> _jobsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _jobsFuture = _jobService.fetchJobsByCategory(widget.categoryLabel);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Jobs: ${widget.categoryLabel}'),
+        backgroundColor: Colorss.primaryColor,
+      ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppValues.horizontalPadding,
-                vertical: AppValues.topRowVerticalPadding,
-              ),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: primaryTextColor,
-                      size: AppValues.backIconSize,
-                    ),
+        child: FutureBuilder<List<dynamic>>(
+          future: _jobsFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('An error occurred: ${snapshot.error}'));
+            } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No jobs found'));
+            }
+
+            final jobs = snapshot.data!;
+            return ListView.builder(
+              itemCount: jobs.length,
+              itemBuilder: (context, index) {
+                final job = jobs[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppValues.horizontalPadding,
+                    vertical: AppValues.jobCardVerticalPadding,
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.categoryLabel,
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * AppValues.categoryFontSizeRatio,
-                        fontWeight: AppValues.categoryFontWeight,
-                        color: primaryTextColor,
-                      ),
-                    ),
+                  child: JobCard(
+                    image: job['image_url'] ?? 'assets/default-logo.png',
+                    title: job['title'] ?? '',
+                    location: job['location'] ?? '',
+                    type: job['type'] ?? '',
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/job_details',
+                        arguments: job,
+                      );
+                    },
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppValues.horizontalPadding),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Elevate your career with exclusive web\ndevelopment opportunities!',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * AppValues.descriptionFontSizeRatio,
-                    color: secondaryTextColor,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.builder(
-                itemCount: savedJobs.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppValues.horizontalPadding,
-                      vertical: AppValues.jobCardVerticalPadding,
-                    ),
-                    child: JobCard(
-                      image: 'assets/adham.jpg',
-                      title: 'Full-Stack Developer',
-                      location: 'Nablus-Rafidia',
-                      type: 'Full-Time',
-                      isSaved: savedJobs[index],
-                      onSaveToggle: () {
-                        setState(() {
-                          savedJobs[index] = !savedJobs[index];
-                        });
-                      },
-                      onTap: () {
-                        Navigator.pushNamed(context, '/job_details');
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+                );
+              },
+            );
+          },
         ),
       ),
     );
   }
 }
-
