@@ -1,13 +1,15 @@
-
-
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ojps_flutter/models/resume_model.dart';
+import 'package:ojps_flutter/widgets/Resume/education_input_widget.dart';
+import '../services/resume_service.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart' as dimensions;
 import '../constants/text_styles.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
-import '/widgets/Resume/resume_field_dropdown_widget.dart';
+import '/widgets/resume/resume_field_dropdown_widget.dart';
 
 class ManageResumeScreen extends StatefulWidget {
   const ManageResumeScreen({super.key});
@@ -19,6 +21,9 @@ class ManageResumeScreen extends StatefulWidget {
 class _ManageResumeScreenState extends State<ManageResumeScreen> {
   File? selectedFile;
   String? fileName;
+
+  List<Widget> experienceWidgets = [];
+  List<Widget> educationWidgets = [];
 
   void _showUploadDialog() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -58,7 +63,15 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   final TextEditingController summaryController = TextEditingController();
 
   // Work Experience (Initial Single Entry)
-  List<Map<String, TextEditingController>> workExperienceList = [];
+  List<Map<String, TextEditingController>> workExperienceList = [
+    {
+      'jobTitle': TextEditingController(),
+      'company': TextEditingController(),
+      'startDate': TextEditingController(),
+      'endDate': TextEditingController(),
+      'bulletPoint': TextEditingController(),
+    },
+  ];
 
   // Education
   List<Map<String, dynamic>> educationList = [];
@@ -69,7 +82,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
     "Bachelor",
     "Master",
     "Doctor of philosophy",
-    "Professional Doctorate"
+    "Professional Doctorate",
   ];
   String? selectedDegree;
   final TextEditingController institutionController = TextEditingController();
@@ -79,11 +92,42 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   final TextEditingController honorsController = TextEditingController();
 
 
+  void _navigateToViewResumePage() {
+    final resume = ResumeModel(
+        fullName: fullNameController.text,
+        email: emailController.text,
+        location: locationController.text,
+        phone: phoneController.text,
+        summary: summaryController.text,
+        //imageUrl: imageUrl,
+      experiences: workExperienceList.map((exp) {
+        return Experience(
+          jobTitle: exp['jobTitle']!.text,
+          company: exp['company']!.text,
+          startDate: exp['startDate']!.text,
+          endDate: exp['endDate']!.text,
+          bulletPoint: exp['bulletPoint']!.text,
+        );
+      }).toList(),
+      educations: educationList.map((edu) {
+        return Education(
+          degree: edu['degree'],
+          institution: edu['institution'].text,
+          startDate: edu['startDate'].text,
+          endDate: edu['endDate'].text,
+          gpa: edu['gpa'].text,
+          honors: edu['honors'].text,
+        );
+      }).toList(),
+    );
+    Navigator.pushNamed(context, '/view_resume');
+  }
+
   void _openUploadDialogBox() {
     showDialog(
       context: context,
-      builder: (_) =>
-          AlertDialog(
+      builder:
+          (_) => AlertDialog(
             title: const Text("Upload Resume"),
             content: const Text("Choose a PDF or Word document (Max 5MB)"),
             actions: [
@@ -108,42 +152,98 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
       'endDate': TextEditingController(),
       'bulletPoint': TextEditingController(),
     });
-    setState(() {});
+    setState(() {
+    });
   }
 
-
   void _addEducationEntry() {
+    final degree = 'Bachelor'; // default
+    final institution = TextEditingController();
+    final startDate = TextEditingController();
+    final endDate = TextEditingController();
+    final gpa = TextEditingController();
+    final honors = TextEditingController();
+
+    educationList.add({
+      'degree': degree,
+      'institution': institution,
+      'startDate': startDate,
+      'endDate': endDate,
+      'gpa': gpa,
+      'honors': honors,
+    });
+
     setState(() {
-      educationList.add({
-        'degree': null,
-        'institution': TextEditingController(),
-        'startDate': TextEditingController(),
-        'endDate': TextEditingController(),
-        'gpa': TextEditingController(),
-        'honors': TextEditingController(),
-      });
+      educationWidgets.add(
+        EducationInputWidget(
+            key: ValueKey(institution), // use a unique key
+            institutionController: institution,
+            startDateController: startDate,
+            endDateController: endDate,
+            gpaController: gpa,
+            honorsController: honors,
+            selectedDegree: degree,
+            onDegreeChanged: (newDegree) {
+              final index = educationWidgets.indexWhere((w) => w.key == ValueKey(institution));
+              if (index != -1) {
+                educationList[index]['degree'] = newDegree;
+              }
+            },
+          onRemove: () {
+            final index = educationWidgets.indexWhere((widget) =>
+            widget.key == ValueKey(institution));
+            if (index != -1) {
+              setState(() {
+                educationList.removeAt(index);
+                educationWidgets.removeAt(index);
+              });
+            }
+          },
+        )
+      );
     });
   }
 
   void _loadResumeData() async {
     await Future.delayed(const Duration(milliseconds: 500));
+    ResumeModel resume = await ResumeService.fetchResume();
     setState(() {
-      fullNameController.text = "John Doe";
-      emailController.text = "john.doe@example.com";
-      phoneController.text = "+1234567890";
-      locationController.text = "New York";
+      fullNameController.text = resume.fullName;
+      emailController.text = resume.email;
+      phoneController.text = resume.phone;
+      locationController.text = resume.location;
 
-      summaryController.text = "Passionate software developer...";
+      summaryController.text = resume.summary;
 
-      selectedDegree = "Bachelor";
-      institutionController.text = "ABC University";
-      gpaController.text = "3.9";
-      honorsController.text = "With Distinction";
+      workExperienceList.clear();
+      for (var exp in resume.experiences){
+        workExperienceList.add({
+          'jobTitle': TextEditingController(text: exp.jobTitle),
+          'company': TextEditingController(text: exp.company),
+          'startDate': TextEditingController(text: exp.startDate),
+          'endDate': TextEditingController(text: exp.endDate),
+          'bulletPoint': TextEditingController(text: exp.bulletPoint),
+        });
+      }
+      educationList.clear();
+      for (var edu in resume.educations) {
+        educationList.add({
+          'degree': edu.degree,
+          'institution': TextEditingController(text: edu.institution),
+          'startDate': TextEditingController(text: edu.startDate),
+          'endDate': TextEditingController(text: edu.endDate),
+          'gpa': TextEditingController(text: edu.gpa),
+          'honors': TextEditingController(text: edu.honors),
+        });
+      }
     });
+
   }
 
   Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     DateTime? picked = await showDatePicker(
       context: context,
       firstDate: DateTime(1980),
@@ -156,9 +256,9 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   }
 
   void _saveResume() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Resume saved successfully.")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Resume saved successfully.")));
   }
 
 
@@ -166,12 +266,7 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
   void initState() {
     super.initState();
     _loadResumeData();
-    _addWorkExperienceEntry();
-    _addEducationEntry(); // Initialize with one education entry
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -200,12 +295,20 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
                 if (fileName != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
-                    child: Text("Uploaded File: $fileName",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    child: Text(
+                      "Uploaded File: $fileName",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ProfileFieldWidget(label: "Full Name", controller: fullNameController),
+                ProfileFieldWidget(
+                  label: "Full Name",
+                  controller: fullNameController,
+                ),
                 ProfileFieldWidget(label: "Email", controller: emailController),
-                ProfileFieldWidget(label: "Phone Number", controller: phoneController),
+                ProfileFieldWidget(
+                  label: "Phone Number",
+                  controller: phoneController,
+                ),
                 ProfileFieldWidget(
                   label: "Location",
                   controller: locationController,
@@ -227,18 +330,44 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
               title: "Work Experience",
               children: [
                 for (int i = 0; i < workExperienceList.length; i++) ...[
-                  ProfileFieldWidget(label: "Job Title", controller: workExperienceList[i]['jobTitle']!),
-                  ProfileFieldWidget(label: "Company", controller: workExperienceList[i]['company']!),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Work Experience Entry"),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            workExperienceList.removeAt(i);
+                          });
+                        },
+                        icon: Icon(Icons.delete_outline, color: Colorss.remove),
+                      ),
+                    ],
+                  ),
+                  ProfileFieldWidget(
+                    label: "Job Title",
+                    controller: workExperienceList[i]['jobTitle']!,
+                  ),
+                  ProfileFieldWidget(
+                    label: "Company",
+                    controller: workExperienceList[i]['company']!,
+                  ),
                   GestureDetector(
                     onTap: () => _selectDate(context, workExperienceList[i]['startDate']!),
                     child: AbsorbPointer(
-                      child: ProfileFieldWidget(label: "Start Date", controller: workExperienceList[i]['startDate']!),
+                      child: ProfileFieldWidget(
+                        label: "Start Date",
+                        controller: workExperienceList[i]['startDate']!,
+                      ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => _selectDate(context, workExperienceList[i]['endDate']!),
                     child: AbsorbPointer(
-                      child: ProfileFieldWidget(label: "End Date", controller: workExperienceList[i]['endDate']!),
+                      child: ProfileFieldWidget(
+                        label: "End Date",
+                        controller: workExperienceList[i]['endDate']!,
+                      ),
                     ),
                   ),
                   ProfileFieldWidget(
@@ -248,20 +377,32 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
                   ),
                   const Divider(),
                 ],
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: _addWorkExperienceEntry,
-                    icon: const Icon(Icons.add),
-                    label: const Text("Add Work Experience"),
-                  ),
-                )
+                TextButton.icon(
+                  onPressed: _addWorkExperienceEntry,
+                  icon: const Icon(Icons.add, color: Colorss.primaryColor),
+                  label: const Text("Add Work Experience", style: TextStyle(color: Colorss.primaryColor)),
+                ),
               ],
             ),
+
             ResumeFieldDropdownWidget(
               title: "Education",
               children: [
                 for (int i = 0; i < educationList.length; i++) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Education Entry"),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            educationList.removeAt(i);
+                          });
+                        },
+                        icon: Icon(Icons.delete_outline, color: Colorss.remove),
+                      ),
+                    ],
+                  ),
                   DropdownButtonFormField<String>(
                     value: educationList[i]['degree'],
                     items: degrees
@@ -275,7 +416,22 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
                         educationList[i]['degree'] = value;
                       });
                     },
-                    decoration: const InputDecoration(labelText: "Degree"),
+                    decoration: InputDecoration(labelText: "Degree",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(dimensions.AppDimensions.defaultRadius),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colorss.greyColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
+                      ),
+                    ),
+                      iconEnabledColor: Colorss.greyColor,
+                      dropdownColor: Colorss.whiteColor,
+                      style: const TextStyle(color: Colorss.blackColor),
                   ),
                   ProfileFieldWidget(
                     label: "Institution",
@@ -309,32 +465,44 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
                   ),
                   const Divider(),
                 ],
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton.icon(
-                    onPressed: _addEducationEntry,
-                    icon: const Icon(Icons.add),
-                    label: const Text("Add Education"),
-                  ),
+                TextButton.icon(
+                  onPressed: _addEducationEntry,
+                  icon: const Icon(Icons.add, color: Colorss.primaryColor),
+                  label: const Text("Add Education", style: TextStyle(color: Colorss.primaryColor)),
                 ),
               ],
             ),
 
+
             const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children : [
+                ElevatedButton(
                 onPressed: _saveResume,
-                style: ElevatedButton.styleFrom(backgroundColor: Colorss.primaryColor),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colorss.primaryColor,
+                ),
                 child: const Text(
-                  "Save & View Resume",
+                  "Save Resume",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            )
+                ElevatedButton(
+                  onPressed: _navigateToViewResumePage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colorss.primaryColor,
+                  ),
+                  child: const Text(
+                    "View Resume",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
           ],
         ),
-      ),
+    ],
+                ),
+    ),
     );
   }
 }
-

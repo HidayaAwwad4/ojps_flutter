@@ -7,6 +7,7 @@ class Colorss {
   static const Color lightBlueBackgroundColor = Color(0xFFDDEAF3);
   static const Color customLightPurple = Color(0xFFE1BEE7);
   static const Color closedColor = Colors.red;
+  static const Color errorColor = Colors.red;
   static const Color openColor = Colors.green;
   static const Color pendingColor = Colors.orange;
   static const Color primaryTextColor = Colors.black;
@@ -21,4 +22,9 @@ class Colorss {
   static const Color buttonInactiveTextColor = Color(0xFFADADAD);
   static const Color successValidation = Colors.green;
   static const Color failValidation = Colors.red;
+  static const Color remove = Colors.red;
+  static const Color orange = Color(0xFFFFA500);
+  static const Color secondaryOrange = Color(0xFFF5CF80);
+  static const Color secondaryBlue = Color(0xFF549CC6);
+
 }

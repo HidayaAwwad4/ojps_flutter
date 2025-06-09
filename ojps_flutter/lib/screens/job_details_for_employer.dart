@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
@@ -58,11 +59,11 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                       style: const TextStyle(color: Colorss.greyColor),
                     ),
                     Spaces.vertical(AppDimensions.verticalSpacerMedium),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Description',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        'description'.tr(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     Spaces.vertical(AppDimensions.spacingTiny),
@@ -78,17 +79,17 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                       ),
                       child: Column(
                         children: [
-                          DetailTile(title: 'Experience', value: job.experience),
+                          DetailTile(title: 'experience'.tr(), value: job.experience),
                           const Divider(height: 1),
-                          DetailTile(title: 'Languages', value: job.languages),
+                          DetailTile(title: 'languages'.tr(), value: job.languages),
                           const Divider(height: 1),
-                          DetailTile(title: 'Employment', value: job.employment),
+                          DetailTile(title: 'employment'.tr(), value: job.employment),
                           const Divider(height: 1),
-                          DetailTile(title: 'Schedule', value: job.schedule),
+                          DetailTile(title: 'schedule'.tr(), value: job.schedule),
                           const Divider(height: 1),
-                          DetailTile(title: 'Category', value: job.category),
+                          DetailTile(title: 'category'.tr(), value: job.category),
                           const Divider(height: 1),
-                          DetailTile(title: 'Salary', value: job.salary),
+                          DetailTile(title: 'salary'.tr(), value: job.salary),
                         ],
                       ),
                     ),
@@ -113,7 +114,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                           ),
                         ),
                         icon: const Icon(Icons.description),
-                        label: const Text('View Documents'),
+                        label: Text('view_documents'.tr()),
                       ),
                     Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     ElevatedButton(
@@ -136,7 +137,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                         foregroundColor: Colorss.whiteColor,
                         minimumSize: const Size(double.infinity, AppDimensions.minimumSizeButton),
                       ),
-                      child: const Text('Edit'),
+                      child: Text('edit'.tr()),
                     ),
                     Spaces.vertical(AppDimensions.verticalSpacerXLarge),
                   ],

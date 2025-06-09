@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
+
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
 import '../utils/network_utils.dart';
+import '../providers/employer_jobs_provider.dart';
 
 class JobCardContent extends StatefulWidget {
   final Job job;
-  final Function(Job) onStatusChange;
-  final Function(Job)? onJobDeleted;
   final EdgeInsetsGeometry? padding;
   final bool showVerticalLayout;
 
   const JobCardContent({
     super.key,
     required this.job,
-    required this.onStatusChange,
-    this.onJobDeleted,
     this.padding,
     this.showVerticalLayout = true,
   });
@@ -31,47 +31,54 @@ class _JobCardContentState extends State<JobCardContent> {
     bool newStatus = !widget.job.isOpened;
     final updatedData = {'isOpened': newStatus ? 1 : 0};
 
+    final provider = Provider.of<EmployerJobsProvider>(context, listen: false);
+
     try {
       await JobService().updateJob(widget.job.id, updatedData);
 
-      final updatedJob = widget.job.copyWith(isOpened: newStatus);
-
-      widget.onStatusChange(updatedJob);
+      provider.updateJobStatus(widget.job.id, newStatus);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(newStatus ? 'Job opened' : 'Job closed')),
+          SnackBar(content: Text(tr(newStatus ? 'job_opened' : 'job_closed'))),
         );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to update job status')),
+          SnackBar(content: Text(tr('job_status_failed'))),
         );
       }
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<EmployerJobsProvider>(context, listen: false);
+
     return GestureDetector(
       onTap: () async {
         try {
           final data = await JobService().getJobById(widget.job.id);
           final jobDetails = Job.fromJson(data);
-          if (context.mounted) {
-            Navigator.pushNamed(
-              context,
-              '/employer/job-details',
-              arguments: jobDetails,
-            );
 
+          if (!context.mounted) return;
+
+          final result = await Navigator.pushNamed(
+            context,
+            '/employer/job-details',
+            arguments: jobDetails,
+          );
+
+          if (result is Job) {
+            provider.updateJob(result);
           }
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to load job details')),
-          );
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(tr('job_details_failed'))),
+            );
+          }
         }
       },
       child: Container(
@@ -128,7 +135,6 @@ class _JobCardContentState extends State<JobCardContent> {
                     ),
                   ),
                 ),
-
                 Spaces.horizontal(AppDimensions.horizontalSpacerNormal),
                 Expanded(
                   child: Column(
@@ -155,23 +161,23 @@ class _JobCardContentState extends State<JobCardContent> {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title:
-                        Text(widget.job.isOpened ? 'Close Job?' : 'Open Job?'),
+                        title: Text(widget.job.isOpened ? tr('close_job') : tr('open_job')),
                         content: Text(
                           widget.job.isOpened
-                              ? 'Are you sure you want to close this job?'
-                              : 'Are you sure you want to open this job?',
+                              ? tr('confirm_close')
+                              : tr('confirm_open'),
                         ),
                         actions: [
                           TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('Cancel')),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text(tr('cancel')),
+                          ),
                           TextButton(
                             onPressed: () async {
                               Navigator.of(context).pop();
                               await _toggleJobStatus(context);
                             },
-                            child: const Text('Confirm'),
+                            child: Text(tr('confirm')),
                           ),
                         ],
                       ),
@@ -184,17 +190,16 @@ class _JobCardContentState extends State<JobCardContent> {
                         widget.job.isOpened
                             ? Icons.cancel_outlined
                             : Icons.check_circle_outline,
-                        color: widget.job.isOpened ?Colorss.closedColor : Colorss.openColor,
+                        color: widget.job.isOpened ? Colorss.closedColor : Colorss.openColor,
                         size: AppDimensions.iconSizeSmall,
                       ),
                       Spaces.horizontal(AppDimensions.horizontalSpacerExtraSmall),
                       Text(
-                        widget.job.isOpened ? 'Closed' : 'Open',
+                        widget.job.isOpened ? tr('closed') : tr('open'),
                         style: TextStyle(
                           fontSize: AppDimensions.fontSizeSmall,
                           fontWeight: FontWeight.w500,
-                          color:
-                          widget.job.isOpened ? Colorss.closedColor : Colorss.openColor,
+                          color: widget.job.isOpened ? Colorss.closedColor : Colorss.openColor,
                         ),
                       ),
                     ],
@@ -212,8 +217,7 @@ class _JobCardContentState extends State<JobCardContent> {
             Spaces.vertical(AppDimensions.verticalSpacerMediumSmall),
             Text(
               widget.job.salary.toString(),
-              style:
-              const TextStyle(fontSize: AppDimensions.fontSizeSmall, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: AppDimensions.fontSizeSmall, fontWeight: FontWeight.bold),
             ),
             Spaces.vertical(AppDimensions.verticalSpacerMedium),
             Row(
@@ -226,13 +230,12 @@ class _JobCardContentState extends State<JobCardContent> {
                         '/employer/job-applicants',
                         arguments: widget.job.id,
                       );
-
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colorss.whiteColor,
                       backgroundColor: Colorss.primaryColor,
                     ),
-                    child: const Text('Applicants'),
+                    child: Text(tr('applicants')),
                   ),
                 ),
                 Spaces.horizontal(AppDimensions.horizontalSpacerSmall),
@@ -242,19 +245,16 @@ class _JobCardContentState extends State<JobCardContent> {
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Confirm Deletion'),
-                          content: const Text(
-                              'Are you sure you want to delete this job?'),
+                          title: Text(tr('confirm_deletion')),
+                          content: Text(tr('confirm_delete_job')),
                           actions: [
                             TextButton(
-                              onPressed: () =>
-                                  Navigator.of(context).pop(false),
-                              child: const Text('Cancel'),
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(tr('cancel')),
                             ),
                             TextButton(
-                              onPressed: () =>
-                                  Navigator.of(context).pop(true),
-                              child: const Text('Confirm'),
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: Text(tr('confirm')),
                             ),
                           ],
                         ),
@@ -262,21 +262,17 @@ class _JobCardContentState extends State<JobCardContent> {
 
                       if (confirm == true) {
                         try {
-                          await JobService().deleteJob(widget.job.id);
+                          await provider.deleteJob(widget.job.id);
+
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Job deleted successfully')),
+                              SnackBar(content: Text(tr('job_deleted_success'))),
                             );
-                            if (widget.onJobDeleted != null) {
-                              widget.onJobDeleted!(widget.job);
-                            }
                           }
                         } catch (e) {
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Failed to delete job: $e')),
+                              SnackBar(content: Text('${tr('job_delete_failed')}: $e')),
                             );
                           }
                         }
@@ -286,7 +282,7 @@ class _JobCardContentState extends State<JobCardContent> {
                       side: const BorderSide(color: Colorss.primaryColor),
                       foregroundColor: Colorss.primaryColor,
                     ),
-                    child: const Text('Delete'),
+                    child: Text(tr('delete')),
                   ),
                 ),
               ],

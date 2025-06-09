@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
 import '../constants/dimensions.dart' as Dimensions;
+import '../constants/spaces.dart';
 
 class NotificationItem extends StatelessWidget {
   final String title;
@@ -48,7 +49,7 @@ class NotificationItem extends StatelessWidget {
               backgroundImage: AssetImage(imageUrl),
               radius: Dimensions.AppDimensions.height20,
             ),
-            SizedBox(width: Dimensions.AppDimensions.width10),
+            Spaces.horizontal(Dimensions.AppDimensions.width10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +58,7 @@ class NotificationItem extends StatelessWidget {
                       style: isNew
                           ? AppValues.textStyleWhiteBold
                           : AppValues.textStylePrimaryBold),
-                  SizedBox(height: Dimensions.AppDimensions.height5),
+                  Spaces.vertical(Dimensions.AppDimensions.height5),
                   Text(subtitle,
                       style: isNew
                           ? AppValues.textStyleWhite

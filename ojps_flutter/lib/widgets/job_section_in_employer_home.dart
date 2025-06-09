@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../models/job_model.dart';
@@ -8,20 +9,37 @@ class JobSectionWidget extends StatelessWidget {
   final String title;
   final List<Job> jobs;
   final int tabIndex;
-  final Function(Job) onStatusChange;
-  final Function(Job)? onJobDeleted;
 
   const JobSectionWidget({
     super.key,
     required this.title,
     required this.jobs,
     required this.tabIndex,
-    required this.onStatusChange,
-    this.onJobDeleted,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (jobs.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
+          Text(
+            tr('noJobsAvailable'),
+            style: const TextStyle(
+              color: Colorss.secondaryTextColor,
+              fontSize: AppDimensions.fontSizeSmall,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,12 +52,15 @@ class JobSectionWidget extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   '/employer/job-posting',
-                  arguments: tabIndex,
+                  arguments: {
+                    'tabIndex': tabIndex,
+                    'fromSeeAll': true,
+                  },
                 );
               },
-              child: const Text(
-                'See All',
-                style: TextStyle(
+              child: Text(
+                tr('seeAll'),
+                style: const TextStyle(
                   fontSize: AppDimensions.fontSizeSmall,
                   color: Colorss.primaryColor,
                   fontWeight: FontWeight.w500,
@@ -60,8 +81,7 @@ class JobSectionWidget extends StatelessWidget {
                 width: AppDimensions.jobCardHorizontalWidth,
                 child: JobCardHorizontal(
                   job: jobs[index],
-                  onStatusChange: onStatusChange,
-                  onJobDeleted: onJobDeleted,
+
                 ),
               );
             },

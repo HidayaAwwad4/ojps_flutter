@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../Services/notification_service.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/categories_widget.dart';
 import '../widgets/recommended_jobs_widget.dart';

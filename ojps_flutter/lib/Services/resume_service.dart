@@ -1,8 +1,7 @@
 import '../models/resume_model.dart';
 
 class ResumeService {
-  static Future<ResumeModel> fetchResumeData() async {
-    // Simulate fetching from DB or local storage
+  static Future<ResumeModel> fetchResume() async {
     return ResumeModel(
       fullName: "Lorem ipsum",
       email: "Lorem.ipsum112@example.com",
@@ -10,26 +9,30 @@ class ResumeService {
       phone: "+970592222222",
       summary: "Detail-oriented software engineer with 4+ years of experience...",
       imageUrl: "", // Use default avatar
-      workExperiences: [
+      experiences: [
         Experience(
-          "Marketing Coordinator",
-          "ABC Digital Agency",
-          "Jan 2022 to Present",
-          "• Developed campaigns\n• Increased engagement...",
+          jobTitle: "Marketing Coordinator",
+          company: "ABC Digital Agency",
+          startDate: "Jan 2022 ",
+          endDate: "to Present",
+          bulletPoint: "• Developed campaigns\n• Increased engagement...",
         ),
         Experience(
-          "Software Developer",
-          "TechNova Ltd",
-          "Jun 2020 to Dec 2022",
-          "• Built and maintained web apps\n• Integrated REST APIs...",
+          jobTitle: "Software Developer",
+          company: "TechNova Ltd",
+          startDate: "Jun 2020 ",
+          endDate: "to Dec 2022",
+          bulletPoint: "• Built and maintained web apps\n• Integrated REST APIs...",
         )
       ],
       educations: [
         Education(
-          "B.Sc. in Computer Science",
-          "NNU University",
-          "Sep 2019 to Jun 2023",
-          "• Graduated with Honors\n• Relevant courses: Data Structures...",
+          degree: "Bachelor",
+          institution: "NNU University",
+          startDate: "Sep 2019 ",
+          endDate: "to Jun 2023",
+          gpa: "3.85",
+          honors: "• Graduated with Honors\n• Relevant courses: Data Structures...",
         )
       ],
     );
