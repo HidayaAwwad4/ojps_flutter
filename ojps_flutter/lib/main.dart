@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';  // استدعاء easy_localization
+import 'package:easy_localization/easy_localization.dart';  
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
+import 'package:ojps_flutter/screens/main_screen.dart';
+import 'package:ojps_flutter/screens/notifications.dart';
+import 'package:ojps_flutter/services/job_service.dart';
+import 'package:provider/provider.dart';
+
+import 'Services/notification_service.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
 import 'package:ojps_flutter/services/job_service.dart';
 import 'package:provider/provider.dart';
 
@@ -71,9 +81,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      localizationsDelegates: context.localizationDelegates, // ضروري لـ easy_localization
-      supportedLocales: context.supportedLocales, // ضروري
-      locale: context.locale, // ضروري
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales, 
+      locale: context.locale, 
       initialRoute: '/',
       routes: appRoutes,
     );

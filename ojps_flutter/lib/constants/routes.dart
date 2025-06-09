@@ -38,8 +38,8 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/saved_jobs': (context) => const SavedJobsScreen(),
   '/view_profile_employer':(context)=> const ViewEditEmployerProfile(),
   '/view_profile_seeker':(context)=> const ViewEditSeekerProfile(),
-  '/view_seeker_profile_employer':(context)=> const  ViewProfile(),
-  '/view_resume':(context)=> const ViewResumeScreen(),
+  '/view_seeker_profile_employer':(context)=> const  ViewProfile(token: '',),
+  '/view_resume':(context)=> const ViewResumeScreen(token: '',),
   '/manage_resume':(context)=> const ManageResumeScreen(),
   '/notifications':(context)=> const Notifications(),
   '/employer/main-screen': (context) {

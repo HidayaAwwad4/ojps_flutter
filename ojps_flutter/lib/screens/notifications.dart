@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Services/notification_service.dart';
+import '../models/notificationModel.dart';
 import '../widgets/notification_item.dart';
 import '../constants/dimensions.dart';
 
@@ -13,28 +16,78 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  List<Map<String, dynamic>> newNotifications = [
-    {
-      'title': 'Asal Company',
-      'subtitle': 'Your application was accepted.',
-      'image': 'assets/images/company1.png',
-    },
-    {
-      'title': 'ADHAM',
-      'subtitle': 'Your application was rejected.',
-      'image': 'assets/images/company2.png',
-    },
-  ];
 
-  List<Map<String, dynamic>> todayNotifications = [];
 
-  List<Map<String, dynamic>> thisWeekNotifications = [
-    {
-      'title': 'TECHNO',
-      'subtitle': 'Job saved by seeker.',
-      'image': 'assets/images/company3.png',
-    },
-  ];
+  List<NotificationModel> newNotifications = [];
+  List<NotificationModel> todayNotifications = [];
+  List<NotificationModel> thisWeekNotifications = [];
+
+  String selectedUserType = 'employer'; // default: 'employer'
+  late String token;
+
+  final employerToken = '20|67X7Ltf5cMs19UZKO8fj57DqYGZyyovm8ce0of3l43376be3';
+  final seekerToken = '19|15t0VgAc644x5n7JEhqMdI3uuTzmvzwir2U8mi3L87586df5';
+
+
+  void sendSystemNotification(String title, String body) {
+    NotificationService.showSystemNotification({
+      'id': DateTime
+          .now()
+          .millisecondsSinceEpoch ~/ 1000,
+      'message': body,
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+    try {
+      //final prefs = await SharedPreferences.getInstance();
+      //final token = prefs.getString('19|15t0VgAc644x5n7JEhqMdI3uuTzmvzwir2U8mi3L87586df5');
+      token = selectedUserType == 'employer' ? employerToken : seekerToken;
+
+      // if (token != null) {
+      final fetched = await NotificationService.fetchNotifications(token);
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+
+      List<NotificationModel> newNotifs = [];
+      List<NotificationModel> todayNotifs = [];
+      List<NotificationModel> weekNotifs = [];
+
+      for (var notif in fetched) {
+        final createdAt = DateTime.tryParse(notif.createdAt);
+        if (createdAt == null) continue;
+
+        final diff = now.difference(createdAt);
+        if (!notif.isRead) {
+          newNotifs.add(notif);
+          await NotificationService.showSystemNotification({
+            'id': notif.id,
+            'message': notif.message,
+          });
+        } else if (createdAt.isAfter(today)) {
+          todayNotifs.add(notif);
+        } else if (diff.inDays <= 7) {
+          weekNotifs.add(notif);
+        }
+      }
+
+      setState(() {
+        newNotifications = newNotifs;
+        todayNotifications = todayNotifs;
+        thisWeekNotifications = weekNotifs;
+      });
+    } catch (e) {
+      print('Error loading notifications: $e');
+    }
+  }
+
 
   void moveToToday(int index) {
     setState(() {
@@ -47,23 +100,32 @@ class _NotificationsState extends State<Notifications> {
     });
   }
 
-  Widget buildSection(String title, List<Map<String, dynamic>> list, bool isNew) {
+  void handleTap(NotificationModel item, {bool isNew = false, int? index}) {
+    if (isNew && index != null) moveToToday(index);
+    if (item.redirectUrl.isNotEmpty) {
+      Navigator.pushNamed(context, item.redirectUrl);
+    }
+  }
+
+
+  Widget buildSection(String title, List<NotificationModel> list, bool isNew) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: AppDimensions.width15, vertical: AppDimensions.height10),
+              horizontal: AppDimensions.width15,
+              vertical: AppDimensions.height10),
           child: Text(title, style: AppValues.textStyleHeader),
         ),
         ...List.generate(list.length, (index) {
           final item = list[index];
           return NotificationItem(
-            title: item['title'],
-            subtitle: item['subtitle'],
-            imageUrl: item['image'],
+            title: item.message,
+            subtitle: item.type,
+            imageUrl: 'assets/images/default.png',
             isNew: isNew,
-            onTap: isNew ? () => moveToToday(index) : () {},
+            onTap: () => handleTap(item, isNew: isNew, index: index),
           );
         }),
       ],
@@ -74,8 +136,17 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications", style: AppValues.textStyleAppBar ),
+        title: Text("Notifications", style: AppValues.textStyleAppBar),
         centerTitle: true,
+        leading: BackButton(
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+
+            }
+          },
+        ),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -90,3 +161,4 @@ class _NotificationsState extends State<Notifications> {
     );
   }
 }
+
