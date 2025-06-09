@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/constants//text_styles.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Services/notification_service.dart';
+import 'package:ojps_flutter/constants/text_styles.dart';
+import 'package:ojps_flutter/constants/dimensions.dart';
 import '../models/notificationModel.dart';
 import '../widgets/notification_item.dart';
-import '../constants/dimensions.dart';
-
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -15,79 +12,89 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-
-
   List<NotificationModel> newNotifications = [];
   List<NotificationModel> todayNotifications = [];
   List<NotificationModel> thisWeekNotifications = [];
 
-  late String token;
-
-
-  void sendSystemNotification(String title, String body) {
-    NotificationService.showSystemNotification({
-      'id': DateTime
-          .now()
-          .millisecondsSinceEpoch ~/ 1000,
-      'message': body,
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    _loadNotifications();
+    _loadNotifications(); // Load mock data
   }
 
   Future<void> _loadNotifications() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final storedToken = prefs.getString('auth_token');
+    await Future.delayed(Duration(seconds: 1)); // Simulate loading delay
 
-      if (storedToken == null) {
-        print('No token found in SharedPreferences');
-        return;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Fake notifications for testing
+    List<NotificationModel> mockNotifications = [
+      NotificationModel(
+        id: 1,
+        message: "Your job application was accepted.",
+        type: "Application Accepted",
+        isRead: false,
+        createdAt: now.subtract(Duration(minutes: 10)),
+        redirectUrl: "/job-details/1",
+      ),
+      NotificationModel(
+        id: 2,
+        message: "Your application for Flutter Developer was rejected.",
+        type: "Application Rejected",
+        isRead: false,
+        createdAt: now.subtract(Duration(hours: 2)),
+        redirectUrl: "/job-details/2",
+      ),
+      NotificationModel(
+        id: 3,
+        message: "A job seeker applied to your posted job.",
+        type: "New Applicant",
+        isRead: true,
+        createdAt: now.subtract(Duration(hours: 4)),
+        redirectUrl: "/applicants",
+      ),
+      NotificationModel(
+        id: 4,
+        message: "Someone saved your job listing.",
+        type: "Saved Job",
+        isRead: true,
+        createdAt: now.subtract(Duration(days: 3)),
+        redirectUrl: "/job-details/3",
+      ),
+      NotificationModel(
+        id: 5,
+        message: "System update available.",
+        type: "System",
+        isRead: true,
+        createdAt: now.subtract(Duration(days: 6)),
+        redirectUrl: "",
+      ),
+    ];
+
+    // Group notifications
+    List<NotificationModel> newNotifs = [];
+    List<NotificationModel> todayNotifs = [];
+    List<NotificationModel> weekNotifs = [];
+
+    for (var notif in mockNotifications) {
+      final createdAt = notif.createdAt!;
+      final diff = now.difference(createdAt);
+      if (!notif.isRead) {
+        newNotifs.add(notif);
+      } else if (createdAt.isAfter(today)) {
+        todayNotifs.add(notif);
+      } else if (diff.inDays <= 7) {
+        weekNotifs.add(notif);
       }
-
-      token = storedToken;
-
-      final fetched = await NotificationService.fetchNotifications(token);
-      final now = DateTime.now();
-      final today = DateTime(now.year, now.month, now.day);
-
-      List<NotificationModel> newNotifs = [];
-      List<NotificationModel> todayNotifs = [];
-      List<NotificationModel> weekNotifs = [];
-
-      for (var notif in fetched) {
-        final createdAt = notif.createdAt;
-        if (createdAt == null) continue;
-
-        final diff = now.difference(createdAt);
-        if (!notif.isRead) {
-          newNotifs.add(notif);
-          await NotificationService.showSystemNotification({
-            'id': notif.id,
-            'message': notif.message,
-          });
-        } else if (createdAt.isAfter(today)) {
-          todayNotifs.add(notif);
-        } else if (diff.inDays <= 7) {
-          weekNotifs.add(notif);
-        }
-      }
-
-      setState(() {
-        newNotifications = newNotifs;
-        todayNotifications = todayNotifs;
-        thisWeekNotifications = weekNotifs;
-      });
-    } catch (e) {
-      print('Error loading notifications: $e');
     }
+
+    setState(() {
+      newNotifications = newNotifs;
+      todayNotifications = todayNotifs;
+      thisWeekNotifications = weekNotifs;
+    });
   }
-
-
 
   void moveToToday(int index) {
     setState(() {
@@ -107,7 +114,6 @@ class _NotificationsState extends State<Notifications> {
     }
   }
 
-
   Widget buildSection(String title, List<NotificationModel> list, bool isNew) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,6 +124,13 @@ class _NotificationsState extends State<Notifications> {
               vertical: AppDimensions.height10),
           child: Text(title, style: AppValues.textStyleHeader),
         ),
+        if (list.isEmpty)
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.width15,
+                vertical: AppDimensions.height10),
+            child: Text("No notifications", style: AppValues.textStyleHeader),
+          ),
         ...List.generate(list.length, (index) {
           final item = list[index];
           return NotificationItem(
@@ -142,8 +155,6 @@ class _NotificationsState extends State<Notifications> {
           onPressed: () {
             if (Navigator.canPop(context)) {
               Navigator.pop(context);
-            } else {
-
             }
           },
         ),
@@ -161,4 +172,3 @@ class _NotificationsState extends State<Notifications> {
     );
   }
 }
-

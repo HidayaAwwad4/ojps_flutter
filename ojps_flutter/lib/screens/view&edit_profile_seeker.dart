@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/models/user_data.dart';
 import '../constants/spaces.dart';
 import '../constants/text_styles.dart';
-import '../widgets/custom_bottom_nav.dart';
 import '/widgets/view&edit_profile/profile_image_widget.dart';
 import '/widgets/view&edit_profile/profile_field_widget.dart';
 import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../services/profile_service.dart';
 import '../services/job_seeker_service.dart';
 
@@ -26,28 +24,8 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
 
   final _formKey = GlobalKey<FormState>();
 
-  int _currentIndex = AppValues.profileInitialIndex;
-
   final ProfileService _profileService = ProfileService();
   final JobSeekerService _jobSeekerService = JobSeekerService();
-
-  void _onTap(int index) {
-    if (index == _currentIndex) return;
-    if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/saved_jobs');
-    } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/notifications');
-    } else if (index == 3) {
-      Navigator.pushReplacementNamed(context, '/job_status');
-    } else if (index == 4) {
-
-    }
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   void initState() {
@@ -79,7 +57,11 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
   }
 
   void _handleLogout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
 
+    if (!mounted) return;
+    Navigator.pushNamedAndRemoveUntil(context, '/Login', (route) => false);
   }
 
   void _navigateToResumePage() {
@@ -214,10 +196,6 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
       ),
     );
   }

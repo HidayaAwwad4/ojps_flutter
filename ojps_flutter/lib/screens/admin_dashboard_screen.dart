@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/admin_service.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -13,10 +13,14 @@ class AdminDashboardScreen extends StatelessWidget {
     EasyLocalization.of(context)!.setLocale(newLocale);
   }
 
-
-  void _logout(BuildContext context) {
-    // TODO: Add your logout logic here
-    Navigator.of(context).popUntil((route) => route.isFirst);
+  void _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/Login',
+          (route) => false,
+    );
   }
 
   @override
@@ -90,8 +94,6 @@ class AdminDashboardScreen extends StatelessWidget {
                 );
               },
             ),
-
-
             const Spacer(),
             TextButton(
               onPressed: () => _logout(context),

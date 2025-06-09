@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
-import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/widgets/job_card_widget.dart';
-import 'package:ojps_flutter/services/job_service.dart';
 
 class RecommendedJobsWidget extends StatefulWidget {
   const RecommendedJobsWidget({Key? key}) : super(key: key);
@@ -13,61 +11,72 @@ class RecommendedJobsWidget extends StatefulWidget {
 }
 
 class _RecommendedJobsWidgetState extends State<RecommendedJobsWidget> {
-  late Future<List<dynamic>> _futureJobs;
-  List<bool> savedJobs = [];
+  late List<Map<String, dynamic>> jobs;
+  late List<bool> savedJobs;
 
   @override
   void initState() {
     super.initState();
-    _futureJobs = JobService().fetchRecommendedJobs();
+
+    jobs = [
+      {
+        'image': 'assets/default-logo.png',
+        'title': 'Flutter Developer',
+        'location': 'Ramallah, Palestine',
+        'type': 'Full-time',
+        'description': 'Build and maintain Flutter applications.',
+        'salary': '\$1200/month',
+      },
+      {
+        'image': 'assets/default-logo.png',
+        'title': 'Backend Engineer',
+        'location': 'Nablus, Palestine',
+        'type': 'Part-time',
+        'description': 'Work with Laravel and MySQL.',
+        'salary': '\$800/month',
+      },
+      {
+        'image': 'assets/default-logo.png',
+        'title': 'UI/UX Designer',
+        'location': 'Hebron, Palestine',
+        'type': 'Remote',
+        'description': 'Design beautiful and intuitive interfaces.',
+        'salary': '\$1000/month',
+      },
+    ];
+
+    savedJobs = List<bool>.filled(jobs.length, false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
-      future: _futureJobs,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No recommended jobs found.'));
-        } else {
-          final jobs = snapshot.data!;
-          if (savedJobs.length != jobs.length) {
-            savedJobs = List<bool>.filled(jobs.length, false);
-          }
-          return Column(
-            children: List.generate(jobs.length, (index) {
-              final job = jobs[index];
-              return JobCardWrapper(
-                child: JobCard(
-                  image: job['image'] ?? 'assets/default-logo.png',
-                  title: job['title'] ?? 'No Title',
-                  location: job['location'] ?? 'Unknown',
-                  type: job['type'] ?? '',
-                  description: job['description'] ?? '',
-                  salary: job['salary'] ?? '',
-                  isSaved: savedJobs[index],
-                  onSaveToggle: () {
-                    setState(() {
-                      savedJobs[index] = !savedJobs[index];
-                    });
-                  },
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/job_details',
-                      arguments: job,
-                    );
-                  },
-                ),
+    return Column(
+      children: List.generate(jobs.length, (index) {
+        final job = jobs[index];
+        return JobCardWrapper(
+          child: JobCard(
+            image: job['image'],
+            title: job['title'],
+            location: job['location'],
+            type: job['type'],
+            description: job['description'],
+            salary: job['salary'],
+            isSaved: savedJobs[index],
+            onSaveToggle: () {
+              setState(() {
+                savedJobs[index] = !savedJobs[index];
+              });
+            },
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                '/job_details',
+                arguments: job,
               );
-            }),
-          );
-        }
-      },
+            },
+          ),
+        );
+      }),
     );
   }
 }

@@ -19,10 +19,11 @@ class ViewEditEmployerProfile extends StatefulWidget {
 }
 
 class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
-    final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController companyController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+  final TextEditingController nameController = TextEditingController(text: "Wafa Al-Adham");
+  final TextEditingController emailController = TextEditingController(text: "wafa@gmail.com");
+  final TextEditingController phoneController = TextEditingController(text: "+970599999999");
+  final TextEditingController companyController = TextEditingController(text: "Al-adham");
+  final TextEditingController locationController = TextEditingController(text: "palestine-Nablus");
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -139,7 +140,7 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
         await prefs.clear();
 
         if (!mounted) return;
-        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/Login', (route) => false);
       }
     }
 

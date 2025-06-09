@@ -5,6 +5,7 @@ import 'package:ojps_flutter/screens/job_status_screen.dart';
 import 'package:ojps_flutter/screens/saved_jobs_screen.dart';
 import 'package:ojps_flutter/screens/job_details_job_seeker_screen.dart';
 import 'package:ojps_flutter/screens/job_list_screen.dart';
+import '../screens/admin_dashboard_screen.dart';
 import '../screens/user_type.dart';
 import '../models/job_model.dart';
 import '../screens/applicant_details.dart';
@@ -42,6 +43,7 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/view_resume':(context)=> const ViewResumeScreen(token: '',),
   '/manage_resume':(context)=> const ManageResumeScreen(),
   '/notifications':(context)=> const Notifications(),
+  '/admin-dashboard':(context)=> const AdminDashboardScreen(),
   '/employer/main-screen': (context) {
     final initialIndex = ModalRoute.of(context)!.settings.arguments as int? ?? 0;
     return MainScreen(initialIndex: initialIndex);
