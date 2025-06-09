@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/spaces.dart';
 import '../constants/text_styles.dart';
@@ -16,17 +19,17 @@ class ViewEditEmployerProfile extends StatefulWidget {
 }
 
 class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
-    final TextEditingController nameController = TextEditingController(text: "Wafa Al-Adham");
-  final TextEditingController emailController = TextEditingController(text: "Al-Adham2020@example.com");
-  final TextEditingController phoneController = TextEditingController(text: "+970599999999");
-  final TextEditingController companyController = TextEditingController(text: "Al-adham");
-  final TextEditingController locationController = TextEditingController(text: "palestine-Nablus");
-  final TextEditingController bioController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController companyController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    fetchProfileData();
+
 
     nameController.addListener(() => setState(() {}));
     emailController.addListener(() => setState(() {}));
@@ -36,13 +39,79 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
     companyController.dispose();
     locationController.dispose();
-    bioController.dispose();
     super.dispose();
   }
 
+    Future<void> fetchProfileData() async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token'); // stored when logging in
+
+      final url = Uri.parse('http://YOUR_BACKEND_URL/api/employer/profile');
+
+      try {
+        final response = await http.get(
+          url,
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        );
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body)['user'];
+
+          setState(() {
+            nameController.text = data['name'] ?? '';
+            emailController.text = data['email'] ?? '';
+            companyController.text = data['company'] ?? '';
+            locationController.text = data['location'] ?? '';
+          });
+        } else {
+          print('Failed to fetch profile: ${response.body}');
+        }
+      } catch (e) {
+        print('Error fetching profile: $e');
+      }
+    }
+
+
+    Future<void> _saveProfileChanges() async {
+      final url = Uri.parse('https://your-api.com/api/employer/profile'); // Replace with your actual API URL
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token'); // Replace with your token key
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'name': nameController.text,
+          'email': emailController.text,
+          'company': companyController.text,
+          'location': locationController.text,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update profile: ${response.reasonPhrase}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
 
     void _handleLogout() async {
       final shouldLogout = await showDialog<bool>(
@@ -83,8 +152,12 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
         title: const Text("Profile"),
         centerTitle: true,
         leading: BackButton(
-          onPressed: (){
-            Navigator.pop(context);
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+
+            }
           },
         ),
         actions: [
@@ -149,13 +222,6 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
 
 
             ProfileFieldWidget(
-                label: "Phone",
-                controller: phoneController,
-              keyboardType: TextInputType.phone,
-            ),
-
-
-            ProfileFieldWidget(
                 label: "Company"
                 , controller: companyController
             ),
@@ -167,34 +233,23 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
             ),
 
 
-            ProfileFieldWidget(
-                label: "Bio",
-                controller: bioController,
-              keyboardType: TextInputType.multiline,
-            ),
-
-
 
             Spaces.vertical(20),
             ElevatedButton(
               onPressed: () {
-                if (_formKey.currentState!.validate()){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Changes saved successfully'),
-                        backgroundColor: Colorss.successValidation,
-                      )
-                  );
+                if (_formKey.currentState!.validate()) {
+                  _saveProfileChanges();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please complete all required fields correctly'),
-                      )
+                    const SnackBar(
+                      content: Text('Please complete all required fields correctly'),
+                    ),
                   );
                 }
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colorss.primaryColor
+                  backgroundColor: Colorss.primaryColor,
+
               ),
               child: const Text(
                 "Save Changes",

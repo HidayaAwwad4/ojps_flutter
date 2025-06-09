@@ -8,7 +8,7 @@ import '../models/resume_model.dart';
 import '../Services/resume_service.dart';
 
 class ViewResumeScreen extends StatefulWidget {
-  const ViewResumeScreen ({super.key});
+  const ViewResumeScreen ({super.key, required String token});
 
   @override
   State<ViewResumeScreen> createState() => _ViewResumeScreenState();

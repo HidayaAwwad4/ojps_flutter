@@ -69,7 +69,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home : const Notifications(),
+      initialRoute: '/',
+      routes: appRoutes,
     );
   }
 }
