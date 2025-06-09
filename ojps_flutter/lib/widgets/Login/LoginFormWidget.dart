@@ -139,7 +139,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                             Navigator.of(context).pushReplacementNamed('/home');
                           } else if (userRoleId == 1) {
                             Navigator.pushReplacementNamed(context, '/employer/main-screen');
-                          } else {
+                          } else if (userRoleId == 3) {
+                            Navigator.pushReplacementNamed(context, '/admin-dashboard');
+                          }
+                          else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Unknown user role')),
                             );

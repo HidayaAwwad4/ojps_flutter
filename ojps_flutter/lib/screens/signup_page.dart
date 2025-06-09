@@ -5,74 +5,57 @@ import '../widgets/sign_up_form.dart';
 import '../widgets/Login/SocialIconsWidget.dart';
 
 class SignUpPage extends StatelessWidget {
-  final String selectedType;
+  final int roleId;
 
-  const SignUpPage({required this.selectedType, Key? key}) : super(key: key);
+  const SignUpPage({required this.roleId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String type = selectedType.toLowerCase();
-    String topImage = type == 'employer'
-        ? 'assets/employer_top.png'
-        : 'assets/job_seeker_top.png';
+    String type = roleId == 1 ? 'employer' : 'job-seeker';
+    String topImage = type == 'employer' ? 'assets/employer_top.png' : 'assets/job_seeker_top.png';
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colorss.whiteColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Image.asset(
-                  topImage,
-                  width: double.infinity,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-              ],
-            ),
+            Image.asset(topImage, width: double.infinity, height: 250, fit: BoxFit.cover),
             Transform.translate(
               offset: const Offset(0, -60),
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(AppDimensions.radius20),
-                  ),
-                ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimensions.defaultPadding,
-                  vertical: AppDimensions.paddingSmall,
+                  vertical: AppDimensions.defaultPadding,
+                ),
+                decoration: BoxDecoration(
+                  color: Colorss.whiteColor,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
                 ),
                 child: Column(
                   children: [
-                    SignUpForm( selectedType: selectedType),
-                    SizedBox(height: AppDimensions.verticalSpacerLarge),
-                    const Text(
-                      'Or sign up with',
-                      style: TextStyle(color: Colors.black54),
+                    Center(
+                      child: Image.asset(
+                        'assets/app_logo.png',
+                        height: 70,
+                      ),
                     ),
-                    SizedBox(height: AppDimensions.verticalSpacerMedium),
+                    SizedBox(height: AppDimensions.verticalSpacerLarge),
+
+                    SignUpForm(roleId: roleId),
+
+                    SizedBox(height: AppDimensions.verticalSpacerLarge),
+                    Text('Or sign up with', style: TextStyle(color: Colorss.secondaryTextColor)),
+                    SizedBox(height: AppDimensions.verticalSpacerSmall),
                     SocialIconsWidget(),
-                    SizedBox(height: AppDimensions.verticalSpacerMedium),
+
+                    SizedBox(height: AppDimensions.verticalSpacerLarge),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Have an account?",
-                          style: TextStyle(color: Colorss.secondaryTextColor),
-                        ),
+                        Text("Have an account?"),
                         TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/Login');
-                          },
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                              color: Colorss.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          onPressed: () => Navigator.pushNamed(context, '/Login'),
+                          child: Text("Login", style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -86,3 +69,5 @@ class SignUpPage extends StatelessWidget {
     );
   }
 }
+
+
