@@ -1,17 +1,230 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../exceptions/api_exception.dart';
 
 class JobService {
+  final String apiUrl = 'http://127.0.0.1:8000/api';
   static const String baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
+
+  Future<Map<String, dynamic>> getJobDetails(int jobId) async {
+    final token = await getToken();
+    try {
+      final response = await http
+          .get(
+        Uri.parse('$apiUrl/jobs/$jobId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw HttpException('Failed to load job details (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<int> getCurrentUserId() async {
+    final token = await getToken();
+    try {
+      final response = await http.get(
+        Uri.parse('$apiUrl/user'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['id'];
+      } else {
+        throw HttpException('Failed to fetch user (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<List<dynamic>> searchJobs(String query) async {
+    try {
+      final response = await http
+          .get(
+        Uri.parse('$apiUrl/search-jobs?query=$query'),
+        headers: {
+          'Accept': 'application/json',
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw HttpException('Failed to search jobs (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<List<dynamic>> fetchJobsByCategory(String category) async {
+    final token = await getToken();
+    try {
+      final response = await http
+          .get(
+        Uri.parse('$apiUrl/jobs/category/$category'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw HttpException('Failed to load jobs by category (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<List<dynamic>> fetchRecommendedJobs() async {
+    final token = await getToken();
+    try {
+      final response = await http
+          .get(
+        Uri.parse('$apiUrl/jobs/recommended'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw HttpException('Failed to load recommended jobs (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<List<dynamic>> getApplicationsByJobSeekerId(int jobSeekerId) async {
+    final token = await getToken();
+    try {
+      final response = await http
+          .get(
+        Uri.parse('$apiUrl/applications/by-job-seeker/$jobSeekerId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw HttpException('Failed to load applications (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } on FormatException {
+      throw Exception('Bad response format');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    }
+  }
+
+  Future<void> submitApplication({
+    required int jobId,
+    required String coverLetter,
+    required int jobSeekerId,
+    File? cvFile,
+  }) async {
+    final token = await getToken();
+    try {
+      var uri = Uri.parse('$apiUrl/applications/submit');
+      var request = http.MultipartRequest('POST', uri)
+        ..headers['Authorization'] = 'Bearer $token'
+        ..fields['job_id'] = jobId.toString()
+        ..fields['cover_letter'] = coverLetter
+        ..fields['job_seeker_id'] = jobSeekerId.toString();
+
+      if (cvFile != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath('cv_file', cvFile.path),
+        );
+      }
+
+      final streamedResponse = await request.send().timeout(Duration(seconds: 15));
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode != 200) {
+        throw HttpException('Failed to submit application (status: ${response.statusCode})');
+      }
+    } on SocketException {
+      throw Exception('No Internet connection');
+    } on TimeoutException {
+      throw Exception('Request timed out');
+    } on HttpException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
 
   Future<int> getEmployerId() async {
     final token = await getToken();
