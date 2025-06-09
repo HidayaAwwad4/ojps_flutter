@@ -16,7 +16,7 @@ class JobActionButtonsWidget extends StatelessWidget {
             message: 'View required job documents',
             child: ElevatedButton.icon(
               onPressed: () {},
-              icon: const Icon(Icons.description, color: Colorss.primaryTextColor),
+              icon: Icon(Icons.description, color: Colorss.primaryTextColor),
               label: const Text("Documents"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colorss.cardBackgroundColor,

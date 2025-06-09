@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
 
-import '../screens/notifications.dart';
-
 class CustomBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
@@ -19,12 +17,7 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
-      if (index == 2) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const Notifications()),
-        );
-      } else if (index == 3) {
+        if (index == 3) {
           Navigator.pushNamed(context, '/job_status');
         } else {
           onTap(index);

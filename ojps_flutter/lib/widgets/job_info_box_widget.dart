@@ -73,5 +73,3 @@ class JobInfoBoxWidget extends StatelessWidget {
     );
   }
 }
-
-

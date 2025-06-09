@@ -43,3 +43,4 @@ class JobHeaderWidget extends StatelessWidget {
     );
   }
 }
+
