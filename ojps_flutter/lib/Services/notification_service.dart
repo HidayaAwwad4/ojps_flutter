@@ -16,9 +16,9 @@ class NotificationService {
     await _notifications.initialize(initSettings);
   }
 
-  static Future<List<dynamic>> fetchNotifications(String token) async {
+  static Future<List<NotificationModel>> fetchNotifications(String token) async {
     final response = await http.get(
-      Uri.parse('https://127.0.0.1:8000/api/notifications'),
+      Uri.parse('http://10.0.2.2:8000/api/notifications'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -35,7 +35,7 @@ class NotificationService {
 
   static Future<int> getNewNotificationCount(String token) async {
     final response = await http.get(
-      Uri.parse('https://127.0.0.1:8000/api/notifications/unread/count'),
+      Uri.parse('http://10.0.2.2:8000/api/notifications/unread/count'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -52,7 +52,7 @@ class NotificationService {
 
   static Future<void> markNotificationAsRead(String token, int id) async {
     final response = await http.post(
-      Uri.parse('https://yourdomain.com/api/notifications/mark-as-read/$id'),
+      Uri.parse('http://10.0.2.2:8000/api/notifications/mark-as-read/$id'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -66,7 +66,7 @@ class NotificationService {
 
   static Future<void> notifySeekerStatus(String token, int seekerId, String status) async {
     final response = await http.post(
-      Uri.parse('https://yourdomain.com/api/notifications/seeker/$seekerId/$status'),
+      Uri.parse('http://10.0.2.2:8000/api/notifications/seeker/$seekerId/$status'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -80,7 +80,7 @@ class NotificationService {
 
   static Future<void> notifyEmployerActivity(String token, int employerId, String type) async {
     final response = await http.post(
-      Uri.parse('https://yourdomain.com/api/notifications/employer/$employerId/$type'),
+      Uri.parse('http://10.0.2.2:8000/api/notifications/employer/$employerId/$type'),
       headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
