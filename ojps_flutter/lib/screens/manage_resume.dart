@@ -53,16 +53,16 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
     }
   }
 
-  // Personal Data Controllers
+
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
-  // Summary
+
   final TextEditingController summaryController = TextEditingController();
 
-  // Work Experience (Initial Single Entry)
+
   List<Map<String, TextEditingController>> workExperienceList = [
     {
       'jobTitle': TextEditingController(),
@@ -99,7 +99,6 @@ class _ManageResumeScreenState extends State<ManageResumeScreen> {
         location: locationController.text,
         phone: phoneController.text,
         summary: summaryController.text,
-        //imageUrl: imageUrl,
       experiences: workExperienceList.map((exp) {
         return Experience(
           jobTitle: exp['jobTitle']!.text,
