@@ -1,6 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'Login_page.dart';
+import '../../Services/auth_service.dart';
+
 class NewPasswordPage extends StatefulWidget {
+  final String email;
+  NewPasswordPage({required this.email});
+
   @override
   _NewPasswordPageState createState() => _NewPasswordPageState();
 }
@@ -9,32 +15,47 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final AuthService authService = AuthService();
 
   final Color primaryColor = Color(0xFF0273B1);
+  bool isLoading = false;
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.push(
+  void _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => isLoading = true);
+    final response = await authService.resetPassword(
+      widget.email,
+      newPasswordController.text,
+      confirmPasswordController.text,
+    );
+    setState(() => isLoading = false);
+
+    if (response.statusCode == 200) {
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } else {
+      final responseData = jsonDecode(response.body);
+      String errorMessage = 'Failed to reset password.';
+      if (responseData['message'] != null) {
+        errorMessage = responseData['message'];
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }
 
   String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
+    if (value == null || value.isEmpty) return 'Please enter password';
+    if (value.length < 6) return 'Password must be at least 6 characters';
     return null;
   }
 
   String? _validateConfirmPassword(String? value) {
-    if (value != newPasswordController.text) {
-      return 'Passwords do not match';
-    }
+    if (value != newPasswordController.text) return 'Passwords do not match';
     return null;
   }
 
@@ -116,7 +137,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       validator: _validateConfirmPassword,
                     ),
                     SizedBox(height: 35),
-                    SizedBox(
+                    isLoading
+                        ? CircularProgressIndicator()
+                        : SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(

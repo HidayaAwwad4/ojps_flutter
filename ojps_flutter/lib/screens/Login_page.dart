@@ -45,9 +45,9 @@ class LoginPage extends StatelessWidget {
             ),
 
             const LoginFormWidget(),
-            const SizedBox(height: AppDimensions.verticalSpacerMedium),
+
             const SocialIconsWidget(),
-            const SizedBox(height: AppDimensions.verticalSpacerMedium),
+
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

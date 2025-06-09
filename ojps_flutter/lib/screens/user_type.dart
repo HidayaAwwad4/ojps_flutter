@@ -6,24 +6,20 @@ class ChooseType extends StatefulWidget {
   _ChooseTypeState createState() => _ChooseTypeState();
 }
 
-
 class _ChooseTypeState extends State<ChooseType> {
-  String userType='';
-  final Color primaryColor=Color(0xFF0273B1);
+  int? roleId;
+  final Color primaryColor = Color(0xFF0273B1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Colors.white,
-      body:Container(
+      backgroundColor: Colors.white,
+      body: Container(
         padding: EdgeInsets.all(20),
         child: Column(
           children: [
             SizedBox(height: 100),
-            Image.asset(
-              'assets/app_logo.png',
-              height: 70,
-            ),
+            Image.asset('assets/app_logo.png', height: 70),
             SizedBox(height: 50),
             Text(
               'Choose your Type',
@@ -36,7 +32,7 @@ class _ChooseTypeState extends State<ChooseType> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 12),
               child: Text(
-                'Choose the role that suits you to continue. This will help direct you to the tools and features made for your needs.',
+                'Choose the role that suits you to continue.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, color: Colors.black87),
               ),
@@ -48,20 +44,20 @@ class _ChooseTypeState extends State<ChooseType> {
                 _buildRoleOption(
                   icon: Icons.person,
                   title: 'To find an employee',
-                  subtitle: 'To find an employee',
-                  selected: userType == 'employer',
-                  onTap: () => setState(() => userType = 'employer'),
+                  subtitle: 'Employer',
+                  selected: roleId == 1,
+                  onTap: () => setState(() => roleId = 1),
                 ),
                 _buildRoleOption(
                   icon: Icons.work,
                   title: 'To find a job',
-                  subtitle: 'Find and apply for jobs',
-                  selected: userType== 'jobseeker',
-                  onTap: () => setState(() => userType = 'jobseeker'),
+                  subtitle: 'Job Seeker',
+                  selected: roleId == 2,
+                  onTap: () => setState(() => roleId = 2),
                 ),
               ],
             ),
-            SizedBox(height:20),
+            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
@@ -72,23 +68,19 @@ class _ChooseTypeState extends State<ChooseType> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                onPressed: userType.isNotEmpty
+                onPressed: roleId != null
                     ? () {
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignUpPage(selectedType: userType),
+                      builder: (context) => SignUpPage(roleId: roleId!),
                     ),
                   );
                 }
                     : null,
-                child: Text(
-                  'Start Now !',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text('Start Now!', style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -109,32 +101,24 @@ class _ChooseTypeState extends State<ChooseType> {
         height: 200,
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: selected ? Color(0xFF0273B1).withOpacity(0.1) : Colors.white,
+          color: selected ? primaryColor.withOpacity(0.1) : Colors.white,
           border: Border.all(
-            color: selected ? Color(0xFF0273B1) : Colors.grey.shade400,
+            color: selected ? primaryColor : Colors.grey.shade400,
           ),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            Icon(icon, size: 40, color: selected ? Color(0xFF0273B1) : Colors.grey),
-        SizedBox(height: 10),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize:15,
-              color: selected ? Color(0xFF0273B1) : Colors.black,
-            ),
-          ),
-          SizedBox(height: 8, width: 10),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize:15, color: Colors.black54),
-          ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: selected ? primaryColor : Colors.grey),
+            SizedBox(height: 10),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: selected ? primaryColor : Colors.black)),
+            SizedBox(height: 8),
+            Text(subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, color: Colors.black54)),
           ],
         ),
       ),
