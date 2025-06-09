@@ -9,6 +9,8 @@ import '/constants/colors.dart';
 import '/constants/dimensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/profile_service.dart';
+import '../services/job_seeker_service.dart';
 
 class ViewEditSeekerProfile extends StatefulWidget {
   const ViewEditSeekerProfile({super.key});
@@ -18,19 +20,16 @@ class ViewEditSeekerProfile extends StatefulWidget {
 }
 
 class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
-  final TextEditingController nameController = TextEditingController(
-    text: "Haneen",
-  );
-  final TextEditingController emailController = TextEditingController(
-    text: "Haneen@outlook.com",
-  );
-  final TextEditingController phoneController = TextEditingController(
-    text: "+970592222222",
-  );
-  final TextEditingController bioController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController summaryController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   int _currentIndex = AppValues.profileInitialIndex;
+
+  final ProfileService _profileService = ProfileService();
+  final JobSeekerService _jobSeekerService = JobSeekerService();
 
   void _onTap(int index) {
     if (index == _currentIndex) return;
@@ -43,7 +42,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
     } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/job_status');
     } else if (index == 4) {
-
+      // لا شيء محدد هنا حالياً
     }
     setState(() {
       _currentIndex = index;
@@ -53,6 +52,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
   @override
   void initState() {
     super.initState();
+    _loadProfile();
 
     nameController.addListener(() => setState(() {}));
     emailController.addListener(() => setState(() {}));
@@ -62,44 +62,61 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
   void dispose() {
     nameController.dispose();
     emailController.dispose();
-    phoneController.dispose();
-    bioController.dispose();
+    summaryController.dispose();
     super.dispose();
   }
 
-  void _handleLogout() async {
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Confirm Logout"),
-          content: const Text("Are you sure you want to logout?"),
-          actions: [
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
-            TextButton(
-              child: const Text("Logout"),
-              onPressed: () => Navigator.of(context).pop(true),
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _loadProfile() async {
+    final jobSeeker = await _jobSeekerService.getJobSeekerProfile();
 
-    if (shouldLogout == true) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
-
-      if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    if (jobSeeker != null) {
+      setState(() {
+        nameController.text = jobSeeker.name ?? '';
+        emailController.text = jobSeeker.email ?? '';
+        summaryController.text = jobSeeker.summary ?? '';
+      });
     }
   }
 
+  void _handleLogout() async {
+    // هنا يمكنك إضافة منطق تسجيل الخروج حسب حاجتك
+  }
 
   void _navigateToResumePage() {
     Navigator.pushNamed(context, '/manage_resume');
+  }
+
+  Future<void> _saveChanges() async {
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please complete all required fields correctly'),
+        ),
+      );
+      return;
+    }
+
+    final success = await _profileService.updateBasicInfo(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      summary: summaryController.text.trim(),
+    );
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Changes saved successfully'),
+          backgroundColor: Colorss.successValidation,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to save changes. Please try again.'),
+          backgroundColor: Colorss.errorColor,
+        ),
+      );
+    }
   }
 
   @override
@@ -124,13 +141,12 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.defaultPadding),
-
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfileImageWidget(imagePath: UserData().profileImage, isEditable: true,),
+              ProfileImageWidget(imagePath: UserData().profileImage, isEditable: true),
               Spaces.vertical(10),
               Text(
                 nameController.text.isEmpty ? "Your Name" : nameController.text,
@@ -141,12 +157,9 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
               ),
               Spaces.vertical(4),
               Text(
-                emailController.text.isEmpty
-                    ? "your.email@example.com"
-                    : emailController.text,
+                emailController.text.isEmpty ? "your.email@example.com" : emailController.text,
                 style: const TextStyle(color: Colorss.secondaryTextColor),
               ),
-
               Spaces.vertical(20),
               ProfileFieldWidget(
                 label: "Full Name",
@@ -154,16 +167,14 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
                 keyboardType: TextInputType.text,
                 enabled: true,
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty){
+                  if (value == null || value.trim().isEmpty) {
                     return 'Name is required';
-                  } else if (value.trim().length < 4){
+                  } else if (value.trim().length < 4) {
                     return 'Name must be at least 4 characters';
                   }
                   return null;
-
-                } ,
+                },
               ),
-
               ProfileFieldWidget(
                 label: "Email",
                 controller: emailController,
@@ -177,28 +188,11 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
                   return null;
                 },
               ),
-
               ProfileFieldWidget(
-                label: "Phone",
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty){
-                    return 'Phone number is required';
-                  } else if (!RegExp(r'^05\d{8}$').hasMatch(value.trim())) {
-                    return 'Phone must start with 05 and be 10 digits long';
-                  }
-                  return null;
-
-                },
-              ),
-
-              ProfileFieldWidget(
-                label: "Bio",
-                controller: bioController,
+                label: "Summary",
+                controller: summaryController,
                 keyboardType: TextInputType.multiline,
               ),
-
               TextButton(
                 onPressed: _navigateToResumePage,
                 child: const Text(
@@ -208,35 +202,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
               ),
               Spaces.vertical(20),
               ElevatedButton(
-                onPressed: () {
-                  final name = nameController.text;
-                  final email = emailController.text;
-                  final phone = phoneController.text;
-                  final bio = bioController.text;
-
-                  print("Saved Profile:");
-                  print("Name: $name");
-                  print("Email: $email");
-                  print("Phone: $phone");
-                  print("Bio: $bio");
-
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Changes saved successfully'),
-                        backgroundColor: Colorss.successValidation,
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Please complete all required fields correctly',
-                        ),
-                      ),
-                    );
-                  }
-                },
+                onPressed: _saveChanges,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colorss.primaryColor,
                 ),
@@ -249,7 +215,6 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
           ),
         ),
       ),
-
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,
         onTap: _onTap,

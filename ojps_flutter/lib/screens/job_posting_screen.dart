@@ -126,8 +126,6 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = openJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: provider.updateJobStatusByJob,
-                onJobDeleted: provider.deleteJobByJob,
               );
             },
           ),
@@ -149,8 +147,6 @@ class _JobPostingScreenState extends State<JobPostingScreen>
               final job = closedJobs[index];
               return JobCardVertical(
                 job: job,
-                onStatusChange: provider.updateJobStatusByJob,
-                onJobDeleted: provider.deleteJobByJob,
               );
             },
           ),

@@ -84,7 +84,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
         'documents': null,
       };
 
-      await JobService().createJob(data);
+      // استدعاء الخدمة وإنشاء الوظيفة، مع انتظار نتيجة الوظيفة الجديدة
+      final createdJob = await JobService().createJob(data);
 
       if (context.mounted) {
         showDialog(
@@ -95,8 +96,8 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.pop(context); // إغلاق الديالوج
+                  Navigator.pop(context, createdJob); // العودة مع إرسال الوظيفة الجديدة
                 },
                 child: Text(tr('ok')),
               ),
