@@ -2,7 +2,7 @@ class Job {
   int id;
   String title;
   String description;
-  String salary;
+  double salary;
   String location;
   String category;
   String languages;
@@ -33,10 +33,10 @@ class Job {
 
   factory Job.fromJson(Map<String, dynamic> json) {
     return Job(
-      id: json['id'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
       title: json['title'] ?? '',
       description: json['description'] ?? '',
-      salary: json['salary'] ?? '',
+      salary: double.tryParse(json['salary'].toString()) ?? 0.0,
       location: json['location'] ?? '',
       category: json['category'] ?? '',
       languages: json['languages'] ?? '',
@@ -45,10 +45,11 @@ class Job {
       employment: json['employment'] ?? '',
       companyLogo: json['company_logo'],
       documents: json['documents'],
-      isOpened: json['isOpened'] == 1 || json['isOpened'] == true,
-      employerId: json['employer_id'] ?? 0,
+      isOpened: (json['isOpened'] == 1 || json['isOpened'] == true || json['isOpened'] == "true"),
+      employerId: int.tryParse(json['employer_id'].toString()) ?? 0,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -73,7 +74,7 @@ class Job {
     int? id,
     String? title,
     String? description,
-    String? salary,
+    double? salary,
     String? location,
     String? category,
     String? languages,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,9 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
       _showError('failedServerCommunication');
     } on FormatException {
       _showError('unexpectedResponseFormat');
-    } catch (e) {
+    } on TimeoutException {
+  _showError('requestTimeout');}
+    catch (e) {
       _showError('somethingWentWrong');
     }
   }
@@ -73,6 +76,13 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EmployerJobsProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (provider.error != null) {
+        _showError(provider.error!);
+        provider.clearError();
+      }
+    });
+
     final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
     final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();
 
@@ -129,12 +139,14 @@ class _EmployerHomeScreenState extends State<EmployerHome> {
                 title: tr('openJobs'),
                 jobs: openJobs.take(5).toList(),
                 tabIndex: 0,
+                hasError: provider.error != null,
               ),
               Spaces.vertical(AppDimensions.verticalSpacerXLarge),
               JobSectionWidget(
                 title: tr('closedJobs'),
                 jobs: closedJobs.take(5).toList(),
                 tabIndex: 1,
+                hasError: provider.error != null,
               ),
             ],
           ),

@@ -42,7 +42,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
     } else if (index == 3) {
       Navigator.pushReplacementNamed(context, '/job_status');
     } else if (index == 4) {
-      // لا شيء محدد هنا حالياً
+
     }
     setState(() {
       _currentIndex = index;
@@ -79,7 +79,7 @@ class _ViewEditSeekerProfileState extends State<ViewEditSeekerProfile> {
   }
 
   void _handleLogout() async {
-    // هنا يمكنك إضافة منطق تسجيل الخروج حسب حاجتك
+
   }
 
   void _navigateToResumePage() {

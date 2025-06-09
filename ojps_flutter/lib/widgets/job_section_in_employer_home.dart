@@ -9,12 +9,14 @@ class JobSectionWidget extends StatelessWidget {
   final String title;
   final List<Job> jobs;
   final int tabIndex;
+  final bool hasError;
 
   const JobSectionWidget({
     super.key,
     required this.title,
     required this.jobs,
     required this.tabIndex,
+    required this.hasError,
   });
 
   @override
@@ -30,7 +32,7 @@ class JobSectionWidget extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
           Text(
-            tr('noJobsAvailable'),
+            hasError ? tr('jobLoadError') : tr('noJobsAvailable'),
             style: const TextStyle(
               color: Colorss.secondaryTextColor,
               fontSize: AppDimensions.fontSizeSmall,
