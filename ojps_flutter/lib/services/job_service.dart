@@ -14,8 +14,8 @@ class JobService {
   }
 
   Future<int> getEmployerId() async {
-    //final token = await getToken();
-    final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
+    final token = await getToken();
+    //final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
     if (token == null) {
       throw ApiException.authTokenNotFound();
     }
@@ -37,8 +37,8 @@ class JobService {
   }
 
   Future<List<dynamic>> getJobsByEmployer(int employerId, {int page = 1, int limit = 8}) async {
-    //final token = await getToken();
-    final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
+    final token = await getToken();
+    //final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
     if (token == null) {
       throw ApiException.authTokenNotFound();
     }
@@ -73,8 +73,8 @@ class JobService {
   }
 
   Future<Map<String, dynamic>> createJob(Map<String, dynamic> data) async {
-    //final token = await getToken();
-    final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
+    final token = await getToken();
+    //final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
     if (token == null) throw ApiException.authTokenNotFound();
 
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs'));
@@ -126,8 +126,8 @@ class JobService {
   }
 
   Future<Map<String, dynamic>> updateJob(int id, Map<String, dynamic> data) async {
-    //final token = await getToken();
-    final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
+    final token = await getToken();
+    //final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
     if (token == null) throw ApiException.authTokenNotFound();
 
     var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/jobs/$id?_method=PUT'));
@@ -160,8 +160,8 @@ class JobService {
   }
 
   Future<void> deleteJob(int id) async {
-    //final token = await getToken();
-    final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
+    final token = await getToken();
+    //final token = "57|liaTZkuoTzhogo5aKAIAq8A1eTT59ab5JwTLBop67d4119e2";
     if (token == null) throw ApiException.authTokenNotFound();
 
     final response = await http.delete(
