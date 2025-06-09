@@ -5,16 +5,16 @@ import '../models/job_seeker.dart';
 
 class JobSeekerService {
   final String baseUrl = 'http://10.0.2.2:8000/api';
-/*
+
   Future<Map<String, dynamic>?> _getUserFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? userJson = prefs.getString('user');
     if (userJson == null) return null;
     return jsonDecode(userJson);
   }
-*/
+
   Future<JobSeeker?> getJobSeekerProfile() async {
-    /*final userMap = await _getUserFromPrefs();
+    final userMap = await _getUserFromPrefs();
     if (userMap == null) {
       print('No user data found in SharedPreferences');
       return null;
@@ -25,9 +25,8 @@ class JobSeekerService {
       print('JobSeeker ID not found for user id: $userId');
       return null;
     }
-*/
-    //final url = Uri.parse('$baseUrl/job-seekers/$jobSeekerId');
-      final url = Uri.parse('$baseUrl/job-seekers/1');
+
+    final url = Uri.parse('$baseUrl/job-seekers/$jobSeekerId');
     try {
       final response = await http.get(url);
 

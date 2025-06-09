@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/job_model.dart';
 import '../services/job_service.dart';
+import 'dart:async';
 class EmployerJobsProvider extends ChangeNotifier {
   final JobService jobService;
 
@@ -59,6 +60,11 @@ class EmployerJobsProvider extends ChangeNotifier {
       _jobs.addAll(newJobs);
       _error = null;
       _currentPage++;
+    } on TimeoutException catch (_) {
+      _error = 'Request timed out. Please check your internet connection.';
+      if (_currentPage == 1) {
+        _jobs = [];
+      }
     } catch (e) {
       _error = e.toString();
       if (_currentPage == 1) {
@@ -71,11 +77,13 @@ class EmployerJobsProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> deleteJob(int id) async {
     try {
       await jobService.deleteJob(id);
       _jobs.removeWhere((job) => job.id == id);
+      notifyListeners();
+    } on TimeoutException catch (_) {
+      _error = 'Request timed out. Please check your internet connection.';
       notifyListeners();
     } catch (e) {
       _error = e.toString();
@@ -93,6 +101,9 @@ class EmployerJobsProvider extends ChangeNotifier {
         _jobs[index] = newJob;
         notifyListeners();
       }
+    } on TimeoutException catch (_) {
+      _error = 'Request timed out. Please check your internet connection.';
+      notifyListeners();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -106,12 +117,16 @@ class EmployerJobsProvider extends ChangeNotifier {
       final job = Job.fromJson(createdData);
       _jobs.add(job);
       notifyListeners();
+    } on TimeoutException catch (_) {
+      _error = 'Request timed out. Please check your internet connection.';
+      notifyListeners();
     } catch (e) {
       _error = e.toString();
       notifyListeners();
       rethrow;
     }
   }
+
 
   void clearError() {
     _error = null;

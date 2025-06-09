@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';  // استدعاء easy_localization
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/routes.dart';
 import 'package:ojps_flutter/providers/employer_jobs_provider.dart';
@@ -71,9 +71,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      localizationsDelegates: context.localizationDelegates, // ضروري لـ easy_localization
-      supportedLocales: context.supportedLocales, // ضروري
-      locale: context.locale, // ضروري
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       initialRoute: '/',
       routes: appRoutes,
     );

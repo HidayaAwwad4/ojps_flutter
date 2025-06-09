@@ -26,7 +26,7 @@ class JobService {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-    );
+    ).timeout(const Duration(seconds: 10));  // <=== Timeout added
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -49,7 +49,7 @@ class JobService {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-    );
+    ).timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['data'];
@@ -59,7 +59,9 @@ class JobService {
   }
 
   Future<Map<String, dynamic>> getJobById(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/jobs/$id'));
+    final response = await http.get(
+      Uri.parse('$baseUrl/jobs/$id'),
+    ).timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -81,8 +83,13 @@ class JobService {
 
     data.forEach((key, value) {
       if (value != null && value is! File) {
-        request.fields[key] = value.toString();
+        if (key == 'isOpened') {
+          request.fields[key] = (value == true || value == "true") ? '1' : '0';
+        } else {
+          request.fields[key] = value.toString();
+        }
       }
+
     });
 
     if (data['company_logo'] != null && data['company_logo'] is File) {
@@ -107,7 +114,7 @@ class JobService {
       );
     }
 
-    var streamedResponse = await request.send();
+    var streamedResponse = await request.send().timeout(const Duration(seconds: 10));
     var response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 201) {
@@ -128,12 +135,20 @@ class JobService {
     request.headers['Authorization'] = 'Bearer $token';
 
     data.forEach((key, value) {
-      if (value != null && value is! http.MultipartFile) {
-        request.fields[key] = value.toString();
+      if (value != null) {
+        if (value is http.MultipartFile) {
+          request.files.add(value);
+        } else if (key != 'documents' && key != 'company_logo') {
+          if (key == 'isOpened') {
+            request.fields[key] = (value == true || value == "true") ? '1' : '0';
+          } else {
+            request.fields[key] = value.toString();
+          }
+        }
       }
     });
 
-    var streamedResponse = await request.send();
+    var streamedResponse = await request.send().timeout(const Duration(seconds: 10));
     var response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 200) {
@@ -155,7 +170,7 @@ class JobService {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
-    );
+    ).timeout(const Duration(seconds: 10));
 
     if (response.statusCode != 200) {
       throw ApiException.jobDeletionFailed();
@@ -163,7 +178,9 @@ class JobService {
   }
 
   Future<Map<String, dynamic>> getFormOptions() async {
-    final response = await http.get(Uri.parse('$baseUrl/job-options'));
+    final response = await http.get(
+      Uri.parse('$baseUrl/job-options'),
+    ).timeout(const Duration(seconds: 10));  // <=== Timeout added
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

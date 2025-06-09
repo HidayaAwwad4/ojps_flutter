@@ -65,9 +65,11 @@ final Map<String, WidgetBuilder> appRoutes = {
     return ApplicantDetailsScreen(applicantId: applicantId);
   },
   '/employer/job-posting': (context) {
-    final tabIndex = ModalRoute.of(context)!.settings.arguments as int;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final tabIndex = args['tabIndex'] as int;
     return JobPostingScreen(tabIndex: tabIndex);
   },
+
   '/admin/pending-employers': (context) {
     final adminService = ModalRoute.of(context)!.settings.arguments as AdminService;
     return PendingEmployersScreen(adminService: adminService);

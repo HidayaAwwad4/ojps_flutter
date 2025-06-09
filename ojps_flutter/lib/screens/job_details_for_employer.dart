@@ -35,7 +35,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const HeaderBar(),
+            HeaderBar(updatedJob: job),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: AppDimensions.defaultPadding),
@@ -89,33 +89,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                           const Divider(height: 1),
                           DetailTile(title: 'category'.tr(), value: job.category),
                           const Divider(height: 1),
-                          DetailTile(title: 'salary'.tr(), value: job.salary),
+                          DetailTile(
+                            title: 'salary'.tr(),
+                            value: job.salary.toStringAsFixed(2),
+                          ),
+
                         ],
                       ),
                     ),
-                    Spaces.vertical(AppDimensions.verticalSpacerMedium),
-                    if (job.documents != null)
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          final fixedUrl = fixUrl(job.documents!);
-                          final Uri url = Uri.parse(fixedUrl);
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url);
-                          } else {
-                            print('Could not launch $fixedUrl');
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colorss.primaryTextColor,
-                          backgroundColor: Colorss.cardBackgroundColor,
-                          minimumSize: const Size(double.infinity, AppDimensions.minimumSizeButton),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-                          ),
-                        ),
-                        icon: const Icon(Icons.description),
-                        label: Text('view_documents'.tr()),
-                      ),
                     Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     ElevatedButton(
                       onPressed: () async {

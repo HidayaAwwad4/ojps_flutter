@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
 import '../models/job_model.dart';
+import '../providers/employer_jobs_provider.dart';
 import '../services/job_service.dart';
 import '../utils/network_utils.dart';
 import '../widgets/custom_text_field.dart';
@@ -39,7 +41,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
     descriptionController = TextEditingController(text: widget.job.description);
     languageController = TextEditingController(text: widget.job.languages);
     scheduleController = TextEditingController(text: widget.job.schedule);
-    salaryController = TextEditingController(text: widget.job.salary);
+    salaryController = TextEditingController(text: widget.job.salary.toString());
 
     selectedExperience = widget.job.experience;
     selectedEmployment = widget.job.employment;
@@ -55,6 +57,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
           languageController.text.isNotEmpty &&
           scheduleController.text.isNotEmpty &&
           salaryController.text.isNotEmpty &&
+          double.tryParse(salaryController.text) != null &&
           selectedExperience != null &&
           selectedEmployment != null &&
           selectedCategory != null;
@@ -88,7 +91,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
               radius: 24,
               backgroundImage: widget.job.companyLogo != null
                   ? NetworkImage(fixUrl(widget.job.companyLogo!))
-                  : const AssetImage('assets/default-logo.png'),
+                  : const AssetImage('assets/default-logo.png') as ImageProvider,
             ),
             Spaces.horizontal(AppDimensions.spacingSmall),
           ],
@@ -99,33 +102,25 @@ class _EditJobScreenState extends State<EditJobScreen> {
             child: ElevatedButton(
               onPressed: isFormValid
                   ? () async {
-                final data = {
-                  'title': titleController.text,
-                  'description': descriptionController.text,
-                  'language': languageController.text,
-                  'schedule': scheduleController.text,
-                  'salary': salaryController.text,
-                  'experience': selectedExperience,
-                  'employment': selectedEmployment,
-                  'category': selectedCategory,
-                };
+                final updatedJob = widget.job.copyWith(
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  languages: languageController.text,
+                  schedule: scheduleController.text,
+                  salary: double.tryParse(salaryController.text),
+                  experience: selectedExperience,
+                  employment: selectedEmployment,
+                  category: selectedCategory,
+                  isOpened: widget.job.isOpened,
+                );
 
                 try {
-                  await JobService().updateJob(widget.job.id, data);
+                  await Provider.of<EmployerJobsProvider>(context, listen: false).updateJob(updatedJob);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(tr('job_updated_successfully'))),
                     );
-                    Navigator.pop(context, widget.job.copyWith(
-                      title: titleController.text,
-                      description: descriptionController.text,
-                      languages: languageController.text,
-                      schedule: scheduleController.text,
-                      salary: salaryController.text,
-                      experience: selectedExperience,
-                      employment: selectedEmployment,
-                      category: selectedCategory,
-                    ));
+                    Navigator.pop(context, updatedJob);
                   }
                 } catch (e) {
                   if (context.mounted) {
@@ -136,6 +131,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
                 }
               }
                   : null,
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
                 foregroundColor: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
@@ -184,6 +180,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
               label: tr('salary'),
               hint: tr('salary_hint'),
               controller: salaryController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (_) => updateFormValidity(),
             ),
             DropdownSelector(
