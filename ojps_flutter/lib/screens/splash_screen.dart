@@ -8,6 +8,7 @@ import 'Login_page.dart';
 import 'admin_dashboard_screen.dart';
 import 'employer_home.dart';
 import 'main_screen.dart';
+import 'Login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -73,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(AppValues.splashScreenDuration, () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  MainScreen()),
+        MaterialPageRoute(builder: (context) =>  LoginPage()),
       );
     });
   }
