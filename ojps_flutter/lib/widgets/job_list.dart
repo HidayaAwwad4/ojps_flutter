@@ -69,7 +69,6 @@ class _JobListState extends State<JobList> {
             type: job['type'],
             salary: job['salary'],
             onTap: () {
-              //  Navigator.pushNamed(context, '/job_details');
             },
 
             isSaved: savedJobs[index],

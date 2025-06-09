@@ -1,7 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'New Password.dart';
-
+import '../../Services/auth_service.dart';
+import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/dimensions.dart';
+import 'package:ojps_flutter/constants/routes.dart';
 class VerificationCodePage extends StatefulWidget {
+  final String email;
+
+  VerificationCodePage({required this.email});
+
   @override
   _VerificationCodePageState createState() => _VerificationCodePageState();
 }
@@ -9,7 +17,10 @@ class VerificationCodePage extends StatefulWidget {
 class _VerificationCodePageState extends State<VerificationCodePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final List<TextEditingController> _controllers =
-  List.generate(4, (_) => TextEditingController());
+  List.generate(6, (_) => TextEditingController());
+
+  final AuthService authService = AuthService();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -19,23 +30,49 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
     super.dispose();
   }
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      String code = _controllers.map((c) => c.text).join();
-      print('Verification code entered: $code');
+  void _submit() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NewPasswordPage()),
+    String code = _controllers.map((c) => c.text).join();
+
+    setState(() => isLoading = true);
+
+    try {
+      final response = await authService.verifyForgotCode(widget.email, code);
+
+      setState(() => isLoading = false);
+
+      if (response.statusCode == 200) {
+        // Assuming API returns success on valid code
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewPasswordPage(email: widget.email),
+          ),
+        );
+      } else {
+        String errorMsg = 'Invalid verification code.';
+        if (response.body.isNotEmpty) {
+          final jsonBody = jsonDecode(response.body);
+          if (jsonBody['message'] != null) {
+            errorMsg = jsonBody['message'];
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMsg)),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Connection error. Please try again later.')),
       );
-    } else {
-      print('Validation failed');
     }
   }
 
   Widget _buildCodeField(int index) {
     return SizedBox(
-      width: 55,
+      width: 45,
       child: TextFormField(
         controller: _controllers[index],
         keyboardType: TextInputType.number,
@@ -57,7 +94,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
           ),
         ),
         onChanged: (value) {
-          if (value.length == 1 && index < 3) {
+          if (value.length == 1 && index < 5) {
             FocusScope.of(context).nextFocus();
           } else if (value.isEmpty && index > 0) {
             FocusScope.of(context).previousFocus();
@@ -104,10 +141,12 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children:
-                  List.generate(4, (index) => _buildCodeField(index)),
+                  List.generate(6, (index) => _buildCodeField(index)),
                 ),
                 SizedBox(height: 25),
-                SizedBox(
+                isLoading
+                    ? CircularProgressIndicator(color: primaryColor)
+                    : SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
@@ -132,3 +171,4 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
     );
   }
 }
+

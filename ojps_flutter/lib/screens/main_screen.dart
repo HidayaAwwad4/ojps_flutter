@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ojps_flutter/screens/view_edit_employer_profile.dart';
-
+import 'package:provider/provider.dart';
 import '../constants/colors.dart';
+import '../providers/employer_jobs_provider.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
 import 'notifications.dart';
+
 
 class MainScreen extends StatefulWidget {
   final int initialIndex;
@@ -35,13 +37,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _openCreateJobScreen() async {
-    await Navigator.push(
+    final createdJob = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CreateJobScreen(),
+        builder: (context) => const CreateJobScreen(),
         fullscreenDialog: true,
       ),
     );
+
+    if (createdJob != null) {
+      await Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs(reset: true);
+    }
 
     setState(() {
       _currentIndex = 0;

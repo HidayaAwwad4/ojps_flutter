@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
 import '../../services/job_service.dart';
 import '../constants/colors.dart';
 import '../constants/dimensions.dart';
 import '../constants/spaces.dart';
+import '../models/job_model.dart';
+import '../providers/employer_jobs_provider.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/document_upload_button.dart';
 import '../widgets/dropdown_selector.dart';
@@ -27,7 +30,6 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   String? selectedExperience;
   String? selectedEmployment;
   String? selectedCategory;
-
   File? selectedCompanyLogo;
 
   final List<String> experienceList = [
@@ -67,24 +69,28 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
   }
 
   Future<void> _submitForm() async {
+    final int employerId = await JobService().getEmployerId();
     try {
-      final data = {
-        'title': jobTitle,
-        'description': description,
-        'location': location,
-        'languages': languages,
-        'schedule': schedule,
-        'salary': double.tryParse(salary) ?? 0.0,
-        'experience': selectedExperience!,
-        'employment': selectedEmployment!,
-        'category': selectedCategory!,
-        'isOpened': 1,
-        'employer_id': 38,
-        'company_logo': selectedCompanyLogo,
-        'documents': null,
-      };
+      final newJob = Job(
+        id: 0,
+        title: jobTitle,
+        description: description,
+        location: location,
+        languages: languages,
+        schedule: schedule,
+        salary: double.tryParse(salary) ?? 0.0,
+        experience: selectedExperience!,
+        employment: selectedEmployment!,
+        category: selectedCategory!,
+        isOpened: true,
+        employerId: employerId,
+        companyLogo: selectedCompanyLogo?.path,
+        documents: null,
+      );
 
-      await JobService().createJob(data);
+      final createdData = await JobService().createJob(newJob.toJson());
+      final createdJob = Job.fromJson(createdData);
+      //await Provider.of<EmployerJobsProvider>(context, listen: false).addJob(newJob);
 
       if (context.mounted) {
         showDialog(
@@ -95,8 +101,9 @@ class _CreateJobScreenState extends State<CreateJobScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  //Navigator.pop(context);
+                  Navigator.pop(context); // إغلاق الديالوج
+                  Navigator.pop(context, createdJob); // الرجوع للصفحة السابقة (main screen)
                 },
                 child: Text(tr('ok')),
               ),

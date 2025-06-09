@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/text_styles.dart';
-import 'package:ojps_flutter/widgets/uploaded_cv_widget.dart';
-import 'package:ojps_flutter/widgets/cover_letter_field.dart';
+ import 'package:ojps_flutter/widgets/cover_letter_field.dart';
 import 'package:ojps_flutter/widgets/submit_button.dart';
+import 'package:ojps_flutter/widgets/uploaded_cv_widget.dart';
 
 class ApplyNow extends StatelessWidget {
   const ApplyNow({super.key});

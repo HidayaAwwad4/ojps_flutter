@@ -1,5 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'VerificationCode.dart';
+import '../../Services/auth_service.dart';
+import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/dimensions.dart';
+import 'package:ojps_flutter/constants/routes.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
   @override
@@ -9,7 +14,49 @@ class ForgetPasswordPage extends StatefulWidget {
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
+  final AuthService authService = AuthService();
+
   final Color primaryColor = Color(0xFF0273B1);
+  bool isLoading = false;
+
+  void sendForgotPasswordRequest() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => isLoading = true);
+
+    final email = emailController.text.trim();
+
+    try {
+      final response = await authService.forgotPassword(email);
+
+      setState(() => isLoading = false);
+
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VerificationCodePage(email: email),
+          ),
+        );
+      } else {
+        String errorMsg = 'An error occurred. Please try again.';
+        if (response.body.isNotEmpty) {
+          final jsonBody = jsonDecode(response.body);
+          if (jsonBody['message'] != null) {
+            errorMsg = jsonBody['message'];
+          }
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMsg)),
+        );
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Connection error. Please try again later.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +66,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             Stack(
               children: [
                 ClipPath(
@@ -47,8 +93,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 ),
               ],
             ),
-
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Form(
@@ -60,7 +104,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(color: primaryColor, fontSize: 18),
                     ),
-                    SizedBox(height: 80),
+                    SizedBox(height: 40),
                     TextFormField(
                       controller: emailController,
                       validator: (value) {
@@ -85,7 +129,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ),
                     ),
                     SizedBox(height: 35),
-                    SizedBox(
+                    isLoading
+                        ? CircularProgressIndicator(color: primaryColor)
+                        : SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
@@ -95,22 +141,18 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VerificationCodePage(),
-                              ),
-                            );
-                          }
-                        },
+                        onPressed: sendForgotPasswordRequest,
                         child: Text(
                           'Send',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -122,19 +164,22 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   }
 }
 
-
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
     path.lineTo(0, size.height - 60);
     path.quadraticBezierTo(
-      size.width * 0.25, size.height,
-      size.width * 0.5, size.height - 40,
+      size.width * 0.25,
+      size.height,
+      size.width * 0.5,
+      size.height - 40,
     );
     path.quadraticBezierTo(
-      size.width * 0.75, size.height - 80,
-      size.width, size.height - 40,
+      size.width * 0.75,
+      size.height - 80,
+      size.width,
+      size.height - 40,
     );
     path.lineTo(size.width, 0);
     path.close();

@@ -42,3 +42,4 @@ class CategoryDotsIndicator extends StatelessWidget {
     );
   }
 }
+

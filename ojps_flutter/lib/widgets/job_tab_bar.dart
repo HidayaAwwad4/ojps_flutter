@@ -27,7 +27,7 @@ class JobTabBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colorss.whiteColor,
           borderRadius: BorderRadius.circular(AppValues.tabBarRadius),
         ),
-        labelColor: Colorss.primaryColor,
+        labelColor: Colorss.whiteColor,
         unselectedLabelColor: Colorss.whiteColor,
         labelPadding: EdgeInsets.zero,
         labelStyle: const TextStyle(
