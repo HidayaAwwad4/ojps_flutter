@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ojps_flutter/constants//colors.dart';
 import 'package:ojps_flutter/constants//text_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Services/notification_service.dart';
@@ -22,11 +21,7 @@ class _NotificationsState extends State<Notifications> {
   List<NotificationModel> todayNotifications = [];
   List<NotificationModel> thisWeekNotifications = [];
 
-  String selectedUserType = 'employer'; // default: 'employer'
   late String token;
-
-  final employerToken = '20|67X7Ltf5cMs19UZKO8fj57DqYGZyyovm8ce0of3l43376be3';
-  final seekerToken = '19|15t0VgAc644x5n7JEhqMdI3uuTzmvzwir2U8mi3L87586df5';
 
 
   void sendSystemNotification(String title, String body) {
@@ -46,22 +41,26 @@ class _NotificationsState extends State<Notifications> {
 
   Future<void> _loadNotifications() async {
     try {
-      //final prefs = await SharedPreferences.getInstance();
-      //final token = prefs.getString('19|15t0VgAc644x5n7JEhqMdI3uuTzmvzwir2U8mi3L87586df5');
-      token = selectedUserType == 'employer' ? employerToken : seekerToken;
+      final prefs = await SharedPreferences.getInstance();
+      final storedToken = prefs.getString('auth_token');
 
-      // if (token != null) {
+      if (storedToken == null) {
+        print('No token found in SharedPreferences');
+        return;
+      }
+
+      token = storedToken;
+
       final fetched = await NotificationService.fetchNotifications(token);
       final now = DateTime.now();
       final today = DateTime(now.year, now.month, now.day);
-
 
       List<NotificationModel> newNotifs = [];
       List<NotificationModel> todayNotifs = [];
       List<NotificationModel> weekNotifs = [];
 
       for (var notif in fetched) {
-        final createdAt = DateTime.tryParse(notif.createdAt);
+        final createdAt = notif.createdAt;
         if (createdAt == null) continue;
 
         final diff = now.difference(createdAt);
@@ -87,6 +86,7 @@ class _NotificationsState extends State<Notifications> {
       print('Error loading notifications: $e');
     }
   }
+
 
 
   void moveToToday(int index) {

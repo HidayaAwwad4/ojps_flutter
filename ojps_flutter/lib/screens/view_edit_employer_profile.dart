@@ -46,9 +46,9 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
 
     Future<void> fetchProfileData() async {
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('auth_token'); // stored when logging in
+      final token = prefs.getString('auth_token');
 
-      final url = Uri.parse('http://YOUR_BACKEND_URL/api/employer/profile');
+      final url = Uri.parse('http://10.0.2.2:8000/api/employer/profile');
 
       try {
         final response = await http.get(
@@ -78,9 +78,9 @@ class _ViewEditEmployerProfileState extends State<ViewEditEmployerProfile> {
 
 
     Future<void> _saveProfileChanges() async {
-      final url = Uri.parse('https://your-api.com/api/employer/profile'); // Replace with your actual API URL
+      final url = Uri.parse('http://10.0.2.2:8000/api/employer/profile');
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('auth_token'); // Replace with your token key
+      final token = prefs.getString('auth_token');
 
       final response = await http.put(
         url,
