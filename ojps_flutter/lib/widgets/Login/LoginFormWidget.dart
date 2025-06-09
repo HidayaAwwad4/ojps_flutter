@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Services/auth_service.dart';
 import '../../screens/Forgetpassword.dart';
 import 'package:ojps_flutter/constants/colors.dart';
 import 'package:ojps_flutter/constants/dimensions.dart';
-import 'package:ojps_flutter/constants/routes.dart';
-import 'dart:io';
 
-import '../../screens/home_screen.dart';
-import '../../screens/main_screen.dart';
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({Key? key}) : super(key: key);
 
@@ -89,7 +85,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ForgetPasswordPage()),
+                        MaterialPageRoute(
+                          builder: (context) => ForgetPasswordPage(),
+                        ),
                       );
                     },
                     child: Text(
@@ -103,6 +101,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 ),
               ],
             ),
+            SizedBox(height: AppDimensions.verticalSpacerMedium),
             SizedBox(
               width: double.infinity,
               height: AppDimensions.minimumSizeButton,
@@ -120,46 +119,49 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         'email': emailController.text,
                         'password': passwordController.text,
                       });
-                      print('statusCode: ${response.statusCode}');
-                      print('body: ${response.body}');
-                      if (response.statusCode == 200) {
+
+                      print('Status Code: ${response.statusCode}');
+                      print('Response Body: ${response.body}');
+
+                      if (response.statusCode == 200 || response.statusCode == 201) {
                         final data = jsonDecode(response.body);
-                        final token = data['access_token'];
+                        final token = data['access_token'] ?? data['token'];
+                        final userRoleId = data['user']['role_id'];
 
-                        final prefs = await SharedPreferences.getInstance();
-                        await prefs.setString('token', token);
+                        if (token != null) {
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('token', token);
+                          print('Token saved: $token');
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Login successful')),
-                        );
-                        if (!mounted) return;
-                        Navigator.pushReplacementNamed(context, '/employer/main-screen');
+                          if (!mounted) return;
 
-
-
-
-
+                          if (userRoleId == 2) {
+                            Navigator.of(context).pushReplacementNamed('/home');
+                          } else if (userRoleId == 1) {
+                            Navigator.pushReplacementNamed(context, '/employer/main-screen');
+                          } else if (userRoleId == 3) {
+                            Navigator.pushReplacementNamed(context, '/admin-dashboard');
+                          }
+                          else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Unknown user role')),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login succeeded but no token returned.")),
+                          );
+                        }
                       } else {
                         final error = jsonDecode(response.body);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(error['message'] ?? 'Login failed')),
                         );
                       }
-                    } on SocketException {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("No internet connection. Please check your network.")),
-                      );
-                    } on HttpException catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("HTTP error: ${e.message}")),
-                      );
-                    } on FormatException {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Invalid response format. Unable to parse data.")),
-                      );
                     } catch (e) {
+                      print("Exception: $e");
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("An unexpected error occurred: $e")),
+                        SnackBar(content: Text("Error: $e")),
                       );
                     }
                   }

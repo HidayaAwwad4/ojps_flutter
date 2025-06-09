@@ -8,6 +8,7 @@ import '../providers/employer_jobs_provider.dart';
 import 'create_job_screen.dart';
 import 'employer_home.dart';
 import 'job_posting_screen.dart';
+import 'notifications.dart';
 
 
 class MainScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _MainScreenState extends State<MainScreen> {
     EmployerHome(),
     JobPostingScreen(tabIndex: 0),
     Scaffold(body: Center(child: Text(''))),
-    Scaffold(body: Center(child: Text('Notifications'))),
+    Notifications(),
     ViewEditEmployerProfile(),
   ];
 
