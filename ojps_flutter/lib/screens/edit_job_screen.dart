@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:provider/provider.dart';
+
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
+import '../providers/employer_jobs_provider.dart';
+import '../services/job_service.dart';
+import '../utils/network_utils.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/dropdown_selector.dart';
 
@@ -31,9 +39,9 @@ class _EditJobScreenState extends State<EditJobScreen> {
     super.initState();
     titleController = TextEditingController(text: widget.job.title);
     descriptionController = TextEditingController(text: widget.job.description);
-    languageController = TextEditingController(text: widget.job.language);
+    languageController = TextEditingController(text: widget.job.languages);
     scheduleController = TextEditingController(text: widget.job.schedule);
-    salaryController = TextEditingController(text: widget.job.salary);
+    salaryController = TextEditingController(text: widget.job.salary.toString());
 
     selectedExperience = widget.job.experience;
     selectedEmployment = widget.job.employment;
@@ -49,6 +57,7 @@ class _EditJobScreenState extends State<EditJobScreen> {
           languageController.text.isNotEmpty &&
           scheduleController.text.isNotEmpty &&
           salaryController.text.isNotEmpty &&
+          double.tryParse(salaryController.text) != null &&
           selectedExperience != null &&
           selectedEmployment != null &&
           selectedCategory != null;
@@ -68,93 +77,120 @@ class _EditJobScreenState extends State<EditJobScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cardBackgroundColor,
+      backgroundColor: Colorss.cardBackgroundColor,
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: primaryTextColor),
+          icon: const Icon(Icons.close, color: Colorss.primaryTextColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Row(
           children: [
             CircleAvatar(
-              radius: 16,
-              backgroundImage: AssetImage(widget.job.imageUrl),
+              radius: 24,
+              backgroundImage: widget.job.companyLogo != null
+                  ? NetworkImage(fixUrl(widget.job.companyLogo!))
+                  : const AssetImage('assets/default-logo.png') as ImageProvider,
             ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  //widget.job.companyName,
-                  "adahm",
-                  style: const TextStyle(color: primaryTextColor, fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  //widget.job.companyLocation,
-                  "nablus",
-                  style: const TextStyle(color: greyColor, fontSize: 12),
-                ),
-              ],
-            ),
+            Spaces.horizontal(AppDimensions.spacingSmall),
           ],
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
+            margin: const EdgeInsets.symmetric(horizontal: AppDimensions.marginSmall),
             child: ElevatedButton(
-              onPressed: isFormValid ? () {
-                Navigator.pop(context);
-              } : null,
+              onPressed: isFormValid
+                  ? () async {
+                final updatedJob = widget.job.copyWith(
+                  title: titleController.text,
+                  description: descriptionController.text,
+                  languages: languageController.text,
+                  schedule: scheduleController.text,
+                  salary: double.tryParse(salaryController.text),
+                  experience: selectedExperience,
+                  employment: selectedEmployment,
+                  category: selectedCategory,
+                  isOpened: widget.job.isOpened,
+                );
+
+                try {
+                  await Provider.of<EmployerJobsProvider>(context, listen: false).updateJob(updatedJob);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(tr('job_updated_successfully'))),
+                    );
+                    Navigator.pop(context, updatedJob);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('${tr('failed_to_update_job')}: $e')),
+                    );
+                  }
+                }
+              }
+                  : null,
+
               style: ElevatedButton.styleFrom(
-                backgroundColor: isFormValid ? primaryColor : const Color(0xFFE8E8E8),
-                foregroundColor: isFormValid ? whiteColor : const Color(0xFFADADAD),
+                backgroundColor: isFormValid ? Colorss.primaryColor : Colorss.buttonInactiveBackgroundColor,
+                foregroundColor: isFormValid ? Colorss.whiteColor : Colorss.buttonInactiveTextColor,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.horizontalSpacerXLarge,
+                  vertical: AppDimensions.verticalSpacerMediumSmall,
+                ),
               ),
-              child: const Text('Save'),
+              child: Text(tr('save')),
             ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(AppDimensions.defaultPadding),
         child: ListView(
           children: [
             CustomTextField(
-              label: 'Job Title',
+              label: tr('job_title'),
               controller: titleController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Description',
+              label: tr('description'),
               maxLines: 4,
               controller: descriptionController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Languages',
-              hint: 'e.g. English - Advanced',
+              label: tr('languages'),
+              hint: tr('languages_hint'),
               controller: languageController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Schedule',
-              hint: 'e.g. Sunday to Thursday',
+              label: tr('schedule'),
+              hint: tr('schedule_hint'),
               controller: scheduleController,
               onChanged: (_) => updateFormValidity(),
             ),
             CustomTextField(
-              label: 'Salary',
-              hint: 'Hourly/ daily/ monthly',
+              label: tr('salary'),
+              hint: tr('salary_hint'),
               controller: salaryController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (_) => updateFormValidity(),
             ),
             DropdownSelector(
-              label: 'Experience',
-              options: ['0-1 years', '1-3 years', '3+ years', 'Not required'],
+              label: tr('experience'),
+              options: [
+                tr('exp_0_1'),
+                tr('exp_1_3'),
+                tr('exp_3_plus'),
+                tr('exp_not_required'),
+              ],
               selectedValue: selectedExperience,
               onChanged: (value) {
                 selectedExperience = value;
@@ -162,8 +198,16 @@ class _EditJobScreenState extends State<EditJobScreen> {
               },
             ),
             DropdownSelector(
-              label: 'Employment',
-              options: ['Full-Time', 'Part-Time', 'Remote', 'Contract', 'Internship', 'Temporary', 'Volunteer'],
+              label: tr('employment'),
+              options: [
+                tr('full_time'),
+                tr('part_time'),
+                tr('remote'),
+                tr('contract'),
+                tr('internship'),
+                tr('temporary'),
+                tr('volunteer'),
+              ],
               selectedValue: selectedEmployment,
               onChanged: (value) {
                 selectedEmployment = value;
@@ -171,15 +215,22 @@ class _EditJobScreenState extends State<EditJobScreen> {
               },
             ),
             DropdownSelector(
-              label: 'Category',
-              options: ['Marketing', 'Technology', 'Design', 'Sales', 'Cooking', 'Other'],
+              label: tr('category'),
+              options: [
+                tr('marketing'),
+                tr('technology'),
+                tr('design'),
+                tr('sales'),
+                tr('cooking'),
+                tr('other'),
+              ],
               selectedValue: selectedCategory,
               onChanged: (value) {
                 selectedCategory = value;
                 updateFormValidity();
               },
             ),
-            const SizedBox(height: 20),
+            Spaces.vertical(AppDimensions.verticalSpacerLarge),
           ],
         ),
       ),

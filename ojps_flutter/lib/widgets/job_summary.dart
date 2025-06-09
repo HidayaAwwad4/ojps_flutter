@@ -1,4 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 
 class JobSummaryWidget extends StatelessWidget {
   final int openJobsCount;
@@ -14,9 +18,9 @@ class JobSummaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _buildJobSummaryItem('$openJobsCount job open'),
-        const SizedBox(width: 10),
-        _buildJobSummaryItem('$closedJobsCount job closed'),
+        _buildJobSummaryItem('$openJobsCount ${tr('num_open_job')}'),
+        const SizedBox(width: AppDimensions.verticalSpacerMediumSmall),
+        _buildJobSummaryItem('$closedJobsCount ${tr('num_close_job')}'),
       ],
     );
   }
@@ -24,15 +28,15 @@ class JobSummaryWidget extends StatelessWidget {
   Widget _buildJobSummaryItem(String text) {
     return Expanded(
       child: Container(
-        height: 40,
+        height: AppDimensions.containerHeight,
         decoration: BoxDecoration(
-          color: const Color(0xFFDDEAF3),
-          borderRadius: BorderRadius.circular(20),
+          color: Colorss.lightBlueBackgroundColor,
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLarge),
         ),
         alignment: Alignment.center,
         child: Text(
           text,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colorss.primaryTextColor),
         ),
       ),
     );

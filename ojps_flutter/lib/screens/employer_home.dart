@@ -1,10 +1,15 @@
- import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants/colors.dart';
-import '../models/job_model.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
+import '../providers/employer_jobs_provider.dart';
 import '../widgets/job_section_in_employer_home.dart';
 import '../widgets/job_summary.dart';
 import '../widgets/search_for_employer.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 
 class EmployerHome extends StatefulWidget {
   const EmployerHome({super.key});
@@ -15,81 +20,136 @@ class EmployerHome extends StatefulWidget {
 
 class _EmployerHomeScreenState extends State<EmployerHome> {
   final TextEditingController _searchController = TextEditingController();
-  List<Job> filteredJobs = List.from(jobs);
+  bool _isFirstLoad = true;
 
-  void toggleJobStatus(Job job) {
-    setState(() {
-      job.isOpen = !job.isOpen;
-    });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstLoad) {
+      _loadJobs();
+      _isFirstLoad = false;
+    }
   }
 
-  void searchJobs(String query) {
-    final searchResults = jobs.where((job) {
-      final jobTitle = job.title.toLowerCase();
-      final searchQuery = query.toLowerCase();
-      return jobTitle.contains(searchQuery);
-    }).toList();
-    setState(() {
-      filteredJobs = searchResults;
-    });
+  Future<void> _loadJobs() async {
+    try {
+      await Provider.of<EmployerJobsProvider>(context, listen: false).fetchJobs();
+    } on SocketException {
+      _showError('noInternetConnection');
+    } on HttpException {
+      _showError('failedServerCommunication');
+    } on FormatException {
+      _showError('unexpectedResponseFormat');
+    } on TimeoutException {
+  _showError('requestTimeout');}
+    catch (e) {
+      _showError('somethingWentWrong');
+    }
+  }
+
+
+  void _showError(String key) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(tr(key), style: const TextStyle(color: Colorss.whiteColor)),
+        backgroundColor: Colorss.errorColor,
+      ),
+    );
+  }
+
+  void _toggleLanguage() {
+    final currentLocale = context.locale;
+    if (currentLocale.languageCode == 'en') {
+      context.setLocale(const Locale('ar'));
+    } else {
+      context.setLocale(const Locale('en'));
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final openJobs = filteredJobs.where((job) => job.isOpen).toList();
-    final closedJobs = filteredJobs.where((job) => !job.isOpen).toList();
+    final provider = Provider.of<EmployerJobsProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (provider.error != null) {
+        _showError(provider.error!);
+        provider.clearError();
+      }
+    });
+
+    final openJobs = provider.filteredJobs.where((job) => job.isOpened).toList();
+    final closedJobs = provider.filteredJobs.where((job) => !job.isOpened).toList();
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: whiteColor,
+        backgroundColor: Colorss.whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome Back!', style: TextStyle(fontSize: 18, color: primaryTextColor)),
-            Text('AL-Adham Company', style: TextStyle(fontSize: 14, color: secondaryTextColor)),
+            Text(tr('hello'),
+                style: const TextStyle(
+                    fontSize: AppDimensions.fontSizeMedium,
+                    color: Colorss.primaryTextColor)),
+            Text(tr('welcome'),
+                style: const TextStyle(
+                    fontSize: AppDimensions.fontSizeSmall,
+                    color: Colorss.secondaryTextColor)),
           ],
         ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/adham.jpg'),
-              radius: 18,
-            ),
+        actions: [
+          IconButton(
+            padding: EdgeInsets.only(right: 20,left: 20),
+            onPressed: _toggleLanguage,
+            icon: const Icon(Icons.language, color: Colorss.primaryTextColor),
+            iconSize: 32,
+            tooltip: tr('changeLanguage'),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
-          children: [
-            const SizedBox(height: 12),
-            SearchWidget(
-              searchController: _searchController,
-              onSearchChanged: searchJobs,
-            ),
-            const SizedBox(height: 16),
-            JobSummaryWidget(
-              openJobsCount: openJobs.length,
-              closedJobsCount: closedJobs.length,
-            ),
-            const SizedBox(height: 24),
-            JobSectionWidget(
-              title: 'Open jobs',
-              jobs: openJobs,
-              tabIndex: 0,
-              onStatusChange: toggleJobStatus,
-            ),
-            const SizedBox(height: 24),
-            JobSectionWidget(
-              title: 'Closed jobs',
-              jobs: closedJobs,
-              tabIndex: 1,
-              onStatusChange: toggleJobStatus,
-            ),
-          ],
+      body: provider.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+        onRefresh: _loadJobs,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.horizontalSpacerLarge),
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              Spaces.vertical(AppDimensions.horizontalSpacerNormal),
+              SearchWidget(
+                searchController: _searchController,
+                onSearchChanged: provider.searchJobs,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerMedium),
+              JobSummaryWidget(
+                openJobsCount: openJobs.length,
+                closedJobsCount: closedJobs.length,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
+              JobSectionWidget(
+                title: tr('openJobs'),
+                jobs: openJobs.take(5).toList(),
+                tabIndex: 0,
+                hasError: provider.error != null,
+              ),
+              Spaces.vertical(AppDimensions.verticalSpacerXLarge),
+              JobSectionWidget(
+                title: tr('closedJobs'),
+                jobs: closedJobs.take(5).toList(),
+                tabIndex: 1,
+                hasError: provider.error != null,
+              ),
+            ],
+          ),
         ),
       ),
     );

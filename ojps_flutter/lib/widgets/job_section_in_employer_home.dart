@@ -1,60 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import '../constants/colors.dart';
+import '../constants/dimensions.dart';
 import '../models/job_model.dart';
-import '../screens/job_posting_screen.dart';
 import 'job_card_horizontal.dart';
 
 class JobSectionWidget extends StatelessWidget {
   final String title;
   final List<Job> jobs;
   final int tabIndex;
-  final Function(Job) onStatusChange;
+  final bool hasError;
 
   const JobSectionWidget({
     super.key,
     required this.title,
     required this.jobs,
     required this.tabIndex,
-    required this.onStatusChange,
+    required this.hasError,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (jobs.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
+          Text(
+            hasError ? tr('jobLoadError') : tr('noJobsAvailable'),
+            style: const TextStyle(
+              color: Colorss.secondaryTextColor,
+              fontSize: AppDimensions.fontSizeSmall,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(title, style: const TextStyle(fontSize: AppDimensions.fontSizeNormal, fontWeight: FontWeight.bold)),
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => JobPostingScreen(tabIndex: tabIndex),
-                  ),
+                  '/employer/job-posting',
+                  arguments: {
+                    'tabIndex': tabIndex,
+                    'fromSeeAll': true,
+                  },
                 );
               },
-              child: const Text(
-                'See All',
-                style: TextStyle(fontSize: 14, color: Color(0xFF0273B1), fontWeight: FontWeight.w500),
+              child: Text(
+                tr('seeAll'),
+                style: const TextStyle(
+                  fontSize: AppDimensions.fontSizeSmall,
+                  color: Colorss.primaryColor,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppDimensions.verticalSpacerBetweenTitleAndList),
         SizedBox(
-          height: 270,
+          height: AppDimensions.horizontalJobListHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: jobs.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            separatorBuilder: (context, index) => const SizedBox(width: AppDimensions.horizontalSpacerLarge),
             itemBuilder: (context, index) {
               return SizedBox(
-                width: 320,
+                width: AppDimensions.jobCardHorizontalWidth,
                 child: JobCardHorizontal(
                   job: jobs[index],
-                  onStatusChange: onStatusChange,
+
                 ),
               );
             },

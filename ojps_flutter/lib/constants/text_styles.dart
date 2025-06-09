@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'colors.dart';
+
 class AppValues {
+  static const int notificationsInitialIndex = 2;
+  static const int profileInitialIndex = 4;
   static const int jobStatusInitialIndex = 3;
   static const int jobStatusTabCount = 3;
   static const String jobStatusScreenTitle = 'Job Status';
@@ -130,5 +134,11 @@ class AppValues {
   static const double verticalSpaceAfterText = 10.0;
   static const double extraLargeVerticalSpace = 30.0;
   static const double sectionSpacing = 13.0;
+  static const textStyleWhite = TextStyle(color: Colors.white, fontSize: 12);
+  static const textStyleWhiteBold = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14);
+  static const textStylePrimaryBold = TextStyle(color: Colorss.primaryColor, fontWeight: FontWeight.bold, fontSize: 14);
+  static const textStyleSmallGrey = TextStyle(color: Colors.grey, fontSize: 12);
+  static const textStyleHeader = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  static const textStyleAppBar = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 }

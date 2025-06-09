@@ -1,122 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../constants/colors.dart';
+import '../constants/dimensions.dart';
+import '../constants/spaces.dart';
 import '../models/job_model.dart';
+import '../utils/network_utils.dart';
 import 'edit_job_screen.dart';
 import '../widgets/detail_tile.dart';
 import '../widgets/header_bar.dart';
 
-class JobDetailsScreen extends StatelessWidget {
+class JobDetailsScreen extends StatefulWidget {
   final Job job;
 
   const JobDetailsScreen({super.key, required this.job});
 
   @override
+  State<JobDetailsScreen> createState() => _JobDetailsScreenState();
+}
+
+class _JobDetailsScreenState extends State<JobDetailsScreen> {
+  late Job job;
+
+  @override
+  void initState() {
+    super.initState();
+    job = widget.job;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Colorss.whiteColor,
       body: SafeArea(
         child: Column(
           children: [
-            const HeaderBar(),
-
+            HeaderBar(updatedJob: job),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.defaultPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 36,
-                      backgroundImage: AssetImage(job.imageUrl),
-                      backgroundColor: primaryTextColor,
+                      radius: AppDimensions.companyLogoRadiusInJobDetails,
+                      backgroundImage: job.companyLogo != null
+                          ? NetworkImage(fixUrl(job.companyLogo!))
+                          : const AssetImage('assets/default-logo.png') as ImageProvider,
+                      backgroundColor: Colorss.primaryTextColor,
                     ),
-                    const SizedBox(height: 8),
+                    Spaces.vertical(AppDimensions.spacingXSmall),
                     Text(
                       job.title,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: AppDimensions.fontSizeMedium, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      job.companyLocation,
-                      style: const TextStyle(color:greyColor),
+                      job.location,
+                      style: const TextStyle(color: Colorss.greyColor),
                     ),
-                    const SizedBox(height: 16),
-
-                    const Align(
+                    Spaces.vertical(AppDimensions.verticalSpacerMedium),
+                    Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Description',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        'description'.tr(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    Spaces.vertical(AppDimensions.spacingTiny),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(job.description),
                     ),
-                    const SizedBox(height: 20),
-
+                    Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     Container(
                       decoration: BoxDecoration(
-                        color: cardBackgroundColor,
-                        borderRadius: BorderRadius.circular(12),
+                        color: Colorss.cardBackgroundColor,
+                        borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                       ),
                       child: Column(
                         children: [
-                          DetailTile(title: 'Experience', value: job.experience),
+                          DetailTile(title: 'experience'.tr(), value: job.experience),
                           const Divider(height: 1),
-                          DetailTile(title: 'Languages', value: job.language),
+                          DetailTile(title: 'languages'.tr(), value: job.languages),
                           const Divider(height: 1),
-                          DetailTile(title: 'Employment', value: job.employment),
+                          DetailTile(title: 'employment'.tr(), value: job.employment),
                           const Divider(height: 1),
-                          DetailTile(title: 'Schedule', value: job.schedule),
+                          DetailTile(title: 'schedule'.tr(), value: job.schedule),
                           const Divider(height: 1),
-                          DetailTile(title: 'Category', value: job.category),
+                          DetailTile(title: 'category'.tr(), value: job.category),
                           const Divider(height: 1),
-                          DetailTile(title: 'Salary', value: job.salary),
+                          DetailTile(
+                            title: 'salary'.tr(),
+                            value: job.salary.toStringAsFixed(2),
+                          ),
+
                         ],
                       ),
                     ),
-
-
-                    const SizedBox(height: 16),
-
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Handle documents logic
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: primaryTextColor,
-                        backgroundColor: cardBackgroundColor,
-                        minimumSize: const Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      icon: const Icon(Icons.description),
-                      label: const Text('Documents'),
-                    ),
-
-
-                    const SizedBox(height: 20),
-
+                    Spaces.vertical(AppDimensions.verticalSpacerLarge),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final updatedJob = await Navigator.push<Job>(
                           context,
                           MaterialPageRoute(
                             builder: (_) => EditJobScreen(job: job),
                           ),
                         );
+
+                        if (updatedJob != null) {
+                          setState(() {
+                            job = updatedJob;
+                          });
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        foregroundColor: whiteColor,
-                        minimumSize: const Size(double.infinity, 48),
+                        backgroundColor: Colorss.primaryColor,
+                        foregroundColor: Colorss.whiteColor,
+                        minimumSize: const Size(double.infinity, AppDimensions.minimumSizeButton),
                       ),
-                      child: const Text('Edit'),
+                      child: Text('edit'.tr()),
                     ),
-
-                    const SizedBox(height: 24),
+                    Spaces.vertical(AppDimensions.verticalSpacerXLarge),
                   ],
                 ),
               ),

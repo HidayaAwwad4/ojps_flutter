@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'user_type.dart';
+import 'package:ojps_flutter/constants/colors.dart';
+import 'package:ojps_flutter/constants/dimensions.dart';
+import '../widgets/Login/LoginFormWidget.dart';
+import '../widgets/Login/SocialIconsWidget.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color primaryColor = Color(0xFF0273B1);
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +15,6 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // ✅ صورة مموجة مع شفافية ولوجو
             Stack(
               children: [
                 ClipPath(
@@ -28,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Container(
                     height: screenHeight * 0.4,
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/img1.png'),
                         fit: BoxFit.cover,
@@ -36,16 +30,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                // ✅ طبقة شفافية بيضاء خفيفة
-                ClipPath(
-                  clipper: WaveClipper(),
-                  child: Container(
-                    height: screenHeight * 0.4,
-                    width: double.infinity,
-                    color: Colors.white.withOpacity(0.2),
-                  ),
-                ),
-                // ✅ اللوجو
                 Positioned(
                   top: 20,
                   left: 0,
@@ -53,188 +37,46 @@ class _LoginPageState extends State<LoginPage> {
                   child: Center(
                     child: Image.asset(
                       'assets/app_logo.png',
-                      height: 80,
+                      height: 70,
                     ),
                   ),
                 ),
               ],
             ),
 
-            // 🔒 نموذج تسجيل الدخول
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 5),
-                    Text(
-                      'Log In',
-                      style: TextStyle(
-                        fontFamily: 'Carlito',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                        letterSpacing: 1,
-                        color: primaryColor,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Welcome back! Please login to your account.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                    SizedBox(height: 20),
+            const LoginFormWidget(),
 
-                    // 📧 البريد الإلكتروني
-                    _buildTextFormField(
-                      label: 'Email',
-                      icon: Icons.email,
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        } else if (!value.contains('@')) {
-                          return 'Email must contain @';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    // 🔐 كلمة المرور
-                    _buildTextFormField(
-                      label: 'Password',
-                      icon: Icons.lock,
-                      controller: passwordController,
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    SizedBox(height: 25),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            print('Email: ${emailController.text}');
-                            print('Password: ${passwordController.text}');
-                          } else {
-                            print("Validation failed");
-                          }
-                        },
-                        child: Text(
-                          'Log In',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
+            const SocialIconsWidget(),
 
 
-                    SizedBox(height: 20),
-                    Text("Or sign in with", style: TextStyle(color: Colors.black54)),
-                    SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildSocialIcon('assets/Fasebook.png'),
-                        SizedBox(width: 30),
-                        _buildSocialIcon('assets/linkedin.png'),
-                        SizedBox(width: 30),
-                        _buildSocialIcon('assets/google1.png'),
-                      ],
-                    ),
-
-                    SizedBox(height: 14),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => ChooseType()),
-                            );
-                          },
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(color: primaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account?",
+                  style: TextStyle(color: Colorss.secondaryTextColor),
                 ),
-              ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/usertype');
+                  },
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colorss.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
   }
-
-  Widget _buildTextFormField({
-    required String label,
-    required IconData icon,
-    required TextEditingController controller,
-    required String? Function(String?) validator,
-    bool obscureText = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        validator: validator,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: primaryColor),
-          labelText: label,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2.0),
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialIcon(String assetPath) {
-    return GestureDetector(
-      onTap: () {
-        print("Tapped on $assetPath");
-      },
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        radius: 22,
-        child: Image.asset(
-          assetPath,
-          height: 24,
-          width: 24,
-        ),
-      ),
-    );
-  }
 }
 
-// ✅ كلاس تموج الشكل العلوي
 class WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final Function(String)? onChanged;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
   const CustomTextField({
     super.key,
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLines = 1,
     this.onChanged,
     this.controller,
+    this.keyboardType,
   });
 
   @override
@@ -25,16 +27,17 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         maxLines: maxLines,
+        keyboardType: keyboardType,
         onChanged: onChanged,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
           border: const OutlineInputBorder(),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colorss.primaryColor, width: 2),
           ),
-          labelStyle: TextStyle(color: Colorss.lightBlueBackgroundColor),
-          floatingLabelStyle: TextStyle(color: Colorss.primaryColor),
+          labelStyle: const TextStyle(color: Colorss.secondaryTextColor),
+          floatingLabelStyle: const TextStyle(color: Colorss.primaryColor),
         ),
       ),
     );

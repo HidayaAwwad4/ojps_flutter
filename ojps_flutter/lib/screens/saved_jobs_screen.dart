@@ -29,6 +29,7 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,4 +50,3 @@ class _SavedJobsScreenState extends State<SavedJobsScreen> {
     );
   }
 }
-
